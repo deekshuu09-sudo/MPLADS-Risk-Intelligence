@@ -67,7 +67,7 @@ export const BaselineBarChart: React.FC<BaselineBarChartProps> = ({
         </div>
         <div className="flex items-center gap-2">
           <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
-            Z-Score: {baseline.z_score !== undefined ? baseline.z_score.toFixed(2) : 'N/A'}
+            Z-Score: {baseline.z_score != null ? baseline.z_score.toFixed(2) : '—'}
           </span>
           <span
             className={`text-xs font-bold px-2 py-0.5 rounded ${

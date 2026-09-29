@@ -44,16 +44,56 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS Middleware
+import time
+from collections import defaultdict
+from fastapi import Request, Response
+from fastapi.responses import JSONResponse
+
+# CORS Middleware with configurable origins
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.ALLOWED_ORIGINS if settings.ALLOWED_ORIGINS else ["*"],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "OPTIONS"],
     allow_headers=["*"],
 )
 
+# Lightweight in-memory rate limiter (sliding window by IP)
+_request_counts = defaultdict(list)
+
+@app.middleware("http")
+async def security_and_rate_limit_middleware(request: Request, call_next):
+    # 1. Rate Limiting Check (prototype-grade, non-overengineered)
+    client_ip = request.client.host if request.client else "127.0.0.1"
+    now = time.time()
+    window = 60.0  # 60 seconds
+    limit = settings.RATE_LIMIT_PER_MINUTE
+
+    # Filter timestamps within current window
+    _request_counts[client_ip] = [ts for ts in _request_counts[client_ip] if now - ts < window]
+
+    if len(_request_counts[client_ip]) >= limit:
+        return JSONResponse(
+            status_code=429,
+            content={"detail": "Too Many Requests: Rate limit exceeded. Please wait a minute."}
+        )
+
+    _request_counts[client_ip].append(now)
+
+    # 2. Process request
+    response: Response = await call_next(request)
+
+    # 3. Security Headers
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "geolocation=(self), camera=(), microphone=()"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+
+    return response
+
 app.include_router(api_router, prefix=settings.API_V1_STR)
+
 
 @app.get("/health")
 def health_check():

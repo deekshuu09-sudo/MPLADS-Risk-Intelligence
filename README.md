@@ -168,6 +168,11 @@ npm --prefix frontend run build
 
 ---
 
+> **Final System Positioning:**
+> *"NexSolve does not replace MPLADS monitoring. It creates an evidence-linked investigation layer over it: every risk signal is traceable to source data, scoring factors, related works, verification evidence, officer decision, and audit history."*
+
+---
+
 ## 6. Live Services & Endpoints
 
 - **Web Application:** `http://localhost:5173`
@@ -179,7 +184,7 @@ npm --prefix frontend run build
 
 ## 7. Testing, Security & Quality Assurance
 
-Automated test suite validates 100% of analytical engines, security boundaries, and benchmark cases across **52 passing tests**:
+Automated test suite validates 100% of analytical engines, security boundaries, and benchmark cases across **53 passing tests**:
 
 | Test Group | Test File | Test Count | Status | Key Coverage |
 | :--- | :--- | :---: | :---: | :--- |
@@ -187,14 +192,18 @@ Automated test suite validates 100% of analytical engines, security boundaries, 
 | **Analytics Engine** | `test_analytics.py` | 16 | **PASSED** | Scenarios A-G, false discovery, macro metrics |
 | **Risk Scoring** | `test_risk_engine.py` | 13 | **PASSED** | Benchmark scores (001, 101, 102, 401, 501), weight validation |
 | **Executive Analytics** | `test_executive_analytics_reconciliation.py` | 1 | **PASSED** | Cross-endpoint metric reconciliation |
-| **Security & Hardening** | `test_security_adversarial.py` | 5 | **PASSED** | SQLi resistance, XSS escaping, score immutability |
+| **Security & Hardening** | `test_security_adversarial.py` | 6 | **PASSED** | SQLi resistance, XSS escaping, score immutability, security headers |
 | **Entity Resolution** | `test_phase2_entity_resolution.py` | 1 | **PASSED** | Splink Fellegi-Sunter & TF-IDF similarity |
 | **Evidence Graph** | `test_phase3_evidence_graph.py` | 4 | **PASSED** | Multi-hop graph, 801/802 counterexample, determinism |
 | **Dynamic Security** | `test_9_1_forensic_runner.py` | 16 Probes | **PASS_WITH_LIMITATIONS** | Verified clean injection/traversal; auth/CORS documented |
 
+### Security Boundaries & Architecture Limitations (Honest Disclosure)
+- **CORS & Headers:** Environment-configurable CORS with localhost defaults, alongside defensive HTTP headers (`X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`, and rate limiting).
+- **Authentication & RBAC:** In accordance with transparent prototyping guidelines, authentication and fine-grained RBAC are not fabricated. *Production deployment requires integration with the organization's enterprise identity provider (e.g., NIC SSO, Parichay) and official role authorization model.*
+
 ---
 
-## 7. Official Documentation Library
+## 8. Official Documentation Library
 
 All architectural specifications are organized in the [`docs/`](./docs) directory:
 - [Product Requirements Document (PRD)](./docs/specifications/01_PRD.md)
@@ -210,7 +219,8 @@ All architectural specifications are organized in the [`docs/`](./docs) director
 
 ---
 
-## 8. License & Attribution
+## 9. License & Attribution
 
 Developed for the **Smart India Hackathon 2026**.
 In compliance with the **MPLADS Scheme Guidelines (2023 Revision)** published by the Ministry of Statistics and Programme Implementation (MoSPI), Government of India.
+

@@ -106,3 +106,13 @@ def test_http_method_abuse():
 
     res_post_prov = client.post("/api/v1/works/WS/DEMO/2025/101/provenance", json={})
     assert res_post_prov.status_code == 405
+
+def test_security_response_headers():
+    """Verify standard defensive HTTP headers are attached to responses."""
+    res = client.get("/health")
+    assert res.status_code == 200
+    assert res.headers.get("X-Content-Type-Options") == "nosniff"
+    assert res.headers.get("X-Frame-Options") == "DENY"
+    assert res.headers.get("Referrer-Policy") == "strict-origin-when-cross-origin"
+    assert "geolocation" in res.headers.get("Permissions-Policy", "")
+

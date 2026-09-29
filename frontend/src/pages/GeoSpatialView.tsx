@@ -43,15 +43,33 @@ function MapController({
   const map = useMap();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      map.invalidateSize();
-    }, 150);
-    return () => clearTimeout(timer);
+    // Invalidate size immediately and after multiple intervals to catch render passes
+    map.invalidateSize();
+    const t1 = setTimeout(() => map.invalidateSize(), 100);
+    const t2 = setTimeout(() => map.invalidateSize(), 300);
+    const t3 = setTimeout(() => map.invalidateSize(), 600);
+
+    const container = map.getContainer();
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined' && container) {
+      resizeObserver = new ResizeObserver(() => {
+        map.invalidateSize();
+      });
+      resizeObserver.observe(container);
+    }
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      if (resizeObserver) resizeObserver.disconnect();
+    };
   }, [map]);
 
   useEffect(() => {
     if (center && center[0] && center[1]) {
       map.setView(center, zoom || map.getZoom(), { animate: true });
+      map.invalidateSize();
     }
   }, [center, zoom, map]);
 
@@ -368,130 +386,128 @@ export const GeoSpatialView: React.FC<GeoSpatialViewProps> = ({
         </div>
       </div>
 
-      {/* Main Map + Spatial Investigation Panel Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
-        {/* Left GIS Map View */}
-        <div className={`lg:col-span-${selectedWorkId ? '7' : '12'} bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs relative transition-all duration-300`}>
-          <div style={{ height: '640px', width: '100%' }}>
-            <MapContainer
-              center={defaultCenter}
-              zoom={mapZoom}
-              scrollWheelZoom={true}
-              style={{ height: '100%', width: '100%' }}
-            >
-              <MapController center={mapCenter} zoom={mapZoom} />
+      {/* Main Map Container with Floating Spatial Evidence Investigation Overlay */}
+      <div className="relative w-full h-[720px] bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
+        {/* Full-width Base Leaflet Map */}
+        <div className="absolute inset-0 w-full h-full">
+          <MapContainer
+            center={defaultCenter}
+            zoom={mapZoom}
+            scrollWheelZoom={true}
+            style={{ height: '100%', width: '100%' }}
+          >
+            <MapController center={mapCenter} zoom={mapZoom} />
 
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+
+            {/* Render Buffer Circle for Selected Work */}
+            {spatialData?.selected_work && (
+              <Circle
+                center={[spatialData.selected_work.latitude, spatialData.selected_work.longitude]}
+                radius={radiusMeters}
+                pathOptions={{
+                  color: '#2563eb',
+                  fillColor: '#3b82f6',
+                  fillOpacity: 0.1,
+                  dashArray: '5, 5',
+                  weight: 2,
+                }}
               />
+            )}
 
-              {/* Render Buffer Circle for Selected Work */}
-              {spatialData?.selected_work && (
-                <Circle
-                  center={[spatialData.selected_work.latitude, spatialData.selected_work.longitude]}
-                  radius={radiusMeters}
-                  pathOptions={{
-                    color: '#2563eb',
-                    fillColor: '#3b82f6',
-                    fillOpacity: 0.1,
-                    dashArray: '5, 5',
-                    weight: 2,
+            {/* Render Markers for Geocoded Works */}
+            {geoData?.features.map((feat: GeoJSONFeature, idx: number) => {
+              const [lon, lat] = feat.geometry.coordinates;
+              const props = feat.properties;
+              const isSelected = selectedWorkId === props.work_id;
+              const icon = createCustomPin(props.severity_level, props.composite_risk_score, isSelected);
+
+              return (
+                <Marker
+                  key={`marker-${props.work_id}-${idx}`}
+                  position={[lat, lon]}
+                  icon={icon}
+                  eventHandlers={{
+                    click: () => handleSelectWork(props.work_id),
                   }}
-                />
-              )}
+                >
+                  <Popup className="gov-map-popup">
+                    <div className="p-1 max-w-[260px] text-xs space-y-1.5">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-mono font-bold text-[10px] text-slate-700">
+                          {props.work_id}
+                        </span>
+                        <SeverityBadge severity={props.severity_level} />
+                      </div>
 
-              {/* Render Markers for Geocoded Works */}
-              {geoData?.features.map((feat: GeoJSONFeature, idx: number) => {
-                const [lon, lat] = feat.geometry.coordinates;
-                const props = feat.properties;
-                const isSelected = selectedWorkId === props.work_id;
-                const icon = createCustomPin(props.severity_level, props.composite_risk_score, isSelected);
+                      <h4 className="font-bold text-slate-900 text-xs leading-tight">
+                        {props.activity_name}
+                      </h4>
+                      <p className="text-[11px] text-slate-500">
+                        {props.district_name}, {props.state_name}
+                      </p>
 
-                return (
-                  <Marker
-                    key={`marker-${props.work_id}-${idx}`}
-                    position={[lat, lon]}
-                    icon={icon}
-                    eventHandlers={{
-                      click: () => handleSelectWork(props.work_id),
-                    }}
-                  >
-                    <Popup className="gov-map-popup">
-                      <div className="p-1 max-w-[260px] text-xs space-y-1.5">
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="font-mono font-bold text-[10px] text-slate-700">
-                            {props.work_id}
+                      <div className="grid grid-cols-2 gap-2 bg-slate-50 p-2 rounded text-[11px]">
+                        <div>
+                          <span className="text-slate-400 block text-[9px]">Sanction</span>
+                          <span className="font-bold text-slate-800">
+                            ₹{(props.sanctioned_amount / 100000).toFixed(2)}L
                           </span>
-                          <SeverityBadge severity={props.severity_level} />
                         </div>
-
-                        <h4 className="font-bold text-slate-900 text-xs leading-tight">
-                          {props.activity_name}
-                        </h4>
-                        <p className="text-[11px] text-slate-500">
-                          {props.district_name}, {props.state_name}
-                        </p>
-
-                        <div className="grid grid-cols-2 gap-2 bg-slate-50 p-2 rounded text-[11px]">
-                          <div>
-                            <span className="text-slate-400 block text-[9px]">Sanction</span>
-                            <span className="font-bold text-slate-800">
-                              ₹{(props.sanctioned_amount / 100000).toFixed(2)}L
-                            </span>
-                          </div>
-                          <div>
-                            <span className="text-slate-400 block text-[9px]">Risk Score</span>
-                            <span className="font-bold text-red-600">
-                              {props.composite_risk_score.toFixed(1)}/100
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="flex gap-2 pt-1">
-                          <button
-                            onClick={() => handleSelectWork(props.work_id)}
-                            className="flex-1 py-1 bg-blue-50 text-blue-700 font-semibold border border-blue-200 rounded text-[11px] hover:bg-blue-100"
-                          >
-                            Investigate Spatial Context
-                          </button>
-                          <button
-                            onClick={() => onOpenDossier(props.work_id)}
-                            className="py-1 px-2 bg-[#0d2b45] text-white font-bold rounded text-[11px] hover:bg-[#1a4163]"
-                          >
-                            Dossier
-                          </button>
+                        <div>
+                          <span className="text-slate-400 block text-[9px]">Risk Score</span>
+                          <span className="font-bold text-red-600">
+                            {props.composite_risk_score.toFixed(1)}/100
+                          </span>
                         </div>
                       </div>
-                    </Popup>
-                  </Marker>
-                );
-              })}
-            </MapContainer>
-          </div>
 
-          {/* Bottom Dynamic Map Summary Bar */}
-          <div className="absolute bottom-4 left-4 z-[400] bg-white/95 backdrop-blur-xs border border-slate-300 rounded-lg p-3 shadow-md text-xs">
-            <div className="flex items-center gap-4">
-              <div>
-                <span className="text-[10px] text-slate-500 uppercase block font-bold">Works in View</span>
-                <span className="font-mono font-bold text-slate-900 text-sm">{totalWorksInView}</span>
-              </div>
-              <div className="border-l border-slate-200 pl-4">
-                <span className="text-[10px] text-slate-500 uppercase block font-bold">High / Critical</span>
-                <span className="font-mono font-bold text-amber-600 text-sm">{highCriticalCount}</span>
-              </div>
-              <div className="border-l border-slate-200 pl-4">
-                <span className="text-[10px] text-slate-500 uppercase block font-bold">Spatial Proximity (<span className="normal-case">{radiusMeters}m</span>)</span>
-                <span className="font-mono font-bold text-blue-700 text-sm">{spatialRelationshipClustersCount}</span>
-              </div>
+                      <div className="flex gap-2 pt-1">
+                        <button
+                          onClick={() => handleSelectWork(props.work_id)}
+                          className="flex-1 py-1 bg-blue-50 text-blue-700 font-semibold border border-blue-200 rounded text-[11px] hover:bg-blue-100"
+                        >
+                          Investigate Spatial Context
+                        </button>
+                        <button
+                          onClick={() => onOpenDossier(props.work_id)}
+                          className="py-1 px-2 bg-[#0d2b45] text-white font-bold rounded text-[11px] hover:bg-[#1a4163]"
+                        >
+                          Dossier
+                        </button>
+                      </div>
+                    </div>
+                  </Popup>
+                </Marker>
+              );
+            })}
+          </MapContainer>
+        </div>
+
+        {/* Bottom Dynamic Map Summary Bar */}
+        <div className="absolute bottom-4 left-4 z-[500] bg-white/95 backdrop-blur-xs border border-slate-300 rounded-lg p-3 shadow-md text-xs pointer-events-auto">
+          <div className="flex items-center gap-4">
+            <div>
+              <span className="text-[10px] text-slate-500 uppercase block font-bold">Works in View</span>
+              <span className="font-mono font-bold text-slate-900 text-sm">{totalWorksInView}</span>
+            </div>
+            <div className="border-l border-slate-200 pl-4">
+              <span className="text-[10px] text-slate-500 uppercase block font-bold">High / Critical</span>
+              <span className="font-mono font-bold text-amber-600 text-sm">{highCriticalCount}</span>
+            </div>
+            <div className="border-l border-slate-200 pl-4">
+              <span className="text-[10px] text-slate-500 uppercase block font-bold">Spatial Proximity (<span className="normal-case">{radiusMeters}m</span>)</span>
+              <span className="font-mono font-bold text-blue-700 text-sm">{spatialRelationshipClustersCount}</span>
             </div>
           </div>
         </div>
 
-        {/* Right Spatial Evidence Investigation Panel */}
+        {/* Floating Spatial Evidence Investigation Overlay Drawer */}
         {selectedWorkId && (
-          <div className="lg:col-span-5 bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-4 max-h-[640px] overflow-y-auto">
+          <div className="absolute top-4 right-4 z-[600] w-[calc(100%-2rem)] sm:w-auto sm:max-w-[460px] max-h-[calc(100%-2rem)] bg-white/98 backdrop-blur-sm border border-slate-300 rounded-xl p-4 shadow-xl space-y-4 overflow-y-auto">
             {/* Panel Top Action Bar */}
             <div className="flex items-center justify-between border-b border-slate-200 pb-3">
               <div className="flex items-center gap-2">
@@ -639,7 +655,7 @@ export const GeoSpatialView: React.FC<GeoSpatialViewProps> = ({
                 <div className="pt-2 border-t border-slate-200 space-y-2">
                   <button
                     onClick={() => onOpenDossier(spatialData.selected_work.work_id)}
-                    className="w-full py-2.5 bg-[#0d2b45] text-white font-bold rounded-lg text-xs hover:bg-[#1a4163] transition-colors flex items-center justify-center gap-2 shadow-xs"
+                    className="w-full py-2.5 bg-[#0d2b45] text-white font-bold rounded-lg text-xs hover:bg-[#1a4163] transition-colors flex items-center justify-center gap-2 shadow-xs cursor-pointer"
                   >
                     <ExternalLink className="w-4 h-4" />
                     Open Detailed Explainability Dossier ({spatialData.selected_work.work_id})

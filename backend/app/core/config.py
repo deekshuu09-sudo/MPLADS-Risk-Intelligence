@@ -15,6 +15,17 @@ class Settings:
     ESAKSHI_BASE_URL: str = "https://mplads.mospi.gov.in"
     ESAKSHI_REST_PATH: str = "/rest/PreLoginDashboardData"
     
+    # Deployment & Security
+    ALLOWED_ORIGINS: list[str] = [
+        origin.strip()
+        for origin in os.getenv(
+            "CORS_ORIGINS",
+            "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:3000"
+        ).split(",")
+        if origin.strip()
+    ]
+    RATE_LIMIT_PER_MINUTE: int = int(os.getenv("RATE_LIMIT_PER_MINUTE", "600"))
+
     # Anomaly Thresholds
     STATUTORY_STALL_DAYS: int = 365
     TENDER_THRESHOLD_INR: float = 1000000.0  # ₹10 Lakhs threshold-clustering parameter
@@ -25,3 +36,4 @@ class Settings:
     ADVANCE_PROGRESS_GAP_THRESHOLD: float = 50.0  # 50% gap between disbursed and progress
 
 settings = Settings()
+

@@ -140,6 +140,11 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
     return `₹${val.toLocaleString('en-IN')}`;
   };
 
+  const formatNumber = (
+    value: number | null | undefined,
+    digits = 2
+  ) => (value != null ? value.toFixed(digits) : '—');
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex justify-end">
       <div className="bg-slate-50 w-full max-w-4xl min-h-screen shadow-2xl border-l border-slate-300 flex flex-col animate-in slide-in-from-right duration-200">
@@ -1181,19 +1186,25 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                           <div className="p-2 bg-white rounded border border-slate-200">
                             <span className="block text-[10px] text-slate-500 font-medium">Splink Probability</span>
                             <span className="font-mono font-bold text-slate-900">
-                              {rel.structured_match.available ? `${(rel.structured_match.probability * 100).toFixed(1)}%` : 'N/A'}
+                              {rel.structured_match?.available && rel.structured_match.probability != null
+                                ? `${(rel.structured_match.probability * 100).toFixed(1)}%`
+                                : '—'}
                             </span>
                           </div>
                           <div className="p-2 bg-white rounded border border-slate-200">
                             <span className="block text-[10px] text-slate-500 font-medium">Semantic Cosine Sim</span>
                             <span className="font-mono font-bold text-slate-900">
-                              {rel.semantic_match.available ? (rel.semantic_match.similarity).toFixed(3) : 'N/A'}
+                              {rel.semantic_match?.available && rel.semantic_match.similarity != null
+                                ? rel.semantic_match.similarity.toFixed(3)
+                                : '—'}
                             </span>
                           </div>
                           <div className="p-2 bg-white rounded border border-slate-200">
                             <span className="block text-[10px] text-slate-500 font-medium">Geospatial Distance</span>
                             <span className="font-mono font-bold text-slate-900">
-                              {rel.geospatial_match.distance_meters !== undefined ? `${rel.geospatial_match.distance_meters.toFixed(1)}m` : 'N/A'}
+                              {rel.geospatial_match?.distance_meters != null
+                                ? `${rel.geospatial_match.distance_meters.toFixed(1)}m`
+                                : '—'}
                             </span>
                           </div>
                           <div className="p-2 bg-white rounded border border-slate-200">
@@ -1396,19 +1407,19 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                                   <div className="p-2 bg-slate-900/70 rounded border border-slate-700">
                                     <span className="text-[10px] text-slate-400 block">Splink Probability</span>
                                     <span className="font-bold text-amber-300">
-                                      {edge.splink_probability !== undefined ? `${(edge.splink_probability * 100).toFixed(1)}%` : 'N/A'}
+                                      {edge.splink_probability != null ? `${(edge.splink_probability * 100).toFixed(1)}%` : '—'}
                                     </span>
                                   </div>
                                   <div className="p-2 bg-slate-900/70 rounded border border-slate-700">
                                     <span className="text-[10px] text-slate-400 block">Semantic Similarity</span>
                                     <span className="font-bold text-emerald-300">
-                                      {edge.semantic_similarity !== undefined ? edge.semantic_similarity.toFixed(3) : 'N/A'}
+                                      {edge.semantic_similarity != null ? edge.semantic_similarity.toFixed(3) : '—'}
                                     </span>
                                   </div>
                                   <div className="p-2 bg-slate-900/70 rounded border border-slate-700">
                                     <span className="text-[10px] text-slate-400 block">Spatial Distance</span>
                                     <span className="font-bold text-blue-300">
-                                      {edge.spatial_distance_meters !== undefined ? `${edge.spatial_distance_meters.toFixed(1)}m` : 'N/A'}
+                                      {edge.spatial_distance_meters != null ? `${edge.spatial_distance_meters.toFixed(1)}m` : '—'}
                                     </span>
                                   </div>
                                   <div className="p-2 bg-slate-900/70 rounded border border-slate-700">
