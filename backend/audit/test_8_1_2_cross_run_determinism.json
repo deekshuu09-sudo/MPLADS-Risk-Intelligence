@@ -1,0 +1,18 @@
+{
+  "test": "8.1.2",
+  "evaluation_date": "2026-09-25",
+  "configuration_version": "RULE-ENGINE-V2.1",
+  "total_works": 506,
+  "run_1_records": 506,
+  "run_2_records": 506,
+  "run_3_records": 506,
+  "run_1_vs_run_2_mismatches": 0,
+  "run_2_vs_run_3_mismatches": 0,
+  "score_mismatches": 0,
+  "factor_mismatches": 0,
+  "ml_mismatches": 0,
+  "fingerprint_mismatches": 0,
+  "configuration_mismatches": 0,
+  "database_mutation": false,
+  "global_status": "PASS"
+}

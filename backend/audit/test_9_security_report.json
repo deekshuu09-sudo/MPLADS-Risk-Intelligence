@@ -1,0 +1,35 @@
+{
+  "test": "TEST_9",
+  "endpoint_inventory_count": 14,
+  "security_checks": {
+    "sql_injection": "PASS",
+    "xss_encoding": "PASS",
+    "path_traversal": "PASS",
+    "input_validation": "PASS",
+    "state_machine_validation": "PASS",
+    "score_tampering_resistance": "PASS",
+    "provenance_tampering_resistance": "PASS",
+    "audit_log_integrity": "PASS",
+    "authentication": "LIMITATION",
+    "authorization": "LIMITATION",
+    "cors_configuration": "HARDENING_OPPORTUNITY",
+    "security_headers": "HARDENING_OPPORTUNITY",
+    "error_disclosure": "HARDENING_OPPORTUNITY",
+    "rate_limiting": "HARDENING_OPPORTUNITY"
+  },
+  "database_mutation": false,
+  "benchmark_integrity": true,
+  "database_snapshot": {
+    "works_count": 506,
+    "anomalies_count": 506,
+    "investigations_count": 4,
+    "audit_logs_count": 15,
+    "benchmark_scores": {
+      "WS/DEMO/2025/101": 61.0,
+      "WS/DEMO/2025/102": 68.0,
+      "WS/DEMO/2025/801": 22.0,
+      "WS/DEMO/2025/501": 86.0
+    }
+  },
+  "global_status": "PASS"
+}

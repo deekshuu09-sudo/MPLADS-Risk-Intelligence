@@ -1,0 +1,27 @@
+import os
+
+class Settings:
+    PROJECT_NAME: str = "MPLADS Risk Intelligence & Investigation Platform"
+    PROJECT_SLUG: str = "mplads-risk-intelligence"
+    API_V1_STR: str = "/api/v1"
+    
+    # Database
+    DATABASE_URL: str = os.getenv(
+        "DATABASE_URL", 
+        f"sqlite:///{os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../data/mplads.db'))}"
+    )
+    
+    # Official eSAKSHI MoSPI Endpoints
+    ESAKSHI_BASE_URL: str = "https://mplads.mospi.gov.in"
+    ESAKSHI_REST_PATH: str = "/rest/PreLoginDashboardData"
+    
+    # Anomaly Thresholds
+    STATUTORY_STALL_DAYS: int = 365
+    TENDER_THRESHOLD_INR: float = 1000000.0  # ₹10 Lakhs threshold-clustering parameter
+    TRUST_SOCIETY_CAP_INR: float = 7500000.0  # ₹75 Lakhs cap under MPLADS guidelines
+    DUPLICATE_PROXIMITY_METERS: float = 500.0
+    DUPLICATE_TEXT_SIMILARITY: float = 0.80
+    MODIFIED_Z_SCORE_THRESHOLD: float = 3.0
+    ADVANCE_PROGRESS_GAP_THRESHOLD: float = 50.0  # 50% gap between disbursed and progress
+
+settings = Settings()

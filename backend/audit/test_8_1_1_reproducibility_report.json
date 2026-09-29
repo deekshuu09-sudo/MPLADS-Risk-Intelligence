@@ -1,0 +1,93 @@
+{
+  "audit": "TEST_8.1.1",
+  "scope": {
+    "total_works": 506,
+    "dataset_mode": "MIXED_REAL_AND_SYNTHETIC"
+  },
+  "results": {
+    "reproducible": 506,
+    "non_reproducible": 0,
+    "score_mismatches": 0,
+    "factor_sum_mismatches": 0,
+    "missing_provenance": 0,
+    "missing_fingerprint": 0,
+    "missing_configuration": 0
+  },
+  "reproducibility_rate": 100.0,
+  "independent_recalculation": true,
+  "circular_verification_detected": false,
+  "benchmarks": [
+    {
+      "label": "Case 101 Synthetic",
+      "work_id": "WS/DEMO/2025/101",
+      "dataset_mode": "SYNTHETIC_BENCHMARK",
+      "stored_score": 61.0,
+      "independently_recalculated_score": 61.0,
+      "factor_sum": 61.0,
+      "fingerprint": "SHA256:bdeac30d546f3c5cfdd612546e25a06d8b001683247b234003d16fa42c31e5e6",
+      "engine_version": "RULE-ENGINE-V2.1",
+      "config_version": "365 days (Configured Policy Benchmark)",
+      "pass": true
+    },
+    {
+      "label": "Case 102 Synthetic",
+      "work_id": "WS/DEMO/2025/102",
+      "dataset_mode": "SYNTHETIC_BENCHMARK",
+      "stored_score": 68.0,
+      "independently_recalculated_score": 68.0,
+      "factor_sum": 68.0,
+      "fingerprint": "SHA256:70132e0db2823b3eace4e727e0e86a0f969b57aad9794759e37df430b7a809d4",
+      "engine_version": "RULE-ENGINE-V2.1",
+      "config_version": "365 days (Configured Policy Benchmark)",
+      "pass": true
+    },
+    {
+      "label": "Case 801 Synthetic",
+      "work_id": "WS/DEMO/2025/801",
+      "dataset_mode": "SYNTHETIC_BENCHMARK",
+      "stored_score": 22.0,
+      "independently_recalculated_score": 22.0,
+      "factor_sum": 22.0,
+      "fingerprint": "SHA256:ed9236a24bcaaebe68a917a1537172f6a0d7db6f53c35edcc8e117f5d391bb1b",
+      "engine_version": "RULE-ENGINE-V2.1",
+      "config_version": "365 days (Configured Policy Benchmark)",
+      "pass": true
+    },
+    {
+      "label": "Case 501 Synthetic",
+      "work_id": "WS/DEMO/2025/501",
+      "dataset_mode": "SYNTHETIC_BENCHMARK",
+      "stored_score": 86.0,
+      "independently_recalculated_score": 86.0,
+      "factor_sum": 86.0,
+      "fingerprint": "SHA256:d5be85dad29387483ad6d61646b39962acbdc9d67fc81eb4fd7eaa730a894377",
+      "engine_version": "RULE-ENGINE-V2.1",
+      "config_version": "365 days (Configured Policy Benchmark)",
+      "pass": true
+    },
+    {
+      "label": "Case 101 Real Norm",
+      "work_id": "WS/NORM/2024-2025/100101",
+      "dataset_mode": "REAL_TELEMETRY",
+      "stored_score": 1.0,
+      "independently_recalculated_score": 1.0,
+      "factor_sum": 1.0,
+      "fingerprint": "SHA256:d087247fc961e82e01241284a232958af1f98a779cf1371fb4c756afda51a1f3",
+      "engine_version": "RULE-ENGINE-V2.1",
+      "config_version": "365 days (Configured Policy Benchmark)",
+      "pass": true
+    },
+    {
+      "label": "Case 102 Real Norm",
+      "work_id": "WS/NORM/2024-2025/100102",
+      "dataset_mode": "REAL_TELEMETRY",
+      "stored_score": 3.0,
+      "independently_recalculated_score": 3.0,
+      "factor_sum": 3.0,
+      "fingerprint": "SHA256:5ced805cdbec170a06fa5e765341b829ede6f1747c8830e96c3f8c981bde8bf1",
+      "engine_version": "RULE-ENGINE-V2.1",
+      "config_version": "365 days (Configured Policy Benchmark)",
+      "pass": true
+    }
+  ]
+}

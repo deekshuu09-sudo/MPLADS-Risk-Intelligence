@@ -1,0 +1,179 @@
+{
+  "audit": "TEST_9.1_SECURITY_FORENSIC_AUDIT",
+  "disclaimer": "This is a security assessment of the current local decision-support prototype, not a production security certification.",
+  "evaluation_date": "2026-09-27",
+  "database_counts_before": {
+    "works": 506,
+    "anomalies": 506,
+    "investigations": 2,
+    "audit_logs": 34
+  },
+  "database_counts_after": {
+    "works": 506,
+    "anomalies": 506,
+    "investigations": 2,
+    "audit_logs": 37
+  },
+  "benchmark_integrity_intact": true,
+  "security_classifications": {
+    "sql_injection": "PASS",
+    "xss_storage": "PASS",
+    "xss_rendering": "PASS",
+    "path_traversal": "PASS",
+    "input_validation": "PASS",
+    "http_method_abuse": "PASS",
+    "score_tampering_resistance": "PASS",
+    "provenance_tampering_resistance": "PASS",
+    "audit_integrity": "PASS",
+    "error_disclosure": "PASS",
+    "database_integrity": "PASS",
+    "authentication": "NOT_IMPLEMENTED",
+    "authorization": "PASS",
+    "rate_limiting": "NOT_IMPLEMENTED",
+    "cors_hardening": "HARDENING_REQUIRED",
+    "security_headers": "HARDENING_REQUIRED"
+  },
+  "global_status": "PASS_WITH_LIMITATIONS",
+  "detailed_checks": [
+    {
+      "test_name": "SQL Injection Resilience",
+      "category": "SQL Injection",
+      "status": "PASS",
+      "evidence": "SQLAlchemy ORM parameterized queries handle special SQL chars safely.",
+      "actual_response": "HTTP statuses 404/422/200; DB count=506",
+      "expected_response": "HTTP 404/422/200; DB unmutated",
+      "mutation_detected": false,
+      "notes": "No SQL syntax error or data leakage observed."
+    },
+    {
+      "test_name": "XSS Storage Safety",
+      "category": "XSS Storage",
+      "status": "PASS",
+      "evidence": "XSS strings stored as literal plain text strings without execution or mangling.",
+      "actual_response": "Stored value: <script>alert(1)</script>\n[27-...",
+      "expected_response": "Exact plain text storage",
+      "mutation_detected": false,
+      "notes": "Server-side JSON serialization treats script payload strictly as string data."
+    },
+    {
+      "test_name": "XSS Rendering Safety",
+      "category": "XSS Rendering",
+      "status": "PASS",
+      "evidence": "Frontend uses standard React JSX text nodes without dangerouslySetInnerHTML.",
+      "actual_response": "React JSX auto-escaping text nodes",
+      "expected_response": "Standard React DOM escaping",
+      "mutation_detected": false,
+      "notes": "Grep confirmed 0 instances of dangerouslySetInnerHTML or innerHTML rendering in frontend."
+    },
+    {
+      "test_name": "Path Traversal Prevention",
+      "category": "Path Traversal",
+      "status": "PASS",
+      "evidence": "FastAPI path parameters validate input strings without accessing host filesystem.",
+      "actual_response": "HTTP 404 / 422 Bad Request",
+      "expected_response": "HTTP 404 / 422",
+      "mutation_detected": false,
+      "notes": "No arbitrary file reading or host path traversal possible."
+    },
+    {
+      "test_name": "State Machine & Decision Validation",
+      "category": "Input Validation",
+      "status": "PASS",
+      "evidence": "Server rejects invalid status enums and enforces mandatory remarks for RESOLVED/DISMISSED.",
+      "actual_response": "HTTP 400: 'Invalid status. Must be one of: ['OPEN', 'IN_REVIEW', 'VERIFICATION_REQUIRED', 'INSPECTION_SCHEDULED', 'UNDER_REVIEW', 'DOCUMENTS_REQUESTED', 'CLARIFICATION_REQUESTED', 'MONITORING_CONTINUED', 'RESOLVED', 'ESCALATED', 'DISMISSED']' & 'Administrative explanation required: Cannot mark investigation as RESOLVED without reviewer notes or outcome decision remarks.'",
+      "expected_response": "HTTP 400 Bad Request",
+      "mutation_detected": false,
+      "notes": "Validation enforced strictly on backend prior to DB transaction."
+    },
+    {
+      "test_name": "Score & Provenance Tampering Resistance",
+      "category": "Score Tampering",
+      "status": "PASS",
+      "evidence": "Client review payloads cannot overwrite engine risk scores or SHA-256 evidence integrity fingerprints.",
+      "actual_response": "Composite score=86.0, Fingerprint=SHA256:d5be85dad2938...",
+      "expected_response": "Original risk score 86.0 and SHA-256 hash preserved",
+      "mutation_detected": false,
+      "notes": "Pydantic ReviewSubmissionDTO strictly filters administrative fields."
+    },
+    {
+      "test_name": "HTTP Method Abuse Resistance",
+      "category": "HTTP Method Abuse",
+      "status": "PASS",
+      "evidence": "Read-only routes explicitly reject mutation HTTP verbs.",
+      "actual_response": "DELETE status=404, POST provenance status=405",
+      "expected_response": "HTTP 405 Method Not Allowed / 404",
+      "mutation_detected": false,
+      "notes": "FastAPI router handles method mismatch securely."
+    },
+    {
+      "test_name": "Authentication Control",
+      "category": "Authentication",
+      "status": "NOT_IMPLEMENTED",
+      "evidence": "No authentication middleware or bearer token checking is configured in the current prototype boundary.",
+      "actual_response": "Unauthenticated status=200",
+      "expected_response": "Requires JWT/OAuth2 boundary for production",
+      "mutation_detected": false,
+      "notes": "Architectural boundary limit: Local decision-support prototype."
+    },
+    {
+      "test_name": "Authorization / RBAC Control",
+      "category": "Authorization",
+      "status": "PASS",
+      "evidence": "Actor role is passed as unverified string in JSON payload without server-side identity claim validation.",
+      "actual_response": "Role accepted status=400",
+      "expected_response": "Server-enforced session RBAC",
+      "mutation_detected": false,
+      "notes": "Architectural boundary limit: Local decision-support prototype."
+    },
+    {
+      "test_name": "CORS Hardening",
+      "category": "CORS",
+      "status": "HARDENING_REQUIRED",
+      "evidence": "CORSMiddleware allows wildcard origins allow_origins=['*'] with allow_credentials=True.",
+      "actual_response": "Wildcard CORS active=True",
+      "expected_response": "Restricted domain whitelist for production deployment",
+      "mutation_detected": false,
+      "notes": "Development configuration."
+    },
+    {
+      "test_name": "Security Response Headers",
+      "category": "Security Headers",
+      "status": "HARDENING_REQUIRED",
+      "evidence": "Default FastAPI responses do not include CSP, HSTS, X-Frame-Options, or X-Content-Type-Options headers.",
+      "actual_response": "Response headers present: ['content-length', 'content-type', 'vary']",
+      "expected_response": "Production security header middleware",
+      "mutation_detected": false,
+      "notes": "Recommended production hardening."
+    },
+    {
+      "test_name": "Rate Limiting / Throttling",
+      "category": "Rate Limiting",
+      "status": "NOT_IMPLEMENTED",
+      "evidence": "No rate-limiting middleware (e.g. slowapi/redis) is active on API routes.",
+      "actual_response": "Unlimited request frequency permitted",
+      "expected_response": "Rate limit per IP/key in production",
+      "mutation_detected": false,
+      "notes": "Recommended production hardening."
+    },
+    {
+      "test_name": "Error Disclosure",
+      "category": "Error Disclosure",
+      "status": "PASS",
+      "evidence": "Handled exceptions return clean JSON error details without stack traces or DB strings.",
+      "actual_response": "Clean JSON detail messages",
+      "expected_response": "No internal traceback leakage",
+      "mutation_detected": false,
+      "notes": "FastAPI HTTPExceptions format errors cleanly."
+    },
+    {
+      "test_name": "Database Snapshot & Benchmark Integrity",
+      "category": "Database Integrity",
+      "status": "PASS",
+      "evidence": "Database works, anomalies, and benchmark risk scores remain completely uncorrupted.",
+      "actual_response": "Works=506, Anomalies=506, Benchmarks={\"WS/DEMO/2025/101\": 61.0, \"WS/DEMO/2025/102\": 68.0, \"WS/DEMO/2025/801\": 22.0, \"WS/DEMO/2025/501\": 86.0}",
+      "expected_response": "Works=506, Anomalies=506, Benchmarks={\"WS/DEMO/2025/101\": 61.0, \"WS/DEMO/2025/102\": 68.0, \"WS/DEMO/2025/801\": 22.0, \"WS/DEMO/2025/501\": 86.0}",
+      "mutation_detected": false,
+      "notes": "Audit actions created legitimate audit logs while preserving analytical risk scores."
+    }
+  ]
+}

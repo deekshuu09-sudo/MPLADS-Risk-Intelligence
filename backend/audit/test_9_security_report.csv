@@ -1,0 +1,15 @@
+method,path,purpose,type,auth,status
+GET,/health,Health Check,Read-Only,NOT_IMPLEMENTED,PASS
+GET,/api/v1/dashboard/summary,KPI Overview,Read-Only,NOT_IMPLEMENTED,PASS
+GET,/api/v1/analytics/overview,Executive Analytics,Read-Only,NOT_IMPLEMENTED,PASS
+GET,/api/v1/works,Works Listing,Read-Only,NOT_IMPLEMENTED,PASS
+GET,/api/v1/works/{id}/provenance,Work Provenance & Fingerprint,Read-Only,NOT_IMPLEMENTED,PASS
+GET,/api/v1/anomalies,Risk Anomaly Listing,Read-Only,NOT_IMPLEMENTED,PASS
+GET,/api/v1/anomalies/{id}/dossier,Explainability Dossier,Read-Only,NOT_IMPLEMENTED,PASS
+GET,/api/v1/investigations/queue,Priority Queue,Read-Only,NOT_IMPLEMENTED,PASS
+POST,/api/v1/investigations/{id}/review,Officer Administrative Review,Mutation,NOT_IMPLEMENTED,PASS
+GET,/api/v1/geospatial/risk-map,Geospatial Markers,Read-Only,NOT_IMPLEMENTED,PASS
+GET,/api/v1/geospatial/works/{id}/relationships,Spatial Proximity,Read-Only,NOT_IMPLEMENTED,PASS
+GET,/api/v1/audit/logs,Audit Trail Log Search,Read-Only,NOT_IMPLEMENTED,PASS
+GET,/api/v1/audit/entity/{id},Entity Audit History,Read-Only,NOT_IMPLEMENTED,PASS
+GET,/api/v1/esakshi/live-feed,Mock Feed Proxy,Read-Only,NOT_IMPLEMENTED,PASS
