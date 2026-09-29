@@ -6,13 +6,13 @@
     "works": 506,
     "anomalies": 506,
     "investigations": 2,
-    "audit_logs": 34
+    "audit_logs": 41
   },
   "database_counts_after": {
     "works": 506,
     "anomalies": 506,
     "investigations": 2,
-    "audit_logs": 37
+    "audit_logs": 44
   },
   "benchmark_integrity_intact": true,
   "security_classifications": {

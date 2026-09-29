@@ -499,7 +499,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
               </p>
             </div>
             <button
-              onClick={() => onNavigateToTab('map')}
+              onClick={() => onNavigateToTab('geospatial')}
               className="px-3 py-1.5 bg-[#0d2b45] text-white rounded text-xs font-semibold hover:bg-[#19466e] flex items-center gap-1.5 transition-colors"
             >
               <MapPin className="w-3.5 h-3.5 text-emerald-400" /> Launch Spatial Map
@@ -566,7 +566,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           </div>
 
           <button
-            onClick={() => onNavigateToTab('map')}
+            onClick={() => onNavigateToTab('geospatial')}
             className="w-full mt-4 py-2 bg-slate-100 text-slate-700 rounded text-xs font-semibold hover:bg-slate-200 flex items-center justify-center gap-1 transition-colors"
           >
             Explore District Hotspots on Map <ArrowUpRight className="w-3.5 h-3.5" />

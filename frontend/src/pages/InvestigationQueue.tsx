@@ -30,6 +30,7 @@ export const InvestigationQueue: React.FC<InvestigationQueueProps> = ({
   datasetMode,
 }) => {
   const [queue, setQueue] = useState<InvestigationQueueItem[]>([]);
+  const [allQueue, setAllQueue] = useState<InvestigationQueueItem[]>([]);
   const [loading, setLoading] = useState(true);
   
   // Filter & Sort States
@@ -64,15 +65,29 @@ export const InvestigationQueue: React.FC<InvestigationQueueProps> = ({
       const isSyntheticParam =
         datasetMode === 'REAL' ? false : datasetMode === 'SYNTHETIC' ? true : undefined;
 
-      const data = await api.getInvestigationQueue({
-        status: selectedStatus !== 'ALL' ? selectedStatus : undefined,
-        severity: severityFilter !== 'ALL' ? severityFilter : undefined,
-        state_id: selectedState,
-        primary_signal: signalFilter !== 'ALL' ? signalFilter : undefined,
-        sort_by: sortBy,
-        is_synthetic: isSyntheticParam,
-      });
-      setQueue(data);
+      // Always fetch the baseline unstatused queue to keep tab counts accurate across lifecycle
+      const [allData, filteredData] = await Promise.all([
+        api.getInvestigationQueue({
+          severity: severityFilter !== 'ALL' ? severityFilter : undefined,
+          state_id: selectedState,
+          primary_signal: signalFilter !== 'ALL' ? signalFilter : undefined,
+          sort_by: sortBy,
+          is_synthetic: isSyntheticParam,
+        }),
+        selectedStatus !== 'ALL'
+          ? api.getInvestigationQueue({
+              status: selectedStatus,
+              severity: severityFilter !== 'ALL' ? severityFilter : undefined,
+              state_id: selectedState,
+              primary_signal: signalFilter !== 'ALL' ? signalFilter : undefined,
+              sort_by: sortBy,
+              is_synthetic: isSyntheticParam,
+            })
+          : Promise.resolve(null),
+      ]);
+
+      setAllQueue(allData);
+      setQueue(filteredData !== null ? filteredData : allData);
     } catch (err) {
       console.error('Failed to load investigation queue:', err);
     } finally {
@@ -95,7 +110,7 @@ export const InvestigationQueue: React.FC<InvestigationQueueProps> = ({
   }, [queue, searchQuery]);
 
   const countByStatus = (status: string) => {
-    return queue.filter((i) => i.status.toUpperCase() === status.toUpperCase()).length;
+    return allQueue.filter((i) => i.status.toUpperCase() === status.toUpperCase()).length;
   };
 
   return (
