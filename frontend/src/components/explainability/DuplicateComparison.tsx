@@ -90,7 +90,7 @@ export const DuplicateComparison: React.FC<DuplicateComparisonProps> = ({
                   <th className="py-2.5 px-3">Risk Level</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 font-sans">
+              <tbody className="divide-y divide-slate-100 font-ui">
                 {allRelated.map((rw) => (
                   <tr key={rw.work_id} className="hover:bg-slate-50">
                     <td className="py-2.5 px-3 font-mono font-bold text-blue-700">

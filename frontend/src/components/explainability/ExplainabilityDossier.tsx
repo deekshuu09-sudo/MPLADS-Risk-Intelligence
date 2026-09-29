@@ -276,15 +276,15 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-[11px] font-mono">
                     <div className="p-2 bg-slate-800 rounded border border-slate-700">
-                      <span className="text-slate-400 text-[10px] block font-sans">Haversine Distance</span>
+                      <span className="text-slate-400 text-[10px] block font-ui">Haversine Distance</span>
                       <span className="text-white font-bold">166.27 m (Proximity Only)</span>
                     </div>
                     <div className="p-2 bg-slate-800 rounded border border-slate-700">
-                      <span className="text-slate-400 text-[10px] block font-sans">Splink + Semantic Signal</span>
+                      <span className="text-slate-400 text-[10px] block font-ui">Splink + Semantic Signal</span>
                       <span className="text-emerald-400 font-bold">0.000 (Completely Disjoint)</span>
                     </div>
                     <div className="p-2 bg-slate-800 rounded border border-slate-700">
-                      <span className="text-slate-400 text-[10px] block font-sans">System Safeguard Action</span>
+                      <span className="text-slate-400 text-[10px] block font-ui">System Safeguard Action</span>
                       <span className="text-blue-300 font-bold">No False-Positive Duplicate Flag</span>
                     </div>
                   </div>
@@ -354,19 +354,19 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                   {/* Policy Benchmark Metadata */}
                   <div className="mt-3 pt-2.5 border-t border-[#1f4a70] grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] font-mono text-slate-300">
                     <div>
-                      <span className="text-[10px] text-slate-400 block font-sans">Source</span>
+                      <span className="text-[10px] text-slate-400 block font-ui">Source</span>
                       <span className="text-white font-semibold">MPLADS Guidelines</span>
                     </div>
                     <div>
-                      <span className="text-[10px] text-slate-400 block font-sans">Rule Type</span>
+                      <span className="text-[10px] text-slate-400 block font-ui">Rule Type</span>
                       <span className="text-amber-300 font-semibold">Configured Policy Benchmark</span>
                     </div>
                     <div>
-                      <span className="text-[10px] text-slate-400 block font-sans">Benchmark</span>
+                      <span className="text-[10px] text-slate-400 block font-ui">Benchmark</span>
                       <span className="text-white font-semibold">365 days</span>
                     </div>
                     <div>
-                      <span className="text-[10px] text-slate-400 block font-sans">Status</span>
+                      <span className="text-[10px] text-slate-400 block font-ui">Status</span>
                       <span className="text-emerald-300 font-semibold">Demo configuration</span>
                     </div>
                   </div>
@@ -676,18 +676,18 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                                   <td className="py-2.5 px-3 text-slate-600">
                                     {exp.expenditure_date || 'N/A'}
                                   </td>
-                                  <td className="py-2.5 px-3 font-sans text-slate-700">
+                                  <td className="py-2.5 px-3 font-ui text-slate-700">
                                     {exp.vendor_name || 'Designated Vendor'}
                                   </td>
                                   <td className="py-2.5 px-3 font-bold text-emerald-700">
                                     {formatINR(exp.fund_disbursed_amt)}
                                   </td>
-                                  <td className="py-2.5 px-3 font-sans">
+                                  <td className="py-2.5 px-3 font-ui">
                                     <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                                       {exp.payment_status}
                                     </span>
                                   </td>
-                                  <td className="py-2.5 px-3 text-right font-sans">
+                                  <td className="py-2.5 px-3 text-right font-ui">
                                     <button
                                       type="button"
                                       onClick={() => setActiveLineageVoucherId(isLineageOpen ? null : exp.expenditure_id)}
@@ -704,7 +704,7 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                                 </tr>
                                 {isLineageOpen && (
                                   <tr className="bg-blue-50/30">
-                                    <td colSpan={6} className="p-3 font-sans border-b border-blue-200">
+                                    <td colSpan={6} className="p-3 font-ui border-b border-blue-200">
                                       <div className="bg-white border border-blue-200 rounded-lg p-3 text-xs space-y-2">
                                         <div className="flex items-center justify-between text-[11px] font-bold text-blue-900 border-b border-slate-100 pb-1.5">
                                           <span className="flex items-center gap-1.5">
@@ -717,24 +717,24 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                                         </div>
                                         <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 pt-1 font-mono text-[11px]">
                                           <div className="p-2 bg-slate-50 rounded border border-slate-200">
-                                            <span className="text-[10px] text-slate-400 block font-sans">Tier 1: Project Sanction</span>
+                                            <span className="text-[10px] text-slate-400 block font-ui">Tier 1: Project Sanction</span>
                                             <span className="font-bold text-slate-800">{dossier.work_id}</span>
-                                            <span className="text-[10px] text-slate-500 block font-sans">{formatINR(dossier.sanctioned_amount)} sanctioned</span>
+                                            <span className="text-[10px] text-slate-500 block font-ui">{formatINR(dossier.sanctioned_amount)} sanctioned</span>
                                           </div>
                                           <div className="p-2 bg-slate-50 rounded border border-slate-200">
-                                            <span className="text-[10px] text-slate-400 block font-sans">Tier 2: Treasury Voucher</span>
+                                            <span className="text-[10px] text-slate-400 block font-ui">Tier 2: Treasury Voucher</span>
                                             <span className="font-bold text-blue-700">{exp.voucher_no || `VCH-${exp.expenditure_id}`}</span>
-                                            <span className="text-[10px] text-slate-500 block font-sans">{formatINR(exp.fund_disbursed_amt)} disbursed</span>
+                                            <span className="text-[10px] text-slate-500 block font-ui">{formatINR(exp.fund_disbursed_amt)} disbursed</span>
                                           </div>
                                           <div className="p-2 bg-slate-50 rounded border border-slate-200">
-                                            <span className="text-[10px] text-slate-400 block font-sans">Tier 3: Payee Vendor</span>
-                                            <span className="font-bold text-slate-800 font-sans truncate block">{exp.vendor_name || 'Designated Vendor'}</span>
-                                            <span className="text-[10px] text-emerald-600 block font-sans">PFMS Verified Account</span>
+                                            <span className="text-[10px] text-slate-400 block font-ui">Tier 3: Payee Vendor</span>
+                                            <span className="font-bold text-slate-800 font-ui truncate block">{exp.vendor_name || 'Designated Vendor'}</span>
+                                            <span className="text-[10px] text-emerald-600 block font-ui">PFMS Verified Account</span>
                                           </div>
                                           <div className="p-2 bg-slate-50 rounded border border-slate-200">
-                                            <span className="text-[10px] text-slate-400 block font-sans">Tier 4: Ground Milestone</span>
+                                            <span className="text-[10px] text-slate-400 block font-ui">Tier 4: Ground Milestone</span>
                                             <span className="font-bold text-slate-800">{dossier.physical_progress_pct}% Physical</span>
-                                            <span className={`text-[10px] block font-sans ${dossier.physical_progress_pct < 20 && (exp.fund_disbursed_amt / (dossier.sanctioned_amount || 1)) > 0.5 ? 'text-amber-600 font-bold' : 'text-slate-500'}`}>
+                                            <span className={`text-[10px] block font-ui ${dossier.physical_progress_pct < 20 && (exp.fund_disbursed_amt / (dossier.sanctioned_amount || 1)) > 0.5 ? 'text-amber-600 font-bold' : 'text-slate-500'}`}>
                                               MB Abstract Verification
                                             </span>
                                           </div>
@@ -781,18 +781,18 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                 {/* Source Record & Classification Banner */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs bg-slate-50 p-3.5 rounded-lg border border-slate-200 font-mono">
                   <div>
-                    <span className="text-slate-500 text-[10px] block font-sans uppercase font-bold">Source Classification</span>
+                    <span className="text-slate-500 text-[10px] block font-ui uppercase font-bold">Source Classification</span>
                     <span className="font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200 inline-block mt-0.5">
                       {dossier.is_synthetic || dossier.work_id.startsWith('WS/DEMO/') ? 'SYNTHETIC BENCHMARK DATA' : 'IMPORTED TELEMETRY'}
                     </span>
                   </div>
                   <div>
-                    <span className="text-slate-500 text-[10px] block font-sans uppercase font-bold">Source Record ID / Letter</span>
+                    <span className="text-slate-500 text-[10px] block font-ui uppercase font-bold">Source Record ID / Letter</span>
                     <span className="font-bold text-slate-900">{dossier.work_id}</span>
-                    <span className="text-slate-500 block text-[10px] font-sans">Letter: {dossier.provenance_details?.source_metadata?.letter_no || 'Not available'}</span>
+                    <span className="text-slate-500 block text-[10px] font-ui">Letter: {dossier.provenance_details?.source_metadata?.letter_no || 'Not available'}</span>
                   </div>
                   <div>
-                    <span className="text-slate-500 text-[10px] block font-sans uppercase font-bold">Evidence Integrity Fingerprint</span>
+                    <span className="text-slate-500 text-[10px] block font-ui uppercase font-bold">Evidence Integrity Fingerprint</span>
                     <span className="font-bold text-slate-800 text-[10px] break-all bg-white p-1 rounded border border-slate-200 block mt-0.5">
                       {dossier.provenance_details?.integrity_fingerprint || 'SHA256:Pending'}
                     </span>
@@ -808,7 +808,7 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                     <div className="grid grid-cols-1 sm:grid-cols-5 gap-2 text-xs font-mono">
                       {dossier.provenance_details.lineage_steps.map((step, sIdx) => (
                         <div key={sIdx} className="bg-slate-50 border border-slate-200 rounded-lg p-2.5 space-y-1">
-                          <span className="text-[10px] font-bold text-blue-700 block uppercase font-sans">
+                          <span className="text-[10px] font-bold text-blue-700 block uppercase font-ui">
                             {sIdx + 1}. {step.step}
                           </span>
                           <span className="text-[10px] text-slate-600 block">{step.method}</span>
@@ -838,7 +838,7 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                           <th className="py-2.5 px-3 text-right">Applied Engine</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100 font-sans">
+                      <tbody className="divide-y divide-slate-100 font-ui">
                         {dossier.data_provenance.map((item, pIdx) => (
                           <tr key={pIdx} className="hover:bg-slate-50">
                             <td className="py-2.5 px-3 font-semibold text-slate-900">
@@ -1314,7 +1314,7 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                                   isSelected ? "ring-2 ring-white scale-105" : ""
                                 }`}
                               >
-                                <span className="text-[9px] px-1 py-0.5 rounded bg-black/40 font-sans uppercase">
+                                <span className="text-[9px] px-1 py-0.5 rounded bg-black/40 font-ui uppercase">
                                   {node.node_type}
                                 </span>
                                 <span className="font-semibold">{node.label}</span>
@@ -1369,7 +1369,7 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                               <div>
                                 <div className="text-[11px] font-bold text-white flex items-center justify-between pb-1 border-b border-slate-700">
                                   <span>Node: {n.id}</span>
-                                  <span className="text-slate-400 font-sans">{n.node_type}</span>
+                                  <span className="text-slate-400 font-ui">{n.node_type}</span>
                                 </div>
                                 <div className="grid grid-cols-2 gap-2 pt-2 text-[11px]">
                                   {n.activity_name && <div><span className="text-slate-400">Activity:</span> {n.activity_name}</div>}
@@ -1434,7 +1434,7 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                                 </div>
 
                                 {edge.disclaimer && (
-                                  <div className="pt-1.5 text-[10px] text-amber-300/90 font-sans italic">
+                                  <div className="pt-1.5 text-[10px] text-amber-300/90 font-ui italic">
                                     {edge.disclaimer}
                                   </div>
                                 )}
@@ -1504,14 +1504,14 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                                 <div className="space-y-0.5">
                                   <div className="flex items-center gap-2">
                                     <span className="font-bold text-slate-800">{evt.stage}</span>
-                                    <span className="text-[10px] text-slate-500 font-sans">
+                                    <span className="text-[10px] text-slate-500 font-ui">
                                       {new Date(evt.timestamp).toLocaleString('en-IN')}
                                     </span>
-                                    <span className="text-[10px] bg-slate-200 text-slate-700 px-1 rounded font-sans">
+                                    <span className="text-[10px] bg-slate-200 text-slate-700 px-1 rounded font-ui">
                                       {evt.actor}
                                     </span>
                                   </div>
-                                  <p className="text-slate-600 font-sans">{evt.event}</p>
+                                  <p className="text-slate-600 font-ui">{evt.event}</p>
                                 </div>
                               </div>
                             ))}
@@ -1569,19 +1569,19 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                         {item.new_value && (
                           <div className="text-[11px] text-slate-700 font-mono bg-white p-2 rounded border border-slate-200">
                             {item.new_value.status && (
-                              <div className="font-sans">
+                              <div className="font-ui">
                                 <strong>Status Transition:</strong>{' '}
                                 <span className="text-slate-500">{item.old_value?.status || 'INITIAL'}</span> ➔{' '}
                                 <span className="font-bold text-blue-700">{item.new_value.status}</span>
                               </div>
                             )}
                             {item.new_value.notes && (
-                              <div className="font-sans text-slate-600 mt-1">
+                              <div className="font-ui text-slate-600 mt-1">
                                 <strong>Notes:</strong> {item.new_value.notes}
                               </div>
                             )}
                             {item.new_value.decision && (
-                              <div className="font-sans text-slate-600 mt-0.5">
+                              <div className="font-ui text-slate-600 mt-0.5">
                                 <strong>Prescriptive Order:</strong> {item.new_value.decision}
                               </div>
                             )}

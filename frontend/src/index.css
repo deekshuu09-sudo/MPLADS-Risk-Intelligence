@@ -8,8 +8,8 @@
   --gov-crimson: #dc2626;
 
   /* Strict Typography System */
-  --font-ui: "Raleway", -apple-system, sans-serif;
-  --font-display: "Forum", "Classico", "Muse", Georgia, serif;
+  --font-ui: "Raleway", sans-serif;
+  --font-display: "Forum", "Classico", "Muse", serif;
   --font-secondary: "Thasadith", "Ysabeau Infant", sans-serif;
   --font-data: "Brown Austin Sans", "Sulfur Point", "Raleway", sans-serif;
   --font-accent: "Ysabeau Infant", "Sulfur Point", sans-serif;

@@ -55,7 +55,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex flex-col font-sans text-slate-900 selection:bg-blue-100 selection:text-blue-900">
+    <div className="min-h-screen bg-[#f8fafc] flex flex-col font-ui text-slate-900 selection:bg-blue-100 selection:text-blue-900">
       {/* Top Gov Header & Primary Navigation */}
       <GovHeader
         currentTab={currentTab}

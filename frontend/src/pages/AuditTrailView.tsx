@@ -202,12 +202,12 @@ export const AuditTrailView: React.FC<AuditTrailViewProps> = ({ onOpenDossier })
                             </div>
                           )}
                           {entry.new_value.notes && (
-                            <div className="text-slate-800 font-sans">
+                            <div className="text-slate-800 font-secondary">
                               <strong>Notes:</strong> {entry.new_value.notes}
                             </div>
                           )}
                           {entry.new_value.decision && (
-                            <div className="text-emerald-800 font-sans">
+                            <div className="text-emerald-800 font-secondary">
                               <strong>Decision:</strong> {entry.new_value.decision}
                             </div>
                           )}
