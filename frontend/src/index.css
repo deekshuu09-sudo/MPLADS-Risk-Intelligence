@@ -6,14 +6,47 @@
   --gov-emerald: #1a936f;
   --gov-amber: #f59e0b;
   --gov-crimson: #dc2626;
+
+  /* Strict Typography System */
+  --font-ui: "Raleway", -apple-system, sans-serif;
+  --font-display: "Forum", "Classico", "Muse", Georgia, serif;
+  --font-secondary: "Thasadith", "Ysabeau Infant", sans-serif;
+  --font-data: "Brown Austin Sans", "Sulfur Point", "Raleway", sans-serif;
+  --font-accent: "Ysabeau Infant", "Sulfur Point", sans-serif;
+  --font-editorial: "Forum", serif;
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-ui);
   background-color: #f8fafc;
   color: #0f172a;
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
+}
+
+.font-ui {
+  font-family: var(--font-ui);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-secondary {
+  font-family: var(--font-secondary);
+}
+
+.font-data {
+  font-family: var(--font-data);
+}
+
+.font-accent {
+  font-family: var(--font-accent);
+}
+
+.font-editorial {
+  font-family: var(--font-editorial);
 }
 
 /* Custom scrollbars */

@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, Query, HTTPException, Response
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from app.db.session import get_db
-from app.models.entities import Work, Expenditure, RiskAnomaly
+from app.models.entities import Work, Expenditure, RiskAnomaly, MemberOfParliament
 from app.schemas.work_dto import WorkListDTO, WorkDetailDTO, ExpenditureDTO
 
 router = APIRouter()
@@ -13,6 +13,7 @@ def get_works(
     response: Response,
     skip: int = Query(0, ge=0),
     limit: int = Query(50, ge=1, le=200),
+    house: Optional[str] = Query(None, description="LOK, RAJYA, or ALL"),
     state_id: Optional[int] = Query(None),
     district_id: Optional[int] = Query(None),
     mp_id: Optional[int] = Query(None),
@@ -24,10 +25,21 @@ def get_works(
     search: Optional[str] = Query(None),
     db: Session = Depends(get_db)
 ):
+    canonical_house = None
+    if house and house.upper() != "ALL":
+        if "LOK" in house.upper():
+            canonical_house = "LOK"
+        elif "RAJYA" in house.upper():
+            canonical_house = "RAJYA"
+        else:
+            canonical_house = house.upper()
+
     query = db.query(Work).outerjoin(Work.anomaly)
 
     if is_synthetic is not None:
         query = query.filter(Work.is_synthetic == is_synthetic)
+    if canonical_house:
+        query = query.join(Work.mp).filter(MemberOfParliament.house == canonical_house)
     if state_id:
         query = query.join(Work.district).filter(Work.district.has(state_id=state_id))
     if district_id:

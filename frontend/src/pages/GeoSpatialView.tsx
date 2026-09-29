@@ -274,18 +274,19 @@ export const GeoSpatialView: React.FC<GeoSpatialViewProps> = ({
   return (
     <div className="space-y-4">
       {/* Top Map Filter & Header Bar */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs flex flex-wrap items-center justify-between gap-4">
+      <div className="border-b border-slate-200/90 pb-4 pt-1 flex flex-wrap items-end justify-between gap-4 font-ui">
         <div>
-          <div className="flex items-center gap-2 mb-0.5">
-            <Compass className="w-4 h-4 text-blue-600" />
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-              Geospatial Intelligence • Spatial Relationship Analysis
+          <div className="flex items-center gap-2 mb-1 font-ui">
+            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+              Geospatial Intelligence
             </span>
+            <span className="text-slate-300">•</span>
+            <span className="text-[11px] text-slate-600 font-medium">Spatial Proximity Analytics</span>
           </div>
-          <h2 className="text-lg font-bold text-slate-900">
-            Constituency Risk GIS & Spatial Proximity Explorer
+          <h2 className="font-display text-3xl font-normal text-slate-900 tracking-tight">
+            Constituency Risk GIS &amp; Spatial Proximity Explorer
           </h2>
-          <p className="text-xs text-slate-500">
+          <p className="font-secondary text-xs text-slate-600 mt-0.5">
             Decision-support spatial analytics mapping works and detecting spatial relationships within configured parameters
           </p>
         </div>

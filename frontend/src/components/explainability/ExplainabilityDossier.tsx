@@ -149,23 +149,23 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex justify-end">
       <div className="bg-slate-50 w-full max-w-4xl min-h-screen shadow-2xl border-l border-slate-300 flex flex-col animate-in slide-in-from-right duration-200">
         {/* Sticky Header */}
-        <div className="bg-white border-b border-slate-200 p-5 sticky top-0 z-20 shadow-2xs">
+        <div className="bg-white border-b border-slate-200 p-5 sticky top-0 z-20 shadow-2xs font-ui">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                <span className="font-mono text-xs font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-300">
+              <div className="flex flex-wrap items-center gap-2 mb-2 font-ui">
+                <span className="font-data text-xs font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-300">
                   {workId}
                 </span>
                 {dossier?.work_category && (
-                  <span className="text-[11px] font-medium text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                  <span className="text-[11px] font-medium text-slate-600 bg-slate-50 px-2 py-0.5 rounded border border-slate-200">
                     {dossier.work_category}
                   </span>
                 )}
                 {dossier && (
-                  <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200">
+                  <span className="text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-300">
                     {dossier.is_synthetic || dossier.work_id.startsWith('WS/DEMO/')
-                      ? 'BENCHMARK / SYNTHETIC TEST CASE'
-                      : 'NON-OFFICIAL TELEMETRY'}
+                      ? 'Benchmark Archetype'
+                      : 'Telemetry Record'}
                   </span>
                 )}
                 {dossier?.risk_evaluation && (
@@ -178,38 +178,38 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                   <StatusPill status={dossier.investigation_status.status} />
                 )}
               </div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 leading-tight">
-                {dossier ? dossier.activity_name : 'Loading Dossier...'}
+              <h2 className="font-display text-xl sm:text-2xl font-normal text-slate-900 leading-snug tracking-tight">
+                {dossier ? dossier.activity_name : 'Loading Case Dossier...'}
               </h2>
               {dossier && (
-                <p className="text-xs text-slate-500 mt-1 flex flex-wrap items-center gap-2">
+                <p className="font-secondary text-xs text-slate-600 mt-1 flex flex-wrap items-center gap-2">
                   <span>{dossier.district}, {dossier.state}</span>
                   <span>•</span>
-                  <span>MP: <strong>{dossier.mp_name}</strong></span>
+                  <span>MP: <span className="font-ui font-medium text-slate-800">{dossier.mp_name}</span></span>
                   <span>•</span>
-                  <span>Agency: <strong>{dossier.implementing_agency}</strong></span>
+                  <span>Agency: <span className="font-ui font-medium text-slate-800">{dossier.implementing_agency}</span></span>
                 </p>
               )}
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 font-ui">
               {onViewOnMap && workId && (
                 <button
                   onClick={() => {
                     onViewOnMap(workId);
                     onClose();
                   }}
-                  className="px-3 py-1.5 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs"
+                  className="px-3 py-1.5 bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300 rounded text-xs font-medium flex items-center gap-1.5 transition-colors"
                   title="Locate work on Geospatial Risk Map"
                 >
-                  <MapPin className="w-3.5 h-3.5 text-blue-600" />
-                  <span>View on Spatial Map</span>
+                  <MapPin className="w-3.5 h-3.5 text-slate-600" />
+                  <span>View on Map</span>
                 </button>
               )}
 
               <button
                 onClick={onClose}
-                className="p-2 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition-colors"
+                className="p-1.5 text-slate-400 hover:text-slate-700 rounded hover:bg-slate-100 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -217,14 +217,14 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
           </div>
 
           {/* Prototype & Governance Disclaimer */}
-          <div className="mt-3 py-1.5 px-3 bg-amber-50/80 border border-amber-200 rounded-md text-[11px] text-amber-900 flex items-center justify-between gap-2">
+          <div className="mt-3 py-1.5 px-3 bg-slate-50 border border-slate-200 rounded text-[11px] text-slate-700 flex items-center justify-between gap-2 font-secondary">
             <div className="flex items-center gap-2">
-              <Info className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+              <Info className="w-3.5 h-3.5 text-slate-600 shrink-0" />
               <span>
-                <strong>DECISION-SUPPORT PROTOTYPE — NOT AN OFFICIAL MoSPI FINDING:</strong> Risk scores indicate algorithmic priority for physical verification, not findings of misconduct.
+                <span className="font-ui font-semibold text-slate-900">Decision-Support Prototype — Not an Official MoSPI Finding:</span> Risk scores indicate algorithmic priority for physical verification, not findings of misconduct.
               </span>
             </div>
-            <span className="text-[10px] font-mono text-amber-800 whitespace-nowrap hidden sm:inline">
+            <span className="text-[10px] font-ui text-slate-500 whitespace-nowrap hidden sm:inline">
               Rule Engine v2.1
             </span>
           </div>

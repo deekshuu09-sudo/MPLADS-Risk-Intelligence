@@ -5,7 +5,7 @@ interface StatCardProps {
   title: string;
   value: string | number;
   subtitle?: string;
-  icon: LucideIcon;
+  icon?: LucideIcon;
   iconColor?: string;
   iconBg?: string;
   badge?: string;
@@ -18,46 +18,53 @@ export const StatCard: React.FC<StatCardProps> = ({
   value,
   subtitle,
   icon: Icon,
-  iconColor = 'text-blue-600',
-  iconBg = 'bg-blue-50',
+  iconColor = 'text-slate-500',
+  iconBg = 'bg-slate-50',
   badge,
-  badgeColor = 'bg-slate-100 text-slate-700',
+  badgeColor = 'text-slate-600 border-slate-200 bg-slate-50',
   footer,
 }) => {
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs hover:shadow-md transition-shadow relative overflow-hidden">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">
+    <div className="bg-white border border-slate-200/90 rounded-md p-5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:border-slate-300 transition-colors flex flex-col justify-between">
+      <div>
+        <div className="flex items-center justify-between gap-2 mb-2">
+          <p className="font-ui text-[11px] font-semibold tracking-wider text-slate-500 uppercase">
             {title}
           </p>
-          <h3 className="text-2xl font-bold tracking-tight text-slate-900">
+          {Icon && (
+            <div className={`p-1 rounded text-slate-400`}>
+              <Icon className="w-3.5 h-3.5" />
+            </div>
+          )}
+        </div>
+
+        <div className="mt-1">
+          <div className="font-data text-3xl font-bold tracking-tight text-slate-900 leading-none">
             {value}
-          </h3>
+          </div>
           {subtitle && (
-            <p className="text-xs text-slate-500 mt-1 font-medium">
+            <p className="font-secondary text-xs text-slate-600 mt-2 font-normal leading-relaxed">
               {subtitle}
             </p>
           )}
         </div>
-        <div className={`p-3 rounded-lg ${iconBg} ${iconColor} flex items-center justify-center shrink-0`}>
-          <Icon className="w-5 h-5" />
-        </div>
       </div>
 
-      {badge && (
-        <div className="mt-3">
-          <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium ${badgeColor}`}>
-            {badge}
-          </span>
-        </div>
-      )}
+      <div className="mt-3">
+        {badge && (
+          <div className="mb-2">
+            <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium border ${badgeColor}`}>
+              {badge}
+            </span>
+          </div>
+        )}
 
-      {footer && (
-        <div className="mt-3 pt-3 border-t border-slate-100 text-xs text-slate-500">
-          {footer}
-        </div>
-      )}
+        {footer && (
+          <div className="pt-2.5 border-t border-slate-100 font-secondary text-[11px] text-slate-500">
+            {footer}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

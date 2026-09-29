@@ -97,6 +97,7 @@ export function App() {
 
         {currentTab === 'investigations' && (
           <InvestigationQueue
+            selectedHouse={selectedHouse}
             onOpenDossier={handleOpenDossier}
             datasetMode={datasetMode}
           />
@@ -119,20 +120,20 @@ export function App() {
       />
 
       {/* Official MoSPI Gov Footer */}
-      <footer className="bg-white border-t border-slate-200 mt-12 py-6 text-xs text-slate-500">
+      <footer className="bg-white border-t border-slate-200 mt-12 py-6 text-xs text-slate-500 font-ui">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-slate-800">
-              Ministry of Statistics & Programme Implementation (MoSPI)
+            <span className="font-semibold text-slate-800">
+              Ministry of Statistics &amp; Programme Implementation (MoSPI)
             </span>
-            <span>•</span>
-            <span>Data Informatics & Innovation Division (DIID)</span>
+            <span className="text-slate-300">•</span>
+            <span className="font-secondary text-slate-600">Data Informatics &amp; Innovation Division (DIID)</span>
           </div>
 
-          <div className="flex items-center gap-4 text-slate-600">
-            <span>SIH 2026 Problem Statement: <strong>26102</strong></span>
-            <span>•</span>
-            <span className="font-mono text-[11px] bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+          <div className="flex items-center gap-4 text-slate-600 font-secondary text-[11px]">
+            <span>SIH 2026 Problem Statement: <strong className="font-ui font-semibold text-slate-800">26102</strong></span>
+            <span className="text-slate-300">•</span>
+            <span className="font-data text-[10px] bg-slate-50 px-2 py-0.5 rounded border border-slate-200 text-slate-700">
               v1.0.0-PROD
             </span>
           </div>

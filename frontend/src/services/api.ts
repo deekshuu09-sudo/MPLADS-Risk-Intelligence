@@ -47,6 +47,7 @@ export const api = {
   async getWorks(params?: {
     skip?: number;
     limit?: number;
+    house?: string;
     state_id?: number;
     district_id?: number;
     category?: string;
@@ -103,6 +104,7 @@ export const api = {
   },
 
   async getInvestigationQueue(params?: {
+    house?: string;
     status?: string;
     severity?: string;
     state_id?: number;

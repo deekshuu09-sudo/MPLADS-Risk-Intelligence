@@ -66,51 +66,52 @@ export const AuditTrailView: React.FC<AuditTrailViewProps> = ({ onOpenDossier })
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs flex flex-wrap items-center justify-between gap-4">
+      <div className="border-b border-slate-200/90 pb-5 pt-2 flex flex-wrap items-end justify-between gap-4 font-ui">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-              Administrative Audit Log • Compliance Verification
+          <div className="flex items-center gap-2 mb-1.5 font-ui">
+            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+              Compliance Verification
             </span>
+            <span className="text-slate-300">•</span>
+            <span className="text-[11px] text-slate-600 font-medium">Immutable Evidence Ledger</span>
           </div>
-          <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="font-display text-3xl font-normal text-slate-900 tracking-tight">
             Administrative Audit Trail
           </h2>
-          <p className="text-xs text-slate-500">
+          <p className="font-secondary text-xs text-slate-600 mt-1">
             Append-only chronological record of all risk evaluations, status transitions, and officer reviews
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 font-ui">
           <button
             onClick={handleExportCSV}
-            className="px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors flex items-center gap-1.5 shadow-2xs"
+            className="px-3 py-1.5 bg-white border border-slate-200 rounded text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors flex items-center gap-1.5"
           >
-            <Download className="w-3.5 h-3.5" />
+            <Download className="w-3.5 h-3.5 text-slate-500" />
             <span>Export CSV</span>
           </button>
           <button
             onClick={loadAuditLogs}
-            className="p-2 border border-slate-200 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+            className="p-1.5 border border-slate-200 rounded text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors bg-white"
             title="Refresh Audit Trail"
           >
-            <RefreshCw className="w-4 h-4" />
+            <RefreshCw className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
 
       {/* Security & Integrity Banner */}
-      <div className="bg-slate-50 border border-slate-300 rounded-xl p-4 flex items-center justify-between text-xs text-slate-800">
+      <div className="bg-slate-50 border border-slate-200 rounded p-3.5 flex items-center justify-between text-xs text-slate-700 font-secondary">
         <div className="flex items-center gap-2.5">
-          <Lock className="w-4 h-4 text-blue-700 shrink-0" />
+          <Lock className="w-3.5 h-3.5 text-slate-600 shrink-0" />
           <div>
-            <span className="font-bold text-slate-900">System Audit Trail Active:</span> All
+            <span className="font-ui font-semibold text-slate-900">System Audit Trail Active:</span> All
             administrative status transitions and review decisions are chronologically recorded in the database with actor role, IP address, and timestamp.
           </div>
         </div>
-        <span className="font-mono text-[11px] font-bold bg-white px-2.5 py-0.5 rounded border border-slate-300 text-slate-700">
-          AUDIT LOG ACTIVE
+        <span className="font-ui text-[10px] font-semibold bg-white px-2 py-0.5 rounded border border-slate-200 text-slate-700 uppercase tracking-wider">
+          Ledger Active
         </span>
       </div>
 

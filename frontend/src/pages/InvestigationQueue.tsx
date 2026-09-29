@@ -23,11 +23,13 @@ import { SeverityBadge, ScoreBadge, DataSourceBadge, StatusPill } from '../compo
 interface InvestigationQueueProps {
   onOpenDossier: (workId: string) => void;
   datasetMode: 'ALL' | 'REAL' | 'SYNTHETIC';
+  selectedHouse?: string;
 }
 
 export const InvestigationQueue: React.FC<InvestigationQueueProps> = ({
   onOpenDossier,
   datasetMode,
+  selectedHouse,
 }) => {
   const [queue, setQueue] = useState<InvestigationQueueItem[]>([]);
   const [allQueue, setAllQueue] = useState<InvestigationQueueItem[]>([]);
@@ -48,7 +50,7 @@ export const InvestigationQueue: React.FC<InvestigationQueueProps> = ({
 
   useEffect(() => {
     loadQueue();
-  }, [selectedStatus, severityFilter, selectedState, signalFilter, sortBy, datasetMode]);
+  }, [selectedStatus, severityFilter, selectedState, signalFilter, sortBy, datasetMode, selectedHouse]);
 
   const loadStates = async () => {
     try {
@@ -64,10 +66,12 @@ export const InvestigationQueue: React.FC<InvestigationQueueProps> = ({
       setLoading(true);
       const isSyntheticParam =
         datasetMode === 'REAL' ? false : datasetMode === 'SYNTHETIC' ? true : undefined;
+      const houseParam = selectedHouse && selectedHouse !== 'ALL' ? selectedHouse : undefined;
 
       // Always fetch the baseline unstatused queue to keep tab counts accurate across lifecycle
       const [allData, filteredData] = await Promise.all([
         api.getInvestigationQueue({
+          house: houseParam,
           severity: severityFilter !== 'ALL' ? severityFilter : undefined,
           state_id: selectedState,
           primary_signal: signalFilter !== 'ALL' ? signalFilter : undefined,
@@ -76,6 +80,7 @@ export const InvestigationQueue: React.FC<InvestigationQueueProps> = ({
         }),
         selectedStatus !== 'ALL'
           ? api.getInvestigationQueue({
+              house: houseParam,
               status: selectedStatus,
               severity: severityFilter !== 'ALL' ? severityFilter : undefined,
               state_id: selectedState,
@@ -116,49 +121,50 @@ export const InvestigationQueue: React.FC<InvestigationQueueProps> = ({
   return (
     <div className="space-y-6">
       {/* Header Bar */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs flex flex-wrap items-center justify-between gap-4">
+      <div className="border-b border-slate-200/90 pb-5 pt-2 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <ClipboardList className="w-4 h-4 text-blue-600" />
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-              Administrative Oversight • Operational Case Management
+          <div className="flex items-center gap-2 mb-1.5 font-ui">
+            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+              Operational Case Management
             </span>
+            <span className="text-slate-300">•</span>
+            <span className="text-[11px] text-slate-600 font-medium">Administrative Review Grid</span>
           </div>
-          <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">
-            Field Inspection & Anomaly Verification Queue
+          <h2 className="font-display text-3xl font-normal text-slate-900 tracking-tight">
+            Field Inspection &amp; Anomaly Verification Queue
           </h2>
-          <p className="text-xs text-slate-500">
-            Lifecycle tracking of works requiring review (Composite Risk Score ≥ 20.0 or active case records: {queue.length} total cases)
+          <p className="font-secondary text-xs text-slate-600 mt-1">
+            Lifecycle tracking of works requiring review (Composite Risk Score ≥ 20.0 or active case records: <span className="font-data font-semibold text-slate-800">{queue.length}</span> total cases)
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 font-ui">
           <button
             onClick={loadQueue}
-            className="px-3 py-2 border border-slate-200 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors text-xs font-semibold flex items-center gap-1.5"
+            className="px-3 py-1.5 border border-slate-200 rounded text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors text-xs font-medium flex items-center gap-1.5 bg-white"
             title="Refresh Queue"
           >
-            <RefreshCw className="w-3.5 h-3.5" />
+            <RefreshCw className="w-3.5 h-3.5 text-slate-500" />
             <span>Refresh Queue</span>
           </button>
         </div>
       </div>
 
       {/* Priority Guardrail Notice */}
-      <div className="p-3.5 bg-blue-50/80 border border-blue-200 rounded-xl text-xs text-blue-950 flex items-start gap-3">
-        <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+      <div className="p-3 bg-slate-50 border border-slate-200 rounded text-xs text-slate-800 flex items-start gap-2.5">
+        <Info className="w-4 h-4 text-slate-600 shrink-0 mt-0.5" />
         <div className="space-y-0.5">
-          <span className="font-bold text-blue-900 block text-xs">
-            Analytical Priority for Verification
+          <span className="font-ui font-semibold text-slate-900 block text-xs">
+            Analytical Priority for Administrative Verification
           </span>
-          <p className="text-blue-850 leading-relaxed text-[11px]">
+          <p className="font-secondary text-slate-600 leading-relaxed text-xs">
             Risk scores and severity levels establish administrative priority for physical field inspection. They do not constitute findings of wrongdoing. Final determinations require authorized officer review and recorded verification.
           </p>
         </div>
       </div>
 
       {/* Status Filter Tabs */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-3">
+      <div className="flex flex-wrap items-center gap-1.5 border-b border-slate-200 pb-2.5 font-ui">
         {[
           { id: 'ALL', label: 'All Cases', count: queue.length },
           { id: 'VERIFICATION_REQUIRED', label: 'Verification Required', count: countByStatus('VERIFICATION_REQUIRED') },
@@ -172,18 +178,18 @@ export const InvestigationQueue: React.FC<InvestigationQueueProps> = ({
           <button
             key={tab.id}
             onClick={() => setSelectedStatus(tab.id)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all ${
+            className={`px-3 py-1.5 rounded text-xs font-medium flex items-center gap-2 transition-all ${
               selectedStatus === tab.id
-                ? 'bg-[#0d2b45] text-white shadow-xs'
-                : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                ? 'bg-[#0d2b45] text-white'
+                : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
             <span>{tab.label}</span>
             <span
-              className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
+              className={`px-1.5 py-0.2 rounded text-[10px] font-data font-semibold ${
                 selectedStatus === tab.id
-                  ? 'bg-[#19466e] text-white'
-                  : 'bg-slate-100 text-slate-700'
+                  ? 'bg-white/20 text-white'
+                  : 'bg-slate-100 text-slate-600'
               }`}
             >
               {tab.count}
@@ -288,24 +294,24 @@ export const InvestigationQueue: React.FC<InvestigationQueueProps> = ({
           </p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-3 font-ui">
           {filteredQueue.map((item) => (
             <div
               key={item.investigation_id}
-              className={`bg-white border rounded-xl p-5 shadow-xs hover:border-slate-300 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 ${
-                item.status === 'DISMISSED' ? 'opacity-75 bg-slate-50/80 border-slate-200' : 'border-slate-200'
+              className={`bg-white border rounded-md p-4.5 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4 ${
+                item.status === 'DISMISSED' ? 'opacity-70 bg-slate-50 border-slate-200' : 'border-slate-200/90 hover:border-slate-300'
               }`}
             >
               <div className="space-y-2 flex-1">
                 {/* Header Tag Bar */}
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-mono font-bold text-xs text-slate-900 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                  <span className="font-data font-bold text-xs text-slate-900 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
                     {item.work_id}
                   </span>
                   <DataSourceBadge isSynthetic={item.is_synthetic} />
                   <StatusPill status={item.status} />
                   <SeverityBadge severity={item.severity_level} size="sm" />
-                  <span className="text-[11px] text-slate-500 flex items-center gap-1 font-mono">
+                  <span className="text-[11px] text-slate-500 flex items-center gap-1 font-secondary">
                     <Clock className="w-3 h-3 text-slate-400" />
                     {item.days_elapsed}d elapsed
                   </span>
@@ -313,50 +319,50 @@ export const InvestigationQueue: React.FC<InvestigationQueueProps> = ({
 
                 {/* Work Title & Location */}
                 <div>
-                  <h3 className="text-sm font-bold text-slate-900 leading-snug">{item.activity_name}</h3>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    Category: <strong className="text-slate-700">{item.work_category}</strong> • Location: <strong className="text-slate-700">{item.district_name}, {item.state_name}</strong> • Assigned Role: <strong className="text-blue-900">{item.assigned_role}</strong>
+                  <h3 className="font-ui text-sm font-bold text-slate-900 leading-snug">{item.activity_name}</h3>
+                  <p className="font-secondary text-xs text-slate-600 mt-0.5">
+                    Category: <span className="font-ui font-medium text-slate-800">{item.work_category}</span> • Location: <span className="font-ui font-medium text-slate-800">{item.district_name}, {item.state_name}</span> • Role: <span className="font-ui font-medium text-slate-800">{item.assigned_role}</span>
                   </p>
                 </div>
 
                 {/* Metrics Strip */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-200/80 text-[11px] font-mono">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-50/70 p-2 rounded border border-slate-200/80 text-[11px]">
                   <div>
-                    <span className="text-slate-400 block text-[9px]">Sanction Amount</span>
-                    <span className="font-bold text-slate-800">₹{(item.sanctioned_amount / 100000).toFixed(2)}L</span>
+                    <span className="text-slate-400 block text-[9px] uppercase tracking-wider font-semibold">Sanction Amount</span>
+                    <span className="font-data font-bold text-slate-800">₹{(item.sanctioned_amount / 100000).toFixed(2)}L</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[9px]">Physical Progress</span>
-                    <span className="font-bold text-slate-800">{item.physical_progress_pct}%</span>
+                    <span className="text-slate-400 block text-[9px] uppercase tracking-wider font-semibold">Physical Progress</span>
+                    <span className="font-data font-bold text-slate-800">{item.physical_progress_pct}%</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[9px]">Queue Status</span>
-                    <span className="font-bold text-blue-900">{item.status}</span>
+                    <span className="text-slate-400 block text-[9px] uppercase tracking-wider font-semibold">Queue Status</span>
+                    <span className="font-ui font-semibold text-slate-800">{item.status}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[9px]">Days in Queue</span>
-                    <span className="font-bold text-slate-700">{item.days_in_review} days</span>
+                    <span className="text-slate-400 block text-[9px] uppercase tracking-wider font-semibold">Days in Review</span>
+                    <span className="font-data font-bold text-slate-700">{item.days_in_review} days</span>
                   </div>
                 </div>
 
                 {/* Primary Signal Summary */}
-                <div className="bg-white p-2.5 rounded-lg border border-slate-200 text-xs text-slate-700">
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-0.5">Primary Risk Signal Summary:</span>
-                  <p className="text-[11px] text-slate-800 font-medium leading-tight">{item.primary_signal}</p>
+                <div className="bg-slate-50/40 p-2 rounded border border-slate-200/70 text-xs">
+                  <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block mb-0.5 font-ui">Primary Risk Signal:</span>
+                  <p className="text-xs text-slate-800 font-secondary leading-snug">{item.primary_signal}</p>
                 </div>
 
                 {/* Latest Reviewer Notes if available */}
                 {item.reviewer_notes && (
-                  <div className="bg-blue-50/60 p-2.5 rounded-lg border border-blue-200 text-xs text-slate-800">
-                    <span className="text-[10px] uppercase font-bold text-blue-900 block mb-0.5">
-                      Latest Administrative Decision & Notes
+                  <div className="bg-slate-50 p-2 rounded border border-slate-200 text-xs text-slate-800 font-secondary">
+                    <span className="text-[10px] uppercase font-semibold text-slate-700 block mb-0.5 font-ui">
+                      Latest Administrative Notes
                     </span>
-                    <p className="whitespace-pre-line text-[11px] leading-relaxed text-slate-700">
+                    <p className="whitespace-pre-line text-xs text-slate-700 leading-relaxed">
                       {item.reviewer_notes}
                     </p>
                     {item.outcome_decision && (
-                      <div className="mt-1 pt-1 border-t border-blue-200 font-semibold text-[11px] text-blue-900">
-                        Prescriptive Outcome: {item.outcome_decision}
+                      <div className="mt-1 pt-1 border-t border-slate-200 font-medium text-[11px] text-slate-900 font-ui">
+                        Recorded Outcome: {item.outcome_decision}
                       </div>
                     )}
                   </div>
@@ -366,15 +372,15 @@ export const InvestigationQueue: React.FC<InvestigationQueueProps> = ({
               {/* Score & Action Button */}
               <div className="flex md:flex-col items-center md:items-end justify-between gap-3 shrink-0 border-t md:border-t-0 pt-3 md:pt-0 border-slate-100">
                 <div className="text-right">
-                  <span className="text-[10px] text-slate-400 uppercase font-bold block">Risk Score</span>
+                  <span className="text-[10px] text-slate-400 uppercase font-semibold block mb-0.5">Risk Score</span>
                   <ScoreBadge score={item.composite_risk_score} showBar={false} />
                 </div>
 
                 <button
                   onClick={() => onOpenDossier(item.work_id)}
-                  className="px-4 py-2 bg-[#0d2b45] text-white font-bold rounded-lg text-xs hover:bg-[#1a4163] transition-colors flex items-center gap-1.5 shadow-2xs shrink-0"
+                  className="px-3.5 py-1.5 bg-[#0d2b45] text-white font-medium rounded text-xs hover:bg-[#153a5c] transition-colors flex items-center gap-1 shrink-0"
                 >
-                  <span>Review Dossier</span>
+                  <span>Open Dossier</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>

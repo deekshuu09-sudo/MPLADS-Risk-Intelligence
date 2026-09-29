@@ -75,34 +75,29 @@ export const GovHeader: React.FC<GovHeaderProps> = ({
   return (
     <header className="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-xs">
       {/* Top Gov Strip */}
-      <div className="bg-[#0d2b45] text-white text-xs px-4 sm:px-8 py-1.5 flex flex-wrap items-center justify-between border-b border-[#143d60]">
+      <div className="bg-[#0d2b45] text-white text-xs px-4 sm:px-8 py-2 flex flex-wrap items-center justify-between border-b border-[#143d60]">
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 font-medium tracking-wide">
-            {/* Ashoka Chakra / MoSPI Symbol representation */}
-            <div className="w-4 h-4 rounded-full border border-amber-300 flex items-center justify-center text-[9px] font-bold text-amber-300">
-              ☸
-            </div>
-            <span>GOVERNMENT OF INDIA</span>
+          <div className="flex items-center gap-2 font-ui font-medium tracking-wider text-[11px]">
+            <span className="text-amber-400 font-bold">☸</span>
+            <span className="font-semibold text-slate-100">GOVERNMENT OF INDIA</span>
             <span className="text-slate-400">|</span>
-            <span className="text-amber-200">Ministry of Statistics and Programme Implementation (MoSPI)</span>
+            <span className="text-slate-200">Ministry of Statistics and Programme Implementation</span>
           </div>
-          <span className="hidden md:inline px-2 py-0.5 text-[10px] bg-[#1a4163] text-slate-200 rounded font-mono">
+          <span className="hidden md:inline text-[10px] text-slate-300 font-ui tracking-wide">
             DIID • Problem Statement 26102
           </span>
         </div>
 
-        <div className="flex items-center gap-3">
-          {/* Active Tenure Badge */}
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-950 text-emerald-300 border border-emerald-700/60">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            18th Lok Sabha (2024–2029)
+        <div className="flex items-center gap-3 font-ui text-[11px]">
+          <span className="text-slate-200 font-medium">
+            18th Lok Sabha Tenure (2024–2029)
           </span>
 
           <a
             href="https://mplads.mospi.gov.in"
             target="_blank"
             rel="noreferrer"
-            className="hidden sm:inline-flex items-center gap-1 text-slate-300 hover:text-white transition-colors text-[11px]"
+            className="hidden sm:inline-flex items-center gap-1 text-slate-300 hover:text-white transition-colors"
           >
             MoSPI Portal <ExternalLink className="w-3 h-3" />
           </a>
@@ -110,28 +105,28 @@ export const GovHeader: React.FC<GovHeaderProps> = ({
       </div>
 
       {/* Main App Bar */}
-      <div className="px-4 sm:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <div className="px-4 sm:px-8 py-4 flex flex-wrap items-center justify-between gap-4">
         {/* Title & Brand */}
-        <div className="flex items-center gap-3.5">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0d2b45] to-[#1a4163] flex items-center justify-center text-white shadow-sm ring-1 ring-slate-900/10">
-            <ShieldAlert className="w-5 h-5 text-amber-400" />
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded bg-[#0d2b45] flex items-center justify-center text-white shrink-0">
+            <ShieldAlert className="w-4 h-4 text-amber-300" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 leading-tight">
+              <h1 className="font-display text-2xl font-normal tracking-tight text-slate-900 leading-tight">
                 MPLADS Risk Intelligence & Investigation Platform
               </h1>
             </div>
-            <p className="text-xs text-slate-500 font-medium">
-              Explainable AI Anomaly Detection & Policy Compliance Monitor
+            <p className="font-secondary text-xs text-slate-600 mt-0.5">
+              Explainable Anomaly Detection & Policy Compliance Monitor • Evidence-Linked Supervision
             </p>
           </div>
         </div>
 
         {/* Global Controls & Mode Switcher */}
-        <div className="flex flex-wrap items-center gap-3 text-xs">
+        <div className="flex flex-wrap items-center gap-3 text-xs font-ui">
           {/* House Selector */}
-          <div className="inline-flex bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+          <div className="inline-flex bg-slate-100 p-0.5 rounded border border-slate-200">
             {[
               { id: 'ALL', label: 'Both Houses' },
               { id: 'LOK_SABHA', label: 'Lok Sabha' },
@@ -140,9 +135,9 @@ export const GovHeader: React.FC<GovHeaderProps> = ({
               <button
                 key={h.id}
                 onClick={() => onSelectHouse(h.id)}
-                className={`px-2.5 py-1 rounded-md font-medium transition-all ${
+                className={`px-3 py-1 rounded text-xs font-semibold transition-all ${
                   selectedHouse === h.id
-                    ? 'bg-white text-slate-900 shadow-xs'
+                    ? 'bg-white text-slate-900 shadow-2xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -152,12 +147,12 @@ export const GovHeader: React.FC<GovHeaderProps> = ({
           </div>
 
           {/* Dataset Source Toggle */}
-          <div className="inline-flex bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+          <div className="inline-flex bg-slate-100 p-0.5 rounded border border-slate-200">
             <button
               onClick={() => onSelectDatasetMode('ALL')}
-              className={`px-2.5 py-1 rounded-md font-medium transition-all ${
+              className={`px-2.5 py-1 rounded text-xs font-medium transition-all ${
                 datasetMode === 'ALL'
-                  ? 'bg-[#0d2b45] text-white shadow-xs'
+                  ? 'bg-[#0d2b45] text-white shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -165,25 +160,23 @@ export const GovHeader: React.FC<GovHeaderProps> = ({
             </button>
             <button
               onClick={() => onSelectDatasetMode('REAL')}
-              className={`px-2.5 py-1 rounded-md font-medium transition-all flex items-center gap-1 ${
+              className={`px-2.5 py-1 rounded text-xs font-medium transition-all flex items-center gap-1 ${
                 datasetMode === 'REAL'
-                  ? 'bg-blue-700 text-white shadow-xs'
+                  ? 'bg-slate-700 text-white shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-300"></span>
-              Portal Telemetry (Demo)
+              Portal Telemetry
             </button>
             <button
               onClick={() => onSelectDatasetMode('SYNTHETIC')}
-              className={`px-2.5 py-1 rounded-md font-medium transition-all flex items-center gap-1 ${
+              className={`px-2.5 py-1 rounded text-xs font-medium transition-all flex items-center gap-1 ${
                 datasetMode === 'SYNTHETIC'
-                  ? 'bg-purple-700 text-white shadow-xs'
+                  ? 'bg-slate-800 text-white shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              <Sparkles className="w-3 h-3 text-purple-200" />
-              Benchmark Tests
+              Benchmark Archetypes
             </button>
           </div>
 
@@ -193,15 +186,15 @@ export const GovHeader: React.FC<GovHeaderProps> = ({
               onClick={handleSyncEsakshi}
               disabled={isSyncing}
               title="Ingest simulated telemetry records"
-              className="p-1.5 text-slate-600 hover:text-slate-900 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors disabled:opacity-50"
+              className="p-1.5 text-slate-600 hover:text-slate-900 bg-white border border-slate-200 rounded hover:bg-slate-50 transition-colors disabled:opacity-50"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-blue-600' : ''}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-slate-800' : ''}`} />
             </button>
             <button
               onClick={handleResetDemoSeed}
               disabled={isSyncing}
               title="Reset 7 Anomaly Scenarios Benchmark"
-              className="px-2 py-1 text-[11px] font-medium text-slate-700 hover:text-slate-900 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors disabled:opacity-50"
+              className="px-2.5 py-1 text-xs font-medium text-slate-700 hover:text-slate-900 bg-white border border-slate-200 rounded hover:bg-slate-50 transition-colors disabled:opacity-50"
             >
               Reset Scenarios
             </button>
@@ -210,14 +203,14 @@ export const GovHeader: React.FC<GovHeaderProps> = ({
       </div>
 
       {syncStatusMsg && (
-        <div className="bg-blue-50 border-y border-blue-200 px-4 py-1.5 text-xs text-blue-800 flex items-center justify-between font-medium">
+        <div className="bg-slate-50 border-y border-slate-200 px-4 sm:px-8 py-1.5 text-xs text-slate-800 flex items-center justify-between font-ui font-medium">
           <span className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+            <CheckCircle2 className="w-3.5 h-3.5 text-slate-700 shrink-0" />
             {syncStatusMsg}
           </span>
           <button
             onClick={() => setSyncStatusMsg(null)}
-            className="text-blue-600 hover:text-blue-900 font-bold ml-4"
+            className="text-slate-600 hover:text-slate-900 font-bold ml-4"
           >
             ×
           </button>
@@ -225,7 +218,7 @@ export const GovHeader: React.FC<GovHeaderProps> = ({
       )}
 
       {/* Primary Navigation Tabs */}
-      <nav className="px-4 sm:px-8 flex items-center gap-1 overflow-x-auto border-t border-slate-200/80 bg-slate-50/50">
+      <nav className="px-4 sm:px-8 flex items-center gap-2 overflow-x-auto border-t border-slate-200 bg-slate-50/40">
         {[
           { id: 'overview', label: 'Executive Overview', icon: BarChart3 },
           { id: 'explorer', label: 'Explainable Risk Explorer', icon: Search },
@@ -244,16 +237,16 @@ export const GovHeader: React.FC<GovHeaderProps> = ({
             <button
               key={tab.id}
               onClick={() => onSelectTab(tab.id as NavTab)}
-              className={`flex items-center gap-2 px-4 py-2.5 border-b-2 text-xs font-semibold whitespace-nowrap transition-colors ${
+              className={`flex items-center gap-2 px-3.5 py-2.5 border-b-2 font-ui text-xs font-medium whitespace-nowrap transition-colors ${
                 isActive
-                  ? 'border-[#0d2b45] text-[#0d2b45] bg-white'
+                  ? 'border-[#0d2b45] text-slate-900 font-semibold bg-white'
                   : 'border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300'
               }`}
             >
-              <Icon className={`w-4 h-4 ${isActive ? 'text-[#0d2b45]' : 'text-slate-400'}`} />
+              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#0d2b45]' : 'text-slate-400'}`} />
               <span>{tab.label}</span>
               {tab.badge && (
-                <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-red-100 text-red-700 border border-red-200">
+                <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-slate-200 text-slate-800 border border-slate-300">
                   {tab.badge}
                 </span>
               )}

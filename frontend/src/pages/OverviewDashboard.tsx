@@ -124,88 +124,89 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
   const scope = analytics.scope;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* 1. TOP EXECUTIVE CONTEXT HEADER & SCOPE BADGE */}
-      <div className="bg-gradient-to-r from-[#0d2b45] to-[#1a3d60] rounded-xl p-5 text-white shadow-sm flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 mb-1.5">
-            <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              EXECUTIVE SITUATIONAL AWARENESS
-            </span>
-            <span className="text-xs text-slate-300 font-medium">| National Programme Overview</span>
+      <div className="border-b border-slate-200/90 pb-6 pt-2">
+        <div className="flex flex-wrap items-start justify-between gap-6">
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-2 mb-2 font-ui">
+              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">
+                National Surveillance Brief
+              </span>
+              <span className="text-slate-300">•</span>
+              <span className="text-[11px] text-slate-600 font-medium">Programme-Wide Review</span>
+            </div>
+            <h2 className="font-display text-3xl sm:text-4xl font-normal tracking-tight text-slate-900 leading-tight">
+              MPLAD Scheme Programme-Wide Risk &amp; Expenditure Intelligence
+            </h2>
+            <p className="font-secondary text-sm text-slate-600 mt-2.5 leading-relaxed">
+              Decision-support analytics aggregating {kpis.total_works_analysed} works across 543 Lok Sabha and 245 Rajya Sabha constituencies. Designed for prescriptively identifying analytical anomaly concentrations for administrative verification.
+            </p>
           </div>
-          <h2 className="text-xl font-extrabold tracking-tight">
-            MPLAD Scheme Programme-Wide Risk & Expenditure Intelligence
-          </h2>
-          <p className="text-xs text-slate-300 mt-1 max-w-3xl">
-            Decision-support analytics aggregating {kpis.total_works_analysed} works across 543 Lok Sabha and 245 Rajya Sabha constituencies. Designed for prescriptively identifying analytical anomaly concentrations for administrative verification.
-          </p>
-        </div>
 
-        <div className="flex flex-col items-end gap-1.5 shrink-0">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-mono font-bold px-2.5 py-1 rounded bg-white/10 text-white border border-white/20">
-              {scope?.dataset_mode || 'SYNTHETIC'} TELEMETRY BASELINE
-            </span>
+          <div className="flex flex-col sm:items-end gap-1.5 font-ui text-xs text-slate-600 border-l sm:border-l-0 sm:border-r-0 border-slate-200 pl-4 sm:pl-0">
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-800 border border-slate-200 uppercase tracking-wider">
+                {scope?.dataset_mode || 'SYNTHETIC'} Baseline
+              </span>
+            </div>
+            <div className="text-[11px] text-slate-500 mt-1 font-secondary">
+              Scope: <span className="font-ui font-semibold text-slate-800">{scope?.total_records} Works</span> | Flagged: <span className="font-ui font-semibold text-slate-800">{scope?.flagged_records}</span> (Score ≥ {scope?.min_flagged_score})
+            </div>
+            <div className="text-[10px] text-slate-400 font-secondary">
+              Analytics generated: {scope?.generated_at}
+            </div>
           </div>
-          <span className="text-[10px] font-mono text-slate-300">
-            Analysis Scope: {scope?.total_records} Works | Flagged: {scope?.flagged_records} (Score ≥ {scope?.min_flagged_score})
-          </span>
-          <span className="text-[10px] font-mono text-slate-400">
-            Analytics generated: {scope?.generated_at}
-          </span>
-        </div>
-      </div>
-
-      {/* PRIMARY OPERATIONAL ACTION & BENCHMARK DEMO STRIP */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => onNavigateToTab('investigations')}
-            className="px-4 py-2 bg-[#0d2b45] text-white rounded-lg text-xs font-bold hover:bg-[#1a4163] transition-colors flex items-center gap-2 shadow-sm"
-          >
-            <CheckSquare className="w-4 h-4 text-emerald-400" />
-            <span>Review Risk Queue ({pipeline.total_unresolved} Unresolved)</span>
-            <ChevronRight className="w-3.5 h-3.5" />
-          </button>
-          <button
-            onClick={() => onNavigateToTab('explorer')}
-            className="px-3 py-2 bg-slate-100 text-slate-700 rounded-lg text-xs font-semibold hover:bg-slate-200 transition-colors flex items-center gap-1.5 border border-slate-200"
-          >
-            <Layers className="w-3.5 h-3.5 text-slate-600" />
-            <span>Explore Works</span>
-          </button>
-          <button
-            onClick={() => onNavigateToTab('geospatial')}
-            className="px-3 py-2 bg-slate-100 text-slate-700 rounded-lg text-xs font-semibold hover:bg-slate-200 transition-colors flex items-center gap-1.5 border border-slate-200"
-          >
-            <MapPin className="w-3.5 h-3.5 text-slate-600" />
-            <span>Spatial Intelligence</span>
-          </button>
         </div>
 
-        {/* Demo Case Walkthrough Quick Pills */}
-        <div className="flex flex-wrap items-center gap-2 text-xs">
-          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-            Demo Walkthrough:
-          </span>
-          <button
-            onClick={() => onOpenDossier('WS/DEMO/2025/101')}
-            className="px-3 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 transition-colors"
-            title="Launch Primary Demo Case: Tender Splitting & High Similarity Review (Score 61 HIGH)"
-          >
-            <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
-            <span>Work 101 (Tender Splitting • 61 HIGH)</span>
-          </button>
-          <button
-            onClick={() => onOpenDossier('WS/DEMO/2025/801')}
-            className="px-3 py-1 bg-slate-50 hover:bg-slate-100 text-slate-800 border border-slate-300 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 transition-colors"
-            title="Launch Safeguard Counterexample: Spatial Proximity Counterexample (801 ↔ 802 No Relationship)"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-            <span>Work 801 (Proximity Safeguard • Counterexample)</span>
-          </button>
+        {/* PRIMARY OPERATIONAL ACTION & BENCHMARK DEMO STRIP */}
+        <div className="mt-6 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-2.5 font-ui">
+            <button
+              onClick={() => onNavigateToTab('investigations')}
+              className="px-3.5 py-1.5 bg-[#0d2b45] text-white rounded text-xs font-semibold hover:bg-[#153a5c] transition-colors flex items-center gap-1.5"
+            >
+              <span>Investigation Queue ({pipeline.total_unresolved} Unresolved)</span>
+              <ChevronRight className="w-3.5 h-3.5 text-slate-300" />
+            </button>
+            <button
+              onClick={() => onNavigateToTab('explorer')}
+              className="px-3 py-1.5 bg-white text-slate-700 rounded text-xs font-medium hover:bg-slate-50 transition-colors flex items-center gap-1.5 border border-slate-200"
+            >
+              <Layers className="w-3.5 h-3.5 text-slate-500" />
+              <span>Explore Works</span>
+            </button>
+            <button
+              onClick={() => onNavigateToTab('geospatial')}
+              className="px-3 py-1.5 bg-white text-slate-700 rounded text-xs font-medium hover:bg-slate-50 transition-colors flex items-center gap-1.5 border border-slate-200"
+            >
+              <MapPin className="w-3.5 h-3.5 text-slate-500" />
+              <span>Spatial Intelligence</span>
+            </button>
+          </div>
+
+          {/* Demo Case Walkthrough Quick Buttons */}
+          <div className="flex flex-wrap items-center gap-2 font-ui text-xs">
+            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+              Benchmark Walkthrough:
+            </span>
+            <button
+              onClick={() => onOpenDossier('WS/DEMO/2025/101')}
+              className="px-2.5 py-1 bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 rounded text-[11px] font-medium flex items-center gap-1.5 transition-colors"
+              title="Launch Primary Demo Case: Tender Splitting & High Similarity Review (Score 61 HIGH)"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+              <span>Work 101 (Tender Splitting • 61 HIGH)</span>
+            </button>
+            <button
+              onClick={() => onOpenDossier('WS/DEMO/2025/801')}
+              className="px-2.5 py-1 bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 rounded text-[11px] font-medium flex items-center gap-1.5 transition-colors"
+              title="Launch Safeguard Counterexample: Spatial Proximity Counterexample (801 ↔ 802 No Relationship)"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+              <span>Work 801 (Proximity Safeguard • Counterexample)</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -214,11 +215,9 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
         <StatCard
           title="Total Sanctioned Works"
           value={kpis.total_works_analysed.toLocaleString('en-IN')}
-          subtitle={`Total Sanctioned: ${formatCr(kpis.total_sanctioned_amount_inr)}`}
-          icon={Building2}
-          iconColor="text-blue-600"
-          iconBg="bg-blue-50"
-          badge="18th Lok Sabha Tenure"
+          subtitle={`₹${(kpis.total_sanctioned_amount_inr / 10000000).toFixed(2)} Cr Sanctioned`}
+          badge="18th Lok Sabha Scope"
+          badgeColor="text-slate-700 bg-slate-50 border-slate-200"
           footer="Cumulative works registered under eSAKSHI baseline"
         />
 
@@ -226,104 +225,95 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           title="Active Risk Signals"
           value={kpis.flagged_works_count.toLocaleString('en-IN')}
           subtitle={`${kpis.flagged_percentage.toFixed(1)}% Flagged Signal Concentration`}
-          icon={AlertTriangle}
-          iconColor="text-red-600"
-          iconBg="bg-red-50"
-          badge={`Exposure: ${formatCr(kpis.flagged_sanctioned_amount_inr)}`}
-          badgeColor="bg-red-100 text-red-800"
+          badge={`Exposure: ₹${(kpis.flagged_sanctioned_amount_inr / 10000000).toFixed(2)} Cr`}
+          badgeColor="text-amber-900 bg-amber-50/80 border-amber-200"
           footer="Flagged for administrative review (Composite Score ≥ 30)"
         />
 
         <StatCard
           title="Financial Disbursal Exposure"
           value={formatCr(kpis.total_disbursed_amount_inr)}
-          subtitle={`Flagged Disbursed: ${formatCr(kpis.flagged_disbursed_amount_inr)}`}
-          icon={Coins}
-          iconColor="text-emerald-600"
-          iconBg="bg-emerald-50"
-          badge="Verified Vouchers"
-          badgeColor="bg-emerald-100 text-emerald-800"
+          subtitle={`Flagged Disbursed: ₹${(kpis.flagged_disbursed_amount_inr / 10000000).toFixed(2)} Cr`}
+          badge="Treasury / PFMS Tracked"
+          badgeColor="text-slate-700 bg-slate-50 border-slate-200"
           footer="Total disbursed funds tracked across Treasury/PFMS vouchers"
         />
 
         <StatCard
           title="Unresolved Queue Cases"
           value={pipeline.total_unresolved.toLocaleString('en-IN')}
-          subtitle={`Verification Req: ${pipeline.verification_required}`}
-          icon={CheckSquare}
-          iconColor="text-indigo-600"
-          iconBg="bg-indigo-50"
+          subtitle={`Verification Required: ${pipeline.verification_required}`}
           badge="Pending Review"
-          badgeColor="bg-indigo-100 text-indigo-800"
-          footer="Reconciled active cases in District/Nodal Officer queue (Score ≥ 30)"
+          badgeColor="text-slate-700 bg-slate-50 border-slate-200"
+          footer="Active cases in District/Nodal Officer queue (Score ≥ 30)"
         />
       </div>
 
-      {/* 3. DATA-DRIVEN EXECUTIVE INSIGHT CARDS */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
-        <div className="flex items-center justify-between mb-4">
+      {/* 3. ANALYTICAL PRIORITIES BRIEFING */}
+      <div className="pt-2">
+        <div className="flex items-center justify-between mb-4 border-b border-slate-200/80 pb-3">
           <div>
-            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-amber-500" />
-              <span>Data-Driven Executive Insights & Action Priorities</span>
+            <h3 className="font-display text-xl font-normal text-slate-900 tracking-tight">
+              Analytical Priorities
             </h3>
-            <p className="text-xs text-slate-500">
-              Prescriptive operational findings synthesized directly from multi-engine detection signals
+            <p className="font-secondary text-xs text-slate-500 mt-0.5">
+              Highest-priority signals requiring administrative review
             </p>
           </div>
-          <span className="text-xs text-slate-400 font-mono font-medium">{analytics.executive_insights.length} Active Directives</span>
+          <span className="font-ui text-xs text-slate-400 font-medium">{analytics.executive_insights.length} Active Directives</span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {analytics.executive_insights.map((card) => (
             <div
               key={card.insight_id}
-              className={`rounded-xl border p-4 flex flex-col justify-between transition-all hover:shadow-md ${
+              className={`rounded-md border p-5 flex flex-col justify-between transition-colors bg-white ${
                 card.severity === 'CRITICAL'
-                  ? 'bg-red-50/50 border-red-200'
+                  ? 'border-red-200/90'
                   : card.severity === 'HIGH'
-                  ? 'bg-amber-50/50 border-amber-200'
-                  : 'bg-slate-50 border-slate-200'
+                  ? 'border-amber-200/90'
+                  : 'border-slate-200'
               }`}
             >
               <div>
-                <div className="flex items-center justify-between gap-2 mb-2">
+                <div className="flex items-center justify-between gap-2 mb-2.5">
                   <span
-                    className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded uppercase ${
+                    className={`text-[10px] font-ui font-semibold px-1.5 py-0.5 rounded uppercase tracking-wider ${
                       card.severity === 'CRITICAL'
-                        ? 'bg-red-600 text-white'
+                        ? 'bg-red-50 text-red-900 border border-red-200'
                         : card.severity === 'HIGH'
-                        ? 'bg-amber-600 text-white'
-                        : 'bg-slate-600 text-white'
+                        ? 'bg-amber-50 text-amber-900 border border-amber-200'
+                        : 'bg-slate-50 text-slate-800 border border-slate-200'
                     }`}
                   >
-                    {card.severity} ANALYTICAL PRIORITY
+                    {card.severity} Priority
                   </span>
-                  <span className="text-[11px] font-semibold text-slate-500">{card.category}</span>
+                  <span className="font-ui text-[11px] text-slate-500">{card.category}</span>
                 </div>
-                <h4 className="text-sm font-bold text-slate-900 mb-1.5">{card.title}</h4>
-                <div className="text-xs text-slate-700 space-y-1.5 mb-3">
-                  <p><strong className="text-slate-900">Pattern:</strong> {card.observed_pattern}</p>
-                  <p className="text-slate-600"><strong className="text-slate-800">Evidence:</strong> {card.evidence_summary}</p>
+                <h4 className="font-ui text-sm font-bold text-slate-900 mb-2 leading-snug">{card.title}</h4>
+                <div className="font-secondary text-xs text-slate-600 space-y-2 mb-4 leading-relaxed">
+                  <p><span className="font-ui font-semibold text-slate-800">Pattern:</span> {card.observed_pattern}</p>
+                  <p><span className="font-ui font-semibold text-slate-800">Evidence:</span> {card.evidence_summary}</p>
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-slate-200/60 mt-2">
-                <div className="text-[11px] text-slate-800 font-medium mb-3">
-                  <strong className="text-slate-900 block mb-0.5">Suggested Verification Action:</strong>
+              <div className="pt-3 border-t border-slate-100 mt-2">
+                <div className="font-secondary text-xs text-slate-700 mb-3 leading-relaxed">
+                  <span className="font-ui font-semibold text-slate-900 block mb-0.5">Recommended Action:</span>
                   {card.recommended_action}
                 </div>
 
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-500 font-mono font-semibold">
-                    {card.affected_works_count} Works {card.affected_amount_cr > 0 ? `(${card.affected_amount_cr} Cr)` : ''}
+                <div className="flex items-center justify-between text-xs font-ui pt-1">
+                  <span className="font-data text-slate-600 text-xs font-semibold">
+                    {card.affected_works_count} Works {card.affected_amount_cr > 0 ? `(₹${card.affected_amount_cr} Cr)` : ''}
                   </span>
                   {card.affected_works_count > 0 && (
                     <button
-                      onClick={() => onNavigateToTab('queue')}
-                      className="px-2.5 py-1 bg-[#0d2b45] text-white rounded text-[11px] font-semibold hover:bg-[#19466e] flex items-center gap-1 transition-colors"
+                      onClick={() => onNavigateToTab('investigations')}
+                      className="px-2.5 py-1 bg-[#0d2b45] text-white rounded text-[11px] font-medium hover:bg-[#153a5c] flex items-center gap-1 transition-colors"
                     >
-                      Investigate <ChevronRight className="w-3 h-3" />
+                      <span>Investigate</span>
+                      <ChevronRight className="w-3 h-3" />
                     </button>
                   )}
                 </div>
@@ -331,7 +321,6 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
             </div>
           ))}
         </div>
-
       </div>
 
       {/* 4. SIGNAL ENGINE BREAKDOWN & SIGNAL OVERLAP MATRIX */}

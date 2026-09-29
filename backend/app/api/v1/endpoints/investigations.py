@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import desc, asc, outerjoin
 from app.db.session import get_db
-from app.models.entities import Work, RiskAnomaly, Investigation, AuditLog
+from app.models.entities import Work, RiskAnomaly, Investigation, AuditLog, MemberOfParliament
 from app.schemas.investigation_dto import (
     ReviewSubmissionDTO, ReviewResultDTO, InvestigationQueueItemDTO
 )
@@ -114,6 +114,7 @@ def submit_investigation_review(
 
 @router.get("/queue", response_model=List[InvestigationQueueItemDTO])
 def get_investigation_queue(
+    house: Optional[str] = Query(None, description="LOK, RAJYA, or ALL"),
     status: Optional[str] = Query(None),
     severity: Optional[str] = Query(None),
     state_id: Optional[int] = Query(None),
@@ -128,6 +129,15 @@ def get_investigation_queue(
     Returns an operational queue of all flagged works with risk anomalies.
     Reconciles with DB Investigation records and supports filters and sorting.
     """
+    canonical_house = None
+    if house and house.upper() != "ALL":
+        if "LOK" in house.upper():
+            canonical_house = "LOK"
+        elif "RAJYA" in house.upper():
+            canonical_house = "RAJYA"
+        else:
+            canonical_house = house.upper()
+
     from sqlalchemy import or_
     query = db.query(RiskAnomaly, Work, Investigation).join(
         Work, RiskAnomaly.work_id == Work.work_id
@@ -142,6 +152,8 @@ def get_investigation_queue(
 
     if is_synthetic is not None:
         query = query.filter(Work.is_synthetic == is_synthetic)
+    if canonical_house:
+        query = query.join(Work.mp).filter(MemberOfParliament.house == canonical_house)
     if state_id:
         query = query.join(Work.district).filter(Work.district.has(state_id=state_id))
     if district_id:

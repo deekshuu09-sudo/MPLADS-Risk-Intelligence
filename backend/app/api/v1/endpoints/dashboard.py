@@ -17,13 +17,22 @@ def get_dashboard_summary(
     is_synthetic: Optional[bool] = Query(None),
     db: Session = Depends(get_db)
 ):
+    canonical_house = None
+    if house and house.upper() != "ALL":
+        if "LOK" in house.upper():
+            canonical_house = "LOK"
+        elif "RAJYA" in house.upper():
+            canonical_house = "RAJYA"
+        else:
+            canonical_house = house.upper()
+
     query = db.query(Work)
     if is_synthetic is not None:
         query = query.filter(Work.is_synthetic == is_synthetic)
     if state_id:
         query = query.join(Work.district).filter(Work.district.has(state_id=state_id))
-    if house and house != "ALL":
-        query = query.join(Work.mp).filter(Work.mp.has(house=house))
+    if canonical_house:
+        query = query.join(Work.mp).filter(Work.mp.has(house=canonical_house))
 
     total_works = query.count()
     works_sanctioned = query.filter(Work.work_status.in_(["Sanctioned", "Ongoing", "Completed"])).count()
@@ -32,14 +41,16 @@ def get_dashboard_summary(
 
     # Total allocated limit
     mp_query = db.query(func.sum(MemberOfParliament.allocated_limit))
-    if house and house != "ALL":
-        mp_query = mp_query.filter(MemberOfParliament.house == house)
+    if canonical_house:
+        mp_query = mp_query.filter(MemberOfParliament.house == canonical_house)
     allocated_limit = mp_query.scalar() or 83474391109.11
 
     # Total expenditures
     exp_query = db.query(func.sum(Expenditure.fund_disbursed_amt)).join(Expenditure.work)
     if is_synthetic is not None:
         exp_query = exp_query.filter(Work.is_synthetic == is_synthetic)
+    if canonical_house:
+        exp_query = exp_query.join(Work.mp).filter(Work.mp.has(house=canonical_house))
     total_expenditure = exp_query.scalar() or 0.0
     utilization_pct = (total_expenditure / allocated_limit * 100.0) if allocated_limit > 0 else 0.0
 
@@ -49,8 +60,8 @@ def get_dashboard_summary(
         anomaly_query = anomaly_query.filter(Work.is_synthetic == is_synthetic)
     if state_id:
         anomaly_query = anomaly_query.join(Work.district).filter(Work.district.has(state_id=state_id))
-    if house and house != "ALL":
-        anomaly_query = anomaly_query.join(Work.mp).filter(Work.mp.has(house=house))
+    if canonical_house:
+        anomaly_query = anomaly_query.join(Work.mp).filter(Work.mp.has(house=canonical_house))
 
     flagged_works = anomaly_query.filter(RiskAnomaly.composite_risk_score >= 30.0).count()
     flagged_pct = (flagged_works / total_works * 100.0) if total_works > 0 else 0.0
@@ -78,9 +89,17 @@ def get_dashboard_summary(
             medium=medium_count,
             low=low_count
         ),
-        open_investigations_count=db.query(RiskAnomaly).join(RiskAnomaly.work).filter(
-            RiskAnomaly.composite_risk_score >= 20.0,
-            ~RiskAnomaly.status.in_(["RESOLVED", "DISMISSED"])
+        open_investigations_count=(
+            db.query(RiskAnomaly).join(RiskAnomaly.work).filter(
+                RiskAnomaly.composite_risk_score >= 20.0,
+                ~RiskAnomaly.status.in_(["RESOLVED", "DISMISSED"])
+            )
+            .filter(Work.is_synthetic == is_synthetic if is_synthetic is not None else True)
+            .join(Work.mp).filter(MemberOfParliament.house == canonical_house) if canonical_house else
+            db.query(RiskAnomaly).join(RiskAnomaly.work).filter(
+                RiskAnomaly.composite_risk_score >= 20.0,
+                ~RiskAnomaly.status.in_(["RESOLVED", "DISMISSED"])
+            ).filter(Work.is_synthetic == is_synthetic if is_synthetic is not None else True)
         ).count(),
         dataset_mode=dataset_mode,
         last_synced_at=None

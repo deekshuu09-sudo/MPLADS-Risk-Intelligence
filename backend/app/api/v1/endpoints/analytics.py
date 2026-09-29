@@ -29,12 +29,22 @@ def get_executive_overview_analytics(
     is_synthetic: Optional[bool] = Query(None),
     db: Session = Depends(get_db)
 ):
+    # Canonicalize house parameter (supports 'LOK', 'LOK_SABHA', 'RAJYA', 'RAJYA_SABHA', 'ALL')
+    canonical_house = None
+    if house and house.upper() != "ALL":
+        if "LOK" in house.upper():
+            canonical_house = "LOK"
+        elif "RAJYA" in house.upper():
+            canonical_house = "RAJYA"
+        else:
+            canonical_house = house.upper()
+
     # Base Work Query
     work_query = db.query(Work)
     if is_synthetic is not None:
         work_query = work_query.filter(Work.is_synthetic == is_synthetic)
-    if house and house != "ALL":
-        work_query = work_query.join(Work.mp).filter(MemberOfParliament.house == house)
+    if canonical_house:
+        work_query = work_query.join(Work.mp).filter(MemberOfParliament.house == canonical_house)
 
     total_works = work_query.count()
 
@@ -44,16 +54,16 @@ def get_executive_overview_analytics(
     exp_query = db.query(func.sum(Expenditure.fund_disbursed_amt)).join(Expenditure.work)
     if is_synthetic is not None:
         exp_query = exp_query.filter(Work.is_synthetic == is_synthetic)
-    if house and house != "ALL":
-        exp_query = exp_query.join(Work.mp).filter(MemberOfParliament.house == house)
+    if canonical_house:
+        exp_query = exp_query.join(Work.mp).filter(MemberOfParliament.house == canonical_house)
     total_disbursed_sum = exp_query.scalar() or 0.0
 
     # Risk Anomalies Query
     anom_query = db.query(RiskAnomaly).join(RiskAnomaly.work)
     if is_synthetic is not None:
         anom_query = anom_query.filter(Work.is_synthetic == is_synthetic)
-    if house and house != "ALL":
-        anom_query = anom_query.join(Work.mp).filter(MemberOfParliament.house == house)
+    if canonical_house:
+        anom_query = anom_query.join(Work.mp).filter(MemberOfParliament.house == canonical_house)
 
     flagged_anomalies = anom_query.filter(RiskAnomaly.composite_risk_score >= 30.0).all()
     flagged_count = len(flagged_anomalies)
@@ -65,10 +75,15 @@ def get_executive_overview_analytics(
     flagged_disbursed_sum = db.query(func.sum(Expenditure.fund_disbursed_amt)).filter(Expenditure.work_id.in_(flagged_work_ids)).scalar() or 0.0 if flagged_work_ids else 0.0
 
     # Unresolved investigations count (reconciles with investigation queue score threshold >= 30.0 or active anomalies)
-    unresolved_count = db.query(RiskAnomaly).join(RiskAnomaly.work).filter(
+    unresolved_query = db.query(RiskAnomaly).join(RiskAnomaly.work).filter(
         RiskAnomaly.composite_risk_score >= 30.0,
         ~RiskAnomaly.status.in_(["RESOLVED", "DISMISSED"])
-    ).count()
+    )
+    if is_synthetic is not None:
+        unresolved_query = unresolved_query.filter(Work.is_synthetic == is_synthetic)
+    if canonical_house:
+        unresolved_query = unresolved_query.join(Work.mp).filter(MemberOfParliament.house == canonical_house)
+    unresolved_count = unresolved_query.count()
 
     # Engine Trigger Counting & Overlap Analysis
     spatial_rel_count = 0
@@ -146,6 +161,8 @@ def get_executive_overview_analytics(
         w_query = db.query(Work).join(Work.district).filter(District.state_id == s.state_id)
         if is_synthetic is not None:
             w_query = w_query.filter(Work.is_synthetic == is_synthetic)
+        if canonical_house:
+            w_query = w_query.join(Work.mp).filter(MemberOfParliament.house == canonical_house)
         st_total = w_query.count()
         if st_total == 0:
             continue
@@ -155,6 +172,8 @@ def get_executive_overview_analytics(
         )
         if is_synthetic is not None:
             st_flagged = st_flagged.filter(Work.is_synthetic == is_synthetic)
+        if canonical_house:
+            st_flagged = st_flagged.join(Work.mp).filter(MemberOfParliament.house == canonical_house)
         st_f_count = st_flagged.count()
         st_rate = (st_f_count / st_total * 100.0) if st_total > 0 else 0.0
 
@@ -180,6 +199,8 @@ def get_executive_overview_analytics(
         dw_query = db.query(Work).filter(Work.district_id == d.district_id)
         if is_synthetic is not None:
             dw_query = dw_query.filter(Work.is_synthetic == is_synthetic)
+        if canonical_house:
+            dw_query = dw_query.join(Work.mp).filter(MemberOfParliament.house == canonical_house)
         d_total = dw_query.count()
         if d_total == 0:
             continue
@@ -189,6 +210,8 @@ def get_executive_overview_analytics(
         )
         if is_synthetic is not None:
             d_flagged = d_flagged.filter(Work.is_synthetic == is_synthetic)
+        if canonical_house:
+            d_flagged = d_flagged.join(Work.mp).filter(MemberOfParliament.house == canonical_house)
         d_f_count = d_flagged.count()
         d_rate = (d_f_count / d_total * 100.0) if d_total > 0 else 0.0
 
@@ -210,6 +233,8 @@ def get_executive_overview_analytics(
         cw_query = db.query(Work).filter(Work.work_category == cat)
         if is_synthetic is not None:
             cw_query = cw_query.filter(Work.is_synthetic == is_synthetic)
+        if canonical_house:
+            cw_query = cw_query.join(Work.mp).filter(MemberOfParliament.house == canonical_house)
         c_total = cw_query.count()
         if c_total == 0:
             continue
@@ -219,6 +244,8 @@ def get_executive_overview_analytics(
         )
         if is_synthetic is not None:
             c_flagged = c_flagged.filter(Work.is_synthetic == is_synthetic)
+        if canonical_house:
+            c_flagged = c_flagged.join(Work.mp).filter(MemberOfParliament.house == canonical_house)
         c_f_count = c_flagged.count()
         c_rate = (c_f_count / c_total * 100.0) if c_total > 0 else 0.0
 
@@ -239,9 +266,14 @@ def get_executive_overview_analytics(
     category_concentration.sort(key=lambda x: x.flagged_works, reverse=True)
 
     # Investigation Pipeline Status Breakdown
-    inv_statuses = db.query(Investigation.status, func.count(Investigation.investigation_id)).join(Investigation.work).join(Work.anomaly).filter(
+    inv_pipe_query = db.query(Investigation.status, func.count(Investigation.investigation_id)).join(Investigation.work).join(Work.anomaly).filter(
         RiskAnomaly.composite_risk_score >= 30.0
-    ).group_by(Investigation.status).all()
+    )
+    if is_synthetic is not None:
+        inv_pipe_query = inv_pipe_query.filter(Work.is_synthetic == is_synthetic)
+    if canonical_house:
+        inv_pipe_query = inv_pipe_query.join(Work.mp).filter(MemberOfParliament.house == canonical_house)
+    inv_statuses = inv_pipe_query.group_by(Investigation.status).all()
     status_map = {status: count for status, count in inv_statuses}
 
     inv_pipeline = InvestigationPipelineDTO(

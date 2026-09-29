@@ -67,6 +67,7 @@ export const RiskExplorer: React.FC<RiskExplorerProps> = ({
       const { items, total } = await api.getWorks({
         skip: page * limit,
         limit,
+        house: selectedHouse !== 'ALL' ? selectedHouse : undefined,
         search: searchQuery.trim() || undefined,
         category: selectedCategory !== 'ALL' ? selectedCategory : undefined,
         status: selectedStatus !== 'ALL' ? selectedStatus : undefined,
@@ -91,38 +92,39 @@ export const RiskExplorer: React.FC<RiskExplorerProps> = ({
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       {/* Top Header & Triage Summary */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <ShieldAlert className="w-4 h-4 text-blue-600" />
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                Surveillance Grid • Multidimensional Risk Triage
-              </span>
-            </div>
-            <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">
-              Explainable Risk Explorer & Project Inventory
-            </h2>
-            <p className="text-xs text-slate-500">
-              Granular inspection of sanctioned MPLADS projects, multi-engine risk telemetry, and execution milestones
-            </p>
+      <div className="border-b border-slate-200/90 pb-5 pt-2 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 mb-1.5 font-ui">
+            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+              Surveillance Grid
+            </span>
+            <span className="text-slate-300">•</span>
+            <span className="text-[11px] text-slate-600 font-medium">Multidimensional Risk Triage</span>
           </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                setPage(0);
-                loadWorks();
-              }}
-              className="p-2 border border-slate-200 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
-              title="Refresh Works Grid"
-            >
-              <RefreshCw className="w-4 h-4" />
-            </button>
-          </div>
+          <h2 className="font-display text-3xl font-normal text-slate-900 tracking-tight">
+            Explainable Risk Explorer &amp; Project Inventory
+          </h2>
+          <p className="font-secondary text-xs text-slate-600 mt-1">
+            Granular inspection of sanctioned MPLADS projects, multi-engine risk telemetry, and execution milestones
+          </p>
         </div>
+
+        <div className="flex items-center gap-2 font-ui">
+          <button
+            onClick={() => {
+              setPage(0);
+              loadWorks();
+            }}
+            className="px-3 py-1.5 border border-slate-200 rounded text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors text-xs font-medium flex items-center gap-1.5 bg-white"
+            title="Refresh Works Grid"
+          >
+            <RefreshCw className="w-3.5 h-3.5 text-slate-500" />
+            <span>Refresh Grid</span>
+          </button>
+        </div>
+      </div>
 
         {/* Multi-Filter Bar */}
         <div className="mt-5 pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
@@ -196,25 +198,24 @@ export const RiskExplorer: React.FC<RiskExplorerProps> = ({
             </select>
           </div>
 
-          {/* Status Filter */}
-          <div>
-            <select
-              value={selectedStatus}
-              onChange={(e) => {
-                setSelectedStatus(e.target.value);
-                setPage(0);
-              }}
-              className="w-full text-xs py-2 px-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-700"
-            >
-              <option value="ALL">All Execution Statuses</option>
-              <option value="Sanctioned">Sanctioned</option>
-              <option value="Ongoing">Ongoing</option>
-              <option value="Completed">Completed</option>
-              <option value="Stalled">Stalled</option>
-            </select>
+            {/* Status Filter */}
+            <div>
+              <select
+                value={selectedStatus}
+                onChange={(e) => {
+                  setSelectedStatus(e.target.value);
+                  setPage(0);
+                }}
+                className="w-full text-xs py-2 px-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-700"
+              >
+                <option value="ALL">All Execution Statuses</option>
+                <option value="Sanctioned">Sanctioned</option>
+                <option value="Ongoing">Ongoing</option>
+                <option value="Completed">Completed</option>
+                <option value="Stalled">Stalled</option>
+              </select>
+            </div>
           </div>
-        </div>
-      </div>
 
       {/* Table Header: Records Count and Sorting Controls */}
       <div className="flex flex-wrap items-center justify-between gap-3 px-1 text-xs">
