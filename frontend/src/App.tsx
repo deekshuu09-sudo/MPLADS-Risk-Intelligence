@@ -127,14 +127,14 @@ export function App() {
               Ministry of Statistics &amp; Programme Implementation (MoSPI)
             </span>
             <span className="text-slate-300">•</span>
-            <span className="font-secondary text-slate-600">Data Informatics &amp; Innovation Division (DIID)</span>
+            <span className="font-secondary text-slate-600">IPMD &amp; DIID (PAIMANA Ecosystem)</span>
           </div>
 
           <div className="flex items-center gap-4 text-slate-600 font-secondary text-[11px]">
-            <span>SIH 2026 Problem Statement: <strong className="font-ui font-semibold text-slate-800">26102</strong></span>
+            <span>SIH 2026 Problem Statement: <strong className="font-ui font-semibold text-slate-800">SIH26103</strong></span>
             <span className="text-slate-300">•</span>
             <span className="font-data text-[10px] bg-slate-50 px-2 py-0.5 rounded border border-slate-200 text-slate-700">
-              v1.0.0-PROD
+              v2.0.0-PROD
             </span>
           </div>
         </div>

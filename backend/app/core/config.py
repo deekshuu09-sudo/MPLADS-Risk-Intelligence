@@ -1,8 +1,8 @@
 import os
 
 class Settings:
-    PROJECT_NAME: str = "MPLADS Risk Intelligence & Investigation Platform"
-    PROJECT_SLUG: str = "mplads-risk-intelligence"
+    PROJECT_NAME: str = "NexSolve — Predictive Infrastructure Project Intelligence (MoSPI IPMD / PAIMANA)"
+    PROJECT_SLUG: str = "nexsolve-project-intelligence"
     API_V1_STR: str = "/api/v1"
     
     # Database

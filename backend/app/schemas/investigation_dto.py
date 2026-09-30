@@ -41,6 +41,16 @@ class InvestigationQueueItemDTO(BaseModel):
     updated_at: datetime
     is_synthetic: bool
 
+    # SIH26103 Early Warning Queue Aliases & Metrics
+    project_id: Optional[str] = None
+    project_name: Optional[str] = None
+    sector: Optional[str] = None
+    approved_cost: Optional[float] = None
+    forecast_delay_months: Optional[float] = None
+    cost_risk_score: Optional[float] = None
+    schedule_risk_score: Optional[float] = None
+    early_warning_signal: Optional[str] = None
+
     model_config = {"from_attributes": True}
 
 

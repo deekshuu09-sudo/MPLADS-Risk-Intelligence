@@ -453,7 +453,35 @@ def get_explainability_dossier(work_id: str, db: Session = Depends(get_db)):
         shap_explanation=shap_res,
         phase2_relationship_intelligence=phase2_relationships,
         evidence_graph=evidence_graph_result,
-        investigation_intelligence=evidence_graph_result.get("investigation_intelligence")
+        investigation_intelligence=evidence_graph_result.get("investigation_intelligence"),
+        project_monitoring_intelligence={
+            "monitoring_ecosystem": "MoSPI IPMD / PAIMANA Analytical Framework",
+            "sector": w.work_category,
+            "approved_cost_inr": w.sanctioned_amount,
+            "cumulative_expenditure_inr": disbursed,
+            "physical_progress_pct": w.physical_progress_pct,
+            "financial_expenditure_pct": round((disbursed / w.sanctioned_amount * 100.0), 2) if w.sanctioned_amount > 0 else 0.0,
+            "overall_project_risk_score": a.composite_risk_score,
+            "risk_classification": a.severity_level,
+            "schedule_risk_score": b_data.get("risk_contributions", {}).get("Execution Delay", 0) * 2.85,
+            "cost_risk_score": b_data.get("risk_contributions", {}).get("Financial Deviation", 0) * 3.33,
+            "implementation_risk_score": (b_data.get("risk_contributions", {}).get("Duplicate Similarity", 0) + b_data.get("risk_contributions", {}).get("Category Pattern", 0)) * 2.0
+        },
+        cost_overrun_forecast={
+            "cost_variance_pct": round(((w.sanctioned_amount - baseline_comp.median) / baseline_comp.median * 100.0), 1) if (baseline_comp and baseline_comp.median > 0) else 0.0,
+            "peer_median_cost_inr": baseline_comp.median if baseline_comp else w.sanctioned_amount,
+            "unit_cost_status": "Outlier (+MAD Breach)" if (baseline_comp and baseline_comp.z_score and baseline_comp.z_score > 3.0) else "Within Expected Band",
+            "disbursement_progress_gap_pct": round(((disbursed / w.sanctioned_amount * 100.0) - w.physical_progress_pct), 1) if w.sanctioned_amount > 0 else 0.0,
+            "cost_overrun_likelihood": "HIGH" if (a.composite_risk_score >= 60.0 and b_data.get("risk_contributions", {}).get("Financial Deviation", 0) > 10) else ("MEDIUM" if a.composite_risk_score >= 40.0 else "LOW")
+        },
+        schedule_overrun_forecast={
+            "elapsed_days": days_elapsed or 0,
+            "milestone_completion_benchmark_days": 365,
+            "forecast_delay_months": round(max(0, ((days_elapsed or 0) - 365) / 30.0), 1),
+            "burn_rate_velocity": round(w.physical_progress_pct / max(1, (days_elapsed or 1) / 30.0), 2),
+            "schedule_overrun_likelihood": "HIGH" if (days_elapsed and days_elapsed > 365 and w.physical_progress_pct < 50.0) else ("MEDIUM" if (days_elapsed and days_elapsed > 200 and w.physical_progress_pct < 30.0) else "LOW"),
+            "critical_milestone_delayed": (days_elapsed is not None and days_elapsed > 365 and w.work_status != "Completed")
+        }
     )
 
 

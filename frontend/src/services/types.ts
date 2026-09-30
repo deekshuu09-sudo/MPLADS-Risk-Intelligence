@@ -173,6 +173,15 @@ export interface WorkItem {
   severity_level?: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
   primary_trigger_factor?: string;
   is_synthetic: boolean;
+  project_id?: string;
+  project_name?: string;
+  sector?: string;
+  approved_cost?: number;
+  cumulative_expenditure?: number;
+  cost_variance_pct?: number;
+  forecast_delay_months?: number;
+  schedule_risk_score?: number;
+  cost_risk_score?: number;
 }
 
 export interface ExpenditureItem {
@@ -460,6 +469,14 @@ export interface InvestigationQueueItem {
   days_in_review: number;
   updated_at: string;
   is_synthetic: boolean;
+  project_id?: string;
+  project_name?: string;
+  sector?: string;
+  approved_cost?: number;
+  forecast_delay_months?: number;
+  cost_risk_score?: number;
+  schedule_risk_score?: number;
+  early_warning_signal?: string;
 }
 
 export interface AuditLogItem {

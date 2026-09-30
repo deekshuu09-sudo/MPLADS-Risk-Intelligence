@@ -84,13 +84,13 @@ export const GovHeader: React.FC<GovHeaderProps> = ({
             <span className="text-slate-200">Ministry of Statistics and Programme Implementation</span>
           </div>
           <span className="hidden md:inline text-[10px] text-slate-300 font-ui tracking-wide">
-            DIID • Problem Statement 26102
+            DIID / IPMD • Problem Statement SIH26103 (PAIMANA)
           </span>
         </div>
 
         <div className="flex items-center gap-3 font-ui text-[11px]">
           <span className="text-slate-200 font-medium">
-            18th Lok Sabha Tenure (2024–2029)
+            Central Sector Infrastructure Monitoring Portfolio
           </span>
 
           <a
@@ -114,11 +114,11 @@ export const GovHeader: React.FC<GovHeaderProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h1 className="font-display text-2xl font-normal tracking-tight text-slate-900 leading-tight">
-                MPLADS Risk Intelligence & Investigation Platform
+                NexSolve — Predictive Infrastructure Project Intelligence
               </h1>
             </div>
             <p className="font-secondary text-xs text-slate-600 mt-0.5">
-              Explainable Anomaly Detection & Policy Compliance Monitor • Evidence-Linked Supervision
+              MoSPI IPMD / PAIMANA Ecosystem • Predictive Cost &amp; Schedule Overrun Early Warning System
             </p>
           </div>
         </div>
@@ -221,11 +221,11 @@ export const GovHeader: React.FC<GovHeaderProps> = ({
       <nav className="px-4 sm:px-8 flex items-center gap-2 overflow-x-auto border-t border-slate-200 bg-slate-50/40">
         {[
           { id: 'overview', label: 'Executive Overview', icon: BarChart3 },
-          { id: 'explorer', label: 'Explainable Risk Explorer', icon: Search },
-          { id: 'geospatial', label: 'Geospatial Risk Map', icon: MapPin },
+          { id: 'explorer', label: 'Project Risk & Overrun Explorer', icon: Search },
+          { id: 'geospatial', label: 'Geospatial Project Map', icon: MapPin },
           {
             id: 'investigations',
-            label: 'Investigation Queue',
+            label: 'Early Warning Queue',
             icon: ClipboardList,
             badge: openInvestigationsCount > 0 ? openInvestigationsCount : undefined,
           },

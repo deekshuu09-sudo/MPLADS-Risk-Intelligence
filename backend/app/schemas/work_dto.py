@@ -39,6 +39,17 @@ class WorkListDTO(BaseModel):
     primary_trigger_factor: Optional[str] = None
     is_synthetic: bool = False
 
+    # SIH26103 Predictive Infrastructure Project Monitoring Aliases & Metrics
+    project_id: Optional[str] = None
+    project_name: Optional[str] = None
+    sector: Optional[str] = None
+    approved_cost: Optional[float] = None
+    cumulative_expenditure: Optional[float] = None
+    cost_variance_pct: Optional[float] = None
+    forecast_delay_months: Optional[float] = None
+    schedule_risk_score: Optional[float] = None
+    cost_risk_score: Optional[float] = None
+
     model_config = {"from_attributes": True}
 
 

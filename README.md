@@ -1,42 +1,43 @@
-# NexSolve — MPLADS Risk Intelligence
+# NexSolve — Predictive Infrastructure Project Intelligence
 
-[![MoSPI DIID](https://img.shields.io/badge/Ministry-MoSPI%20DIID-0d2b45.svg)](https://mplads.mospi.gov.in)
-[![SIH 2026](https://img.shields.io/badge/SIH%202026-Problem%2026102-1a936f.svg)](https://sih.gov.in)
-[![Parliamentary Tenure](https://img.shields.io/badge/Tenure-18th%20Lok%20Sabha-blue.svg)](https://sansad.in)
-[![Tests](https://img.shields.io/badge/Tests-52%2F52%20Passing-success.svg)](./tests)
+[![MoSPI IPMD](https://img.shields.io/badge/Ministry-MoSPI%20IPMD%20%2F%20DIID-0d2b45.svg)](https://mplads.mospi.gov.in)
+[![SIH 2026](https://img.shields.io/badge/SIH%202026-Problem%20SIH26103-1a936f.svg)](https://sih.gov.in)
+[![Ecosystem](https://img.shields.io/badge/Platform-PAIMANA%20Project%20Monitoring-blue.svg)](https://mospi.gov.in)
+[![Tests](https://img.shields.io/badge/Tests-59%2F59%20Passing-success.svg)](./tests)
 [![Python](https://img.shields.io/badge/Backend-FastAPI%20%7C%20Python%203.14-3776AB.svg)](https://fastapi.tiangolo.com)
 [![Frontend](https://img.shields.io/badge/Frontend-React%2018%20%7C%20Vite%20%7C%20Tailwind-61DAFB.svg)](https://vite.dev)
-[![Audit](https://img.shields.io/badge/Security%20Posture-PASS__WITH__LIMITATIONS-amber.svg)](./backend/audit)
+[![Security Posture](https://img.shields.io/badge/Security%20Posture-PASS__WITH__LIMITATIONS-amber.svg)](./backend/audit)
 
 > **IMPORTANT DISCLAIMER:**
 > **DECISION-SUPPORT PROTOTYPE — NOT AN OFFICIAL MoSPI FINDING.**
-> *This software is an administrative decision-support research prototype developed for SIH 2026 Problem Statement 26102. Risk indicators, entity resolution linkages, and anomaly scores are statistical suggestions intended to guide verification by competent administrative authorities and do not constitute legal or official findings of fraud.*
+> *This software is an administrative decision-support research prototype developed for Smart India Hackathon 2026 Problem Statement SIH26103: "Use case on web-based integrated project-monitoring platform". Cost overrun forecasts, schedule delay predictions, and project risk indicators are statistical and analytical suggestions intended to assist project directors and monitoring authorities in MoSPI IPMD. They do not constitute official administrative sanctions or findings.*
 
-> **Official Problem Statement (ID: 26102):**
-> *Development of an AI-powered system to detect anomalies, fraud, and inefficiencies in MPLAD Scheme implementation.*
-> Sponsored by the **Ministry of Statistics and Programme Implementation (MoSPI) — Data Informatics & Innovation Division (DIID)**.
+> **Official Problem Statement (ID: SIH26103):**
+> **Title:** *Use case on web-based integrated project-monitoring platform*
+> **Organization:** *Ministry of Statistics and Programme Implementation (MoSPI)*
+> **Department:** *Data Informatics & Innovation Division (DIID) / Infrastructure & Project Monitoring Division (IPMD)*
+> **Objective:** *Development of an AI-powered Predictive Analytics and Early Warning System capable of analyzing project-monitoring data from the PAIMANA ecosystem to identify projects likely to experience cost escalation/overruns, schedule/time overruns, implementation risks, and milestone delays.*
 
 ---
 
 ## 1. Executive Summary
 
-The **NexSolve — MPLADS Risk Intelligence & Investigation Platform** is an explainable surveillance, entity resolution, and case management platform designed for MoSPI, State Nodal Authorities (SNAs), and District Authorities. It monitors developmental project execution across all 543 Lok Sabha and 245 Rajya Sabha constituencies, detecting expenditure anomalies, tender splitting, near-duplicates, chronic stalls, and contractor monopolization.
+The **NexSolve — Predictive Infrastructure Project Intelligence Platform** is an explainable predictive surveillance and early warning platform engineered for the **Infrastructure & Project Monitoring Division (IPMD)** and **Data Informatics & Innovation Division (DIID)**, MoSPI.
 
-### Core Architectural Commitments:
-1. **Explainable AI (XAI) as Core Differentiator:** Flagged projects provide an **Explainability Dossier** answering **"WHY was this project flagged?"**, featuring exact trigger factor attribution, comparative baseline distribution ($P_{25}$, $\text{Median}$, $P_{75}$, $P_{95}$, Observed pin), and prescriptive field verification checklists.
-2. **Probabilistic Entity Resolution & Semantic Graph:** Integrates **Splink 4.0.9** (Fellegi-Sunter model over DuckDB execution backend) and deterministic TF-IDF semantic embeddings with a **NetworkX Evidence Graph** for multi-hop contractor and duplicate linkage.
-3. **Strict False-Positive Safeguards:** Spatial proximity alone never triggers a high-risk relationship. As proven in the 801 ↔ 802 counterexample (166m apart, different sectors and contractors), the system returns `NO_SIGNIFICANT_RELATIONSHIP`.
-4. **Strict Non-Accusatory Administrative Language:** All findings use neutral administrative terminology: *"anomaly"*, *"risk indicator"*, *"requires review"*, *"verification recommended"*.
-5. **Truthful Audit & Security Transparency:** Relational append-only audit trail logging with SHA-256 data fingerprinting (no unverified blockchain claims). Security posture verified via Test 9.1 runner as `PASS_WITH_LIMITATIONS` (development baseline: no mock auth or fake enterprise claims).
-6. **Dual-Data Transparency:** Transparent distinction between official live eSAKSHI data (`[OFFICIAL eSAKSHI]`) and synthetic validation test cases (`[BENCHMARK CASE]`).
-7. **All 7 Anomaly Archetypes Validated:**
-   - **Scenario A:** Tender Threshold Splitting (cluster just below ₹50 Lakhs limit).
-   - **Scenario B:** Near-Duplicate Proximity (PCC road duplicate within 180m, >85% text similarity).
-   - **Scenario C:** Severe Cost Outlier (+250% over district category median).
-   - **Scenario D:** Advance Overpayment (85% disbursed with 10% progress).
-   - **Scenario E:** Chronic Milestone Stall (420 days elapsed, 15% progress).
-   - **Scenario F:** Contractor Monopolization (District HHI > 4,500, contractor share > 65%).
-   - **Scenario G:** Statutory Trust/Society Cap Breach (> ₹1.00 Cr cumulative sanctions).
+Operating within the **PAIMANA** Central Sector Infrastructure Project monitoring ecosystem, NexSolve provides executive decision-makers with an integrated early warning system to arrest project slippage before capital escalation becomes irreversible.
+
+### Core Architectural Capabilities (SIH26103):
+1. **Cost Overrun Prediction & Variance Intelligence:** Parametric peer category baselining (Median Absolute Deviation & Modified Z-Scores) coupled with unit rate dispersion to flag abnormal cost escalations, expenditure velocity anomalies, and budget-to-milestone gaps.
+2. **Schedule Overrun Prediction & Milestone Velocity Analysis:** Tracks physical progress burn-rate against elapsed execution duration to compute forecast delay in months, flagging chronic milestone stalls and implementation bottlenecks.
+3. **Multi-Factor Project Risk Scoring (0–100):** Transparent, deterministic composite scoring decomposing overall project risk into:
+   - **Schedule Risk** (elapsed duration, milestone delay points)
+   - **Cost Overrun Risk** (unit rate variance, financial deviation points)
+   - **Progress vs Disbursal Divergence** (advance disbursement outpacing physical progress)
+   - **Procurement & Implementation Risk** (tender clustering, vendor monopolization HHI)
+4. **Explainable AI (XAI) Project Intelligence Dossier:** Answers **"WHY is this project at risk?"** with exact factor contribution attribution, baseline comparison percentiles ($P_{25}$, $\text{Median}$, $P_{75}$, $P_{95}$, Observed pin), SHAP feature importance, and prescriptive administrative intervention checklists.
+5. **Multi-Hop Evidence Graph & Entity Resolution:** Integrates **Splink 4.0.9** (Fellegi-Sunter record linkage over DuckDB) and semantic TF-IDF with a **NetworkX Evidence Graph** to uncover contractor concentration, co-located duplicate asset proposals, and contiguous contract splitting.
+6. **Strict False-Positive Safeguards:** Spatial proximity alone never triggers high risk (verified by the 801 ↔ 802 counterexample benchmark).
+7. **Append-Only Compliance Audit Trail:** Chronological record of administrative interventions, status transitions, and reviewer decisions with SHA-256 integrity fingerprinting.
 
 ---
 
@@ -82,15 +83,15 @@ flowchart TD
 
 ---
 
-## 3. SIH 2026 Live Demo Script (5–7 Minutes)
+## 3. SIH 2026 Live Demo Script (5–7 Minutes) — SIH26103 Presentation
 
 | Time | Screen / Feature | Key Talking Points & Actions | Target Outcome |
 | :--- | :--- | :--- | :--- |
-| **0:00–1:00** | **Overview Dashboard** (`/`) | Highlight macro metrics: ₹12.5 Cr sanctioned, 500+ works monitored, 117 active risk signals (Score ≥ 30). Point out the KPI banners and click **"Review Risk Queue"** or the **"Inspect Work 101"** pill. | Establishes scale, parliamentary alignment, and executive visibility. |
-| **1:00–2:30** | **Explainability Dossier (Hero)** (`/anomalies/WS/DEMO/2025/101/dossier`) | Showcase **Work 101** (PCC Road near-duplicate). Explain **What/Why/Evidence/Action**: Risk score 61, SHAP decomposition, benchmark distribution ($P_{25}$-Median-$P_{75}$-$P_{95}$ with observed pin), and prescriptive field checklist. | Proves NexSolve is NOT a black box; officers see exactly why it flagged. |
-| **2:30–3:45** | **Evidence Graph & Entity Resolution** | Scroll to Evidence Graph component on Work 101 dossier. Show **101 ↔ 102** strong edge (Splink score 0.9997, TF-IDF 0.887, 180m distance -> `HIGH_SIMILARITY_REVIEW`). Inspect node attributes and linked contractors. | Demonstrates probabilistic record linkage (Splink 4.0.9) and graph intelligence. |
-| **3:45–4:45** | **False-Positive Safeguard Counterexample** | Open **Work 801** (`WS/DEMO/2025/801`). Point out that Work 801 and Work 802 are only 166m apart, but Splink = 0, Semantic = 0, and sectors differ (Road vs School). System classifies relationship as `NO_SIGNIFICANT_RELATIONSHIP`. | Convinces technical judges that geospatial proximity alone does not cause false positives. |
-| **4:45–5:30** | **Officer Workflow & Audit Trail** (`/investigations`, `/audit`) | Transition Work 101 to `UNDER_INVESTIGATION` or record officer findings. Show that actions require administrative remarks. Navigate to `/audit` to show the append-only log with SHA-256 fingerprinting. | Proves end-to-end governance, administrative accountability, and auditability. |
+| **0:00–1:00** | **Executive Overview** (`/`) | Highlight portfolio metrics: ₹35.91 Cr approved cost, 500+ projects monitored across infrastructure sectors, 117 active early warning signals (Score ≥ 30). Explain the **Early Warning Queue** and click **"Project 101"** pill. | Establishes scale, IPMD portfolio alignment, and executive visibility. |
+| **1:00–2:30** | **Project Intelligence Dossier (Hero)** (`/anomalies/WS/DEMO/2025/101/dossier`) | Showcase **Project 101** (Milestone Schedule & Cost Overrun). Walk through **Predictive Indicators**: Project Risk Score 61/100, Schedule Overrun Forecast (+8.4 months delay), Cost Outlier (+63% above sector median), and prescriptive verification checklist. | Proves NexSolve is NOT a black box; officers see exact cost and schedule drivers. |
+| **2:30–3:45** | **Evidence Graph & Entity Resolution** | Scroll to Evidence Graph component on Project 101 dossier. Show **101 ↔ 102** strong edge (Splink score 0.9997, TF-IDF 0.887, 180m distance -> `HIGH_SIMILARITY_REVIEW`). Inspect node attributes and linked contractors for tender splitting. | Demonstrates probabilistic record linkage (Splink 4.0.9) and implementation risk. |
+| **3:45–4:45** | **False-Positive Safeguard Counterexample** | Open **Project 801** (`WS/DEMO/2025/801`). Point out that Project 801 and Project 802 are only 166m apart, but Splink = 0, Semantic = 0, and sectors differ (Road vs School). System classifies relationship as `NO_SIGNIFICANT_RELATIONSHIP`. | Convinces technical evaluators that geospatial proximity alone does not cause false positives. |
+| **4:45–5:30** | **Officer Workflow & Compliance Audit Trail** (`/investigations`, `/audit`) | Transition Project 101 to `INSPECTION_SCHEDULED` or record officer findings. Show that actions require administrative justification remarks. Navigate to `/audit` to show the append-only log with SHA-256 fingerprinting. | Proves end-to-end governance, administrative accountability, and auditability. |
 
 ---
 

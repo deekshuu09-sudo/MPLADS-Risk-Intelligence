@@ -220,7 +220,15 @@ def get_investigation_queue(
             outcome_decision=outcome_decision,
             days_in_review=days_in_review,
             updated_at=updated_at,
-            is_synthetic=work.is_synthetic
+            is_synthetic=work.is_synthetic,
+            project_id=work.work_id,
+            project_name=work.activity_name,
+            sector=work.work_category,
+            approved_cost=work.sanctioned_amount,
+            forecast_delay_months=round(max(0, (days_elapsed - 365) / 30.0), 1),
+            schedule_risk_score=float(anomaly.baseline_metrics.get("risk_contributions", {}).get("Execution Delay", 0) * 2.85) if (anomaly.baseline_metrics and "risk_contributions" in anomaly.baseline_metrics) else None,
+            cost_risk_score=float(anomaly.baseline_metrics.get("risk_contributions", {}).get("Financial Deviation", 0) * 3.33) if (anomaly.baseline_metrics and "risk_contributions" in anomaly.baseline_metrics) else None,
+            early_warning_signal=primary_sig
         ))
 
     # Apply Sorting

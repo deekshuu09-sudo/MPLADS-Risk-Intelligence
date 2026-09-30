@@ -125,16 +125,16 @@ export const InvestigationQueue: React.FC<InvestigationQueueProps> = ({
         <div>
           <div className="flex items-center gap-2 mb-1.5 font-ui">
             <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-              Operational Case Management
+              Project Execution Surveillance
             </span>
             <span className="text-slate-300">•</span>
-            <span className="text-[11px] text-slate-600 font-medium">Administrative Review Grid</span>
+            <span className="text-[11px] text-slate-600 font-medium">Early Warning &amp; Milestone Intervention Grid</span>
           </div>
           <h2 className="font-display text-3xl font-normal text-slate-900 tracking-tight">
-            Field Inspection &amp; Anomaly Verification Queue
+            Early Warning &amp; Escalation Queue
           </h2>
           <p className="font-secondary text-xs text-slate-600 mt-1">
-            Lifecycle tracking of works requiring review (Composite Risk Score ≥ 20.0 or active case records: <span className="font-data font-semibold text-slate-800">{queue.length}</span> total cases)
+            Predictive tracking of infrastructure projects exhibiting cost escalation, schedule delays, or milestone slippage (<span className="font-data font-semibold text-slate-800">{queue.length}</span> active project warnings)
           </p>
         </div>
 
@@ -328,7 +328,7 @@ export const InvestigationQueue: React.FC<InvestigationQueueProps> = ({
                 {/* Metrics Strip */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-50/70 p-2 rounded border border-slate-200/80 text-[11px]">
                   <div>
-                    <span className="text-slate-400 block text-[9px] uppercase tracking-wider font-semibold">Sanction Amount</span>
+                    <span className="text-slate-400 block text-[9px] uppercase tracking-wider font-semibold">Approved Cost</span>
                     <span className="font-data font-bold text-slate-800">₹{(item.sanctioned_amount / 100000).toFixed(2)}L</span>
                   </div>
                   <div>
@@ -336,8 +336,10 @@ export const InvestigationQueue: React.FC<InvestigationQueueProps> = ({
                     <span className="font-data font-bold text-slate-800">{item.physical_progress_pct}%</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[9px] uppercase tracking-wider font-semibold">Queue Status</span>
-                    <span className="font-ui font-semibold text-slate-800">{item.status}</span>
+                    <span className="text-slate-400 block text-[9px] uppercase tracking-wider font-semibold">Schedule Forecast</span>
+                    <span className="font-ui font-semibold text-slate-800">
+                      {item.forecast_delay_months && item.forecast_delay_months > 0 ? `+${item.forecast_delay_months}m Delay` : 'On Track'}
+                    </span>
                   </div>
                   <div>
                     <span className="text-slate-400 block text-[9px] uppercase tracking-wider font-semibold">Days in Review</span>
@@ -347,7 +349,7 @@ export const InvestigationQueue: React.FC<InvestigationQueueProps> = ({
 
                 {/* Primary Signal Summary */}
                 <div className="bg-slate-50/40 p-2 rounded border border-slate-200/70 text-xs">
-                  <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block mb-0.5 font-ui">Primary Risk Signal:</span>
+                  <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block mb-0.5 font-ui">Primary Early Warning Signal:</span>
                   <p className="text-xs text-slate-800 font-secondary leading-snug">{item.primary_signal}</p>
                 </div>
 

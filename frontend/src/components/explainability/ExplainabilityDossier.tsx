@@ -298,12 +298,12 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                     <div className="flex items-center gap-2">
                       <ShieldAlert className="w-5 h-5 text-amber-400" />
                       <span className="text-xs uppercase tracking-wider font-bold text-amber-300">
-                        Explainability Analysis • Why Was This Project Flagged?
+                        Predictive Project Intelligence • Early Warning Rationale
                       </span>
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="text-right">
-                        <span className="text-[10px] text-slate-300 uppercase block font-semibold">Composite Score</span>
+                        <span className="text-[10px] text-slate-300 uppercase block font-semibold">Project Risk Score</span>
                         <span className="font-mono text-lg font-bold text-white">
                           {dossier.risk_evaluation.composite_risk_score.toFixed(1)}/100
                         </span>
@@ -319,18 +319,17 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
 
                   {/* Objective Explanation Narrative */}
                   <p className="text-sm leading-relaxed text-slate-100 font-normal mb-3">
-                    This work has been marked with a{' '}
+                    This infrastructure project has been flagged with an early warning{' '}
                     <strong className="text-amber-300 font-semibold uppercase">
-                      {dossier.risk_evaluation.severity_level} Risk Indicator
+                      {dossier.risk_evaluation.severity_level} Risk Classification
                     </strong>{' '}
-                    based on multi-dimensional telemetry analysis. The primary trigger involves{' '}
+                    under the MoSPI IPMD / PAIMANA monitoring framework. Primary predictive signal involves{' '}
                     <span className="underline decoration-amber-400 decoration-1 underline-offset-2">
                       {dossier.risk_evaluation.trigger_factors.length > 0
                         ? dossier.risk_evaluation.trigger_factors[0].summary
-                        : 'policy benchmark parameter deviation'}
+                        : 'milestone schedule or expenditure divergence'}
                     </span>
-                    . Administrative review and physical verification are recommended in
-                    accordance with MPLADS Operational Guidelines.
+                    . Early administrative review and milestone alignment are recommended to mitigate potential cost or schedule escalation.
                   </p>
 
                   {/* Signal Attribution Chips */}
@@ -354,20 +353,20 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                   {/* Policy Benchmark Metadata */}
                   <div className="mt-3 pt-2.5 border-t border-[#1f4a70] grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] font-mono text-slate-300">
                     <div>
-                      <span className="text-[10px] text-slate-400 block font-ui">Source</span>
-                      <span className="text-white font-semibold">MPLADS Guidelines</span>
+                      <span className="text-[10px] text-slate-400 block font-ui">Monitoring Division</span>
+                      <span className="text-white font-semibold">MoSPI IPMD</span>
                     </div>
                     <div>
-                      <span className="text-[10px] text-slate-400 block font-ui">Rule Type</span>
-                      <span className="text-amber-300 font-semibold">Configured Policy Benchmark</span>
+                      <span className="text-[10px] text-slate-400 block font-ui">Ecosystem</span>
+                      <span className="text-amber-300 font-semibold">PAIMANA Framework</span>
                     </div>
                     <div>
-                      <span className="text-[10px] text-slate-400 block font-ui">Benchmark</span>
+                      <span className="text-[10px] text-slate-400 block font-ui">Planned Duration</span>
                       <span className="text-white font-semibold">365 days</span>
                     </div>
                     <div>
-                      <span className="text-[10px] text-slate-400 block font-ui">Status</span>
-                      <span className="text-emerald-300 font-semibold">Demo configuration</span>
+                      <span className="text-[10px] text-slate-400 block font-ui">Escalation Status</span>
+                      <span className="text-emerald-300 font-semibold">Active Early Warning</span>
                     </div>
                   </div>
 
@@ -375,17 +374,17 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                   <div className="mt-4 pt-3 border-t border-[#1f4a70] space-y-2">
                     <span className="text-[10px] uppercase font-bold text-amber-300 tracking-wider flex items-center gap-1.5">
                       <History className="w-3.5 h-3.5 text-amber-400" />
-                      Chronological Investigation Timeline
+                      Chronological Milestone &amp; Intervention Timeline
                     </span>
                     <div className="flex flex-wrap items-center gap-1.5 text-[11px]">
                       <div className="px-2 py-1 bg-[#153e61] border border-[#235887] rounded text-slate-200 flex items-center gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                        <span>Risk Signal Generated ({dossier.days_since_sanction ? `${dossier.days_since_sanction} days elapsed` : 'Initial Sanction'})</span>
+                        <span>Risk Signal Generated ({dossier.days_since_sanction ? `${dossier.days_since_sanction} days elapsed` : 'Project Sanction'})</span>
                       </div>
                       <ChevronRight className="w-3 h-3 text-slate-400 shrink-0" />
                       <div className="px-2 py-1 bg-[#153e61] border border-[#235887] rounded text-slate-200 flex items-center gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
-                        <span>Referred to Verification Queue</span>
+                        <span>Referred to Early Warning Queue</span>
                       </div>
                       <ChevronRight className="w-3 h-3 text-slate-400 shrink-0" />
                       {dossier.audit_trail && dossier.audit_trail.length > 0 ? (
@@ -418,30 +417,34 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
               {/* QUICK KEY METRICS SUMMARY */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
                 <div className="bg-white p-3.5 rounded-xl border border-slate-200">
-                  <span className="text-slate-400 block text-[11px]">Sanction Amount</span>
+                  <span className="text-slate-400 block text-[11px]">Approved Project Cost</span>
                   <span className="font-bold text-slate-900 text-sm">{formatINR(dossier.sanctioned_amount)}</span>
-                  <span className="text-[10px] text-slate-400 block mt-0.5">Administrative Approval</span>
+                  <span className="text-[10px] text-slate-400 block mt-0.5">Original / Sanctioned Cost</span>
                 </div>
                 <div className="bg-white p-3.5 rounded-xl border border-slate-200">
-                  <span className="text-slate-400 block text-[11px]">Disbursed Expenditure</span>
+                  <span className="text-slate-400 block text-[11px]">Cumulative Expenditure</span>
                   <span className="font-bold text-blue-700 text-sm">{formatINR(dossier.actual_amount)}</span>
                   <span className="text-[10px] text-slate-400 block mt-0.5">
                     {dossier.sanctioned_amount > 0
-                      ? `${Math.round((dossier.actual_amount / dossier.sanctioned_amount) * 100)}% of sanction`
+                      ? `${Math.round((dossier.actual_amount / dossier.sanctioned_amount) * 100)}% of approved cost`
                       : '0% disbursed'}
                   </span>
                 </div>
                 <div className="bg-white p-3.5 rounded-xl border border-slate-200">
                   <span className="text-slate-400 block text-[11px]">Physical Progress</span>
                   <span className="font-bold text-slate-900 text-sm">{dossier.physical_progress_pct}%</span>
-                  <span className="text-[10px] text-slate-400 block mt-0.5">Reported physical stage</span>
+                  <span className="text-[10px] text-slate-400 block mt-0.5">Reported milestone stage</span>
                 </div>
                 <div className="bg-white p-3.5 rounded-xl border border-slate-200">
-                  <span className="text-slate-400 block text-[11px]">Days Since Sanction</span>
+                  <span className="text-slate-400 block text-[11px]">Execution Age &amp; Schedule</span>
                   <span className={`font-bold text-sm ${dossier.days_since_sanction && dossier.days_since_sanction > 365 ? 'text-red-600' : 'text-slate-800'}`}>
                     {dossier.days_since_sanction ?? 'N/A'} days
                   </span>
-                  <span className="text-[10px] text-slate-400 block mt-0.5">Configured benchmark: 365 days (Demo)</span>
+                  <span className="text-[10px] text-slate-400 block mt-0.5">
+                    {dossier.days_since_sanction && dossier.days_since_sanction > 365
+                      ? `+${Math.round((dossier.days_since_sanction - 365) / 30)} mo schedule overrun`
+                      : 'Within baseline timeframe'}
+                  </span>
                 </div>
               </div>
 

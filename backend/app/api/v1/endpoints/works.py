@@ -1,3 +1,4 @@
+import datetime
 from typing import Optional, List
 from fastapi import APIRouter, Depends, Query, HTTPException, Response
 from sqlalchemy.orm import Session
@@ -124,7 +125,16 @@ def get_works(
             composite_risk_score=w.anomaly.composite_risk_score if w.anomaly else None,
             severity_level=w.anomaly.severity_level if w.anomaly else None,
             primary_trigger_factor=primary_factor,
-            is_synthetic=w.is_synthetic
+            is_synthetic=w.is_synthetic,
+            project_id=w.work_id,
+            project_name=w.activity_name,
+            sector=w.work_category,
+            approved_cost=w.sanctioned_amount,
+            cumulative_expenditure=disbursed,
+            cost_variance_pct=round(((w.sanctioned_amount - w.estimated_cost) / w.estimated_cost * 100.0), 1) if (w.estimated_cost and w.estimated_cost > 0) else 0.0,
+            forecast_delay_months=round(max(0, ((datetime.date(2026, 9, 25) - w.sanction_date).days - 365) / 30.0), 1) if w.sanction_date else 0.0,
+            schedule_risk_score=float(w.anomaly.baseline_metrics.get("risk_contributions", {}).get("Execution Delay", 0) * 2.85) if (w.anomaly and w.anomaly.baseline_metrics and "risk_contributions" in w.anomaly.baseline_metrics) else None,
+            cost_risk_score=float(w.anomaly.baseline_metrics.get("risk_contributions", {}).get("Financial Deviation", 0) * 3.33) if (w.anomaly and w.anomaly.baseline_metrics and "risk_contributions" in w.anomaly.baseline_metrics) else None
         ))
 
     return results

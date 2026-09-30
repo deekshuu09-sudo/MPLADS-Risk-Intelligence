@@ -131,30 +131,30 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           <div className="max-w-3xl">
             <div className="flex items-center gap-2 mb-2 font-ui">
               <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">
-                National Surveillance Brief
+                Central Sector Portfolio Surveillance
               </span>
               <span className="text-slate-300">•</span>
-              <span className="text-[11px] text-slate-600 font-medium">Programme-Wide Review</span>
+              <span className="text-[11px] text-slate-600 font-medium">MoSPI IPMD / PAIMANA Analytical Framework</span>
             </div>
             <h2 className="font-display text-3xl sm:text-4xl font-normal tracking-tight text-slate-900 leading-tight">
-              MPLAD Scheme Programme-Wide Risk &amp; Expenditure Intelligence
+              Predictive Infrastructure Project Intelligence &amp; Early Warning System
             </h2>
             <p className="font-secondary text-sm text-slate-600 mt-2.5 leading-relaxed">
-              Decision-support analytics aggregating {kpis.total_works_analysed} works across 543 Lok Sabha and 245 Rajya Sabha constituencies. Designed for prescriptively identifying analytical anomaly concentrations for administrative verification.
+              Integrated predictive surveillance platform analyzing {kpis.total_works_analysed} Central Sector Infrastructure Projects. Identifies emerging cost escalation, milestone schedule overruns, and implementation bottlenecks across infrastructure sectors.
             </p>
           </div>
 
           <div className="flex flex-col sm:items-end gap-1.5 font-ui text-xs text-slate-600 border-l sm:border-l-0 sm:border-r-0 border-slate-200 pl-4 sm:pl-0">
             <div className="flex items-center gap-2">
               <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-800 border border-slate-200 uppercase tracking-wider">
-                {scope?.dataset_mode || 'SYNTHETIC'} Baseline
+                {scope?.dataset_mode || 'SYNTHETIC'} Portfolio Baseline
               </span>
             </div>
             <div className="text-[11px] text-slate-500 mt-1 font-secondary">
-              Scope: <span className="font-ui font-semibold text-slate-800">{scope?.total_records} Works</span> | Flagged: <span className="font-ui font-semibold text-slate-800">{scope?.flagged_records}</span> (Score ≥ {scope?.min_flagged_score})
+              Monitored: <span className="font-ui font-semibold text-slate-800">{scope?.total_records} Projects</span> | Early Warnings: <span className="font-ui font-semibold text-slate-800">{scope?.flagged_records}</span> (Risk Score ≥ {scope?.min_flagged_score})
             </div>
             <div className="text-[10px] text-slate-400 font-secondary">
-              Analytics generated: {scope?.generated_at}
+              Predictive models calibrated: {scope?.generated_at}
             </div>
           </div>
         </div>
@@ -166,37 +166,37 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
               onClick={() => onNavigateToTab('investigations')}
               className="px-3.5 py-1.5 bg-[#0d2b45] text-white rounded text-xs font-semibold hover:bg-[#153a5c] transition-colors flex items-center gap-1.5"
             >
-              <span>Investigation Queue ({pipeline.total_unresolved} Unresolved)</span>
+              <span>Early Warning Queue ({pipeline.total_unresolved} Requiring Action)</span>
               <ChevronRight className="w-3.5 h-3.5 text-slate-300" />
             </button>
             <button
               onClick={() => onNavigateToTab('explorer')}
-              className="px-3 py-1.5 bg-white text-slate-700 rounded text-xs font-medium hover:bg-slate-50 transition-colors flex items-center gap-1.5 border border-slate-200"
+              className="px-3.5 py-1.5 bg-white text-slate-700 rounded text-xs font-medium hover:bg-slate-50 transition-colors flex items-center gap-1.5 border border-slate-200"
             >
               <Layers className="w-3.5 h-3.5 text-slate-500" />
-              <span>Explore Works</span>
+              <span>Project Risk Explorer</span>
             </button>
             <button
               onClick={() => onNavigateToTab('geospatial')}
-              className="px-3 py-1.5 bg-white text-slate-700 rounded text-xs font-medium hover:bg-slate-50 transition-colors flex items-center gap-1.5 border border-slate-200"
+              className="px-3.5 py-1.5 bg-white text-slate-700 rounded text-xs font-medium hover:bg-slate-50 transition-colors flex items-center gap-1.5 border border-slate-200"
             >
               <MapPin className="w-3.5 h-3.5 text-slate-500" />
-              <span>Spatial Intelligence</span>
+              <span>Geospatial Project Map</span>
             </button>
           </div>
 
           {/* Demo Case Walkthrough Quick Buttons */}
           <div className="flex flex-wrap items-center gap-2 font-ui text-xs">
             <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
-              Benchmark Walkthrough:
+              Archetype Walkthrough:
             </span>
             <button
               onClick={() => onOpenDossier('WS/DEMO/2025/101')}
               className="px-2.5 py-1 bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 rounded text-[11px] font-medium flex items-center gap-1.5 transition-colors"
-              title="Launch Primary Demo Case: Tender Splitting & High Similarity Review (Score 61 HIGH)"
+              title="Launch Benchmark Case: Schedule Overrun & Milestone Stall (Score 61 HIGH)"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-              <span>Work 101 (Tender Splitting • 61 HIGH)</span>
+              <span>Project 101 (Schedule Overrun • 61 HIGH)</span>
             </button>
             <button
               onClick={() => onOpenDossier('WS/DEMO/2025/801')}
@@ -204,7 +204,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
               title="Launch Safeguard Counterexample: Spatial Proximity Counterexample (801 ↔ 802 No Relationship)"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-              <span>Work 801 (Proximity Safeguard • Counterexample)</span>
+              <span>Project 801 (Proximity Safeguard • Counterexample)</span>
             </button>
           </div>
         </div>
@@ -213,39 +213,39 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
       {/* 2. MACRO EXECUTIVE KPI STRIP (4 RECONCILED CARDS) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
-          title="Total Sanctioned Works"
+          title="Monitored Infrastructure Projects"
           value={kpis.total_works_analysed.toLocaleString('en-IN')}
-          subtitle={`₹${(kpis.total_sanctioned_amount_inr / 10000000).toFixed(2)} Cr Sanctioned`}
-          badge="18th Lok Sabha Scope"
+          subtitle={`₹${(kpis.total_sanctioned_amount_inr / 10000000).toFixed(2)} Cr Approved Cost`}
+          badge="Central Sector Scope"
           badgeColor="text-slate-700 bg-slate-50 border-slate-200"
-          footer="Cumulative works registered under eSAKSHI baseline"
+          footer="Cumulative infrastructure projects monitored across sectors"
         />
 
         <StatCard
-          title="Active Risk Signals"
+          title="Active Early Warning Signals"
           value={kpis.flagged_works_count.toLocaleString('en-IN')}
-          subtitle={`${kpis.flagged_percentage.toFixed(1)}% Flagged Signal Concentration`}
-          badge={`Exposure: ₹${(kpis.flagged_sanctioned_amount_inr / 10000000).toFixed(2)} Cr`}
+          subtitle={`${kpis.flagged_percentage.toFixed(1)}% Early Warning Rate`}
+          badge={`Cost at Risk: ₹${(kpis.flagged_sanctioned_amount_inr / 10000000).toFixed(2)} Cr`}
           badgeColor="text-amber-900 bg-amber-50/80 border-amber-200"
-          footer="Flagged for administrative review (Composite Score ≥ 30)"
+          footer="Flagged for administrative intervention (Risk Score ≥ 30)"
         />
 
         <StatCard
-          title="Financial Disbursal Exposure"
+          title="Cumulative Expenditure"
           value={formatCr(kpis.total_disbursed_amount_inr)}
-          subtitle={`Flagged Disbursed: ₹${(kpis.flagged_disbursed_amount_inr / 10000000).toFixed(2)} Cr`}
+          subtitle={`At-Risk Disbursed: ₹${(kpis.flagged_disbursed_amount_inr / 10000000).toFixed(2)} Cr`}
           badge="Treasury / PFMS Tracked"
           badgeColor="text-slate-700 bg-slate-50 border-slate-200"
-          footer="Total disbursed funds tracked across Treasury/PFMS vouchers"
+          footer="Cumulative financial utilization tracked across milestone vouchers"
         />
 
         <StatCard
-          title="Unresolved Queue Cases"
+          title="Projects Requiring Intervention"
           value={pipeline.total_unresolved.toLocaleString('en-IN')}
-          subtitle={`Verification Required: ${pipeline.verification_required}`}
-          badge="Pending Review"
+          subtitle={`Urgent Verification: ${pipeline.verification_required}`}
+          badge="Pending Administrative Action"
           badgeColor="text-slate-700 bg-slate-50 border-slate-200"
-          footer="Active cases in District/Nodal Officer queue (Score ≥ 30)"
+          footer="Active early warnings in IPMD / Monitoring Officer review queue"
         />
       </div>
 

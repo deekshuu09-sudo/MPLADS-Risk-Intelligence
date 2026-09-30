@@ -141,3 +141,8 @@ class ExplainabilityDossierDTO(BaseModel):
     evidence_graph: Optional[Dict[str, Any]] = None
     investigation_intelligence: Optional[Dict[str, Any]] = None
 
+    # SIH26103 Predictive Infrastructure Project Monitoring Extensions
+    project_monitoring_intelligence: Optional[Dict[str, Any]] = None
+    cost_overrun_forecast: Optional[Dict[str, Any]] = None
+    schedule_overrun_forecast: Optional[Dict[str, Any]] = None
+

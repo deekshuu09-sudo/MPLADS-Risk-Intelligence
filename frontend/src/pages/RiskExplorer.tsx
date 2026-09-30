@@ -98,16 +98,16 @@ export const RiskExplorer: React.FC<RiskExplorerProps> = ({
         <div>
           <div className="flex items-center gap-2 mb-1.5 font-ui">
             <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-              Surveillance Grid
+              Central Sector Portfolio Explorer
             </span>
             <span className="text-slate-300">•</span>
-            <span className="text-[11px] text-slate-600 font-medium">Multidimensional Risk Triage</span>
+            <span className="text-[11px] text-slate-600 font-medium">Predictive Risk &amp; Overrun Matrix</span>
           </div>
           <h2 className="font-display text-3xl font-normal text-slate-900 tracking-tight">
-            Explainable Risk Explorer &amp; Project Inventory
+            Infrastructure Project Risk Explorer &amp; Inventory
           </h2>
           <p className="font-secondary text-xs text-slate-600 mt-1">
-            Granular inspection of sanctioned MPLADS projects, multi-engine risk telemetry, and execution milestones
+            Granular inspection of monitored projects, predictive cost/schedule overruns, and milestone telemetry
           </p>
         </div>
 
@@ -253,12 +253,12 @@ export const RiskExplorer: React.FC<RiskExplorerProps> = ({
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-50/80 border-b border-slate-200">
               <tr className="text-slate-500 uppercase tracking-wider text-[10px]">
-                <th className="py-3 px-4">Work ID & Category</th>
-                <th className="py-3 px-4">Activity Description</th>
-                <th className="py-3 px-4">Location & MP</th>
-                <th className="py-3 px-4">Sanctioned Amount</th>
+                <th className="py-3 px-4">Project ID &amp; Sector</th>
+                <th className="py-3 px-4">Project Scope Description</th>
+                <th className="py-3 px-4">Location &amp; Nodal Agency</th>
+                <th className="py-3 px-4">Approved Cost</th>
                 <th className="py-3 px-4">Physical Progress</th>
-                <th className="py-3 px-4">Primary Risk Factor</th>
+                <th className="py-3 px-4">Early Warning Signal</th>
                 <th className="py-3 px-4">Risk Score</th>
                 <th className="py-3 px-4 text-right">Dossier</th>
               </tr>
