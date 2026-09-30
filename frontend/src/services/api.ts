@@ -6,7 +6,33 @@ import type {
 } from './types';
 
 
-const API_BASE = '/api/v1';
+// Production Render backend as explicit default
+const PRODUCTION_API_URL = 'https://mplads-risk-intelligence-7uas.onrender.com';
+
+function resolveApiBaseUrl(): string {
+  const envUrl = import.meta.env.VITE_API_BASE_URL;
+  let rawBase = envUrl && typeof envUrl === 'string' && envUrl.trim() !== ''
+    ? envUrl.trim()
+    : (import.meta.env.PROD ? PRODUCTION_API_URL : '');
+
+  // Strip trailing slashes
+  rawBase = rawBase.replace(/\/+$/, '');
+
+  // Ensure /api/v1 is appended cleanly without duplication
+  if (rawBase.endsWith('/api/v1')) {
+    return rawBase;
+  }
+  if (rawBase.endsWith('/api')) {
+    return `${rawBase}/v1`;
+  }
+  return rawBase ? `${rawBase}/api/v1` : '/api/v1';
+}
+
+const API_BASE = resolveApiBaseUrl();
+
+if (import.meta.env.DEV) {
+  console.info('[NexSolve API]', API_BASE);
+}
 
 const apiClient = axios.create({
   baseURL: API_BASE,
