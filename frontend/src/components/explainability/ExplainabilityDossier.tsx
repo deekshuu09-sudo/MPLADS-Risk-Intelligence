@@ -448,6 +448,112 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                 </div>
               </div>
 
+              {/* SECTION: PREDICTIVE COST & SCHEDULE OVERRUN INTELLIGENCE (SIH26103) */}
+              <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                  <div className="flex items-center gap-2">
+                    <Cpu className="w-5 h-5 text-blue-600" />
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-900">
+                        Predictive Overrun Analytics &amp; Project Risk Breakdown
+                      </h4>
+                      <p className="text-[11px] text-slate-500">
+                        Deterministic parametric forecasts derived from MoSPI IPMD milestone &amp; peer sector baselines
+                      </p>
+                    </div>
+                  </div>
+                  <span className="px-2.5 py-1 rounded text-[11px] font-mono font-bold bg-slate-100 text-slate-800 border border-slate-300">
+                    PAIMANA FRAMEWORK
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Cost Overrun Card */}
+                  <div className="p-4 rounded-lg bg-slate-50 border border-slate-200 space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5 font-ui">
+                        <IndianRupee className="w-4 h-4 text-emerald-600" />
+                        Cost Overrun Intelligence
+                      </span>
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded font-mono ${
+                        dossier.cost_overrun_forecast?.cost_overrun_likelihood === 'HIGH'
+                          ? 'bg-red-100 text-red-800 border border-red-200'
+                          : dossier.cost_overrun_forecast?.cost_overrun_likelihood === 'MEDIUM'
+                          ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                          : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                      }`}>
+                        {dossier.cost_overrun_forecast?.cost_overrun_likelihood || 'LOW'} OVERRUN RISK
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-1">
+                      <div className="p-2 bg-white rounded border border-slate-200">
+                        <span className="text-[10px] text-slate-400 block font-ui">Unit Cost Variance</span>
+                        <span className="font-bold text-slate-800">
+                          {dossier.cost_overrun_forecast?.cost_variance_pct !== undefined ? `${dossier.cost_overrun_forecast.cost_variance_pct > 0 ? '+' : ''}${dossier.cost_overrun_forecast.cost_variance_pct}%` : '0.0%'}
+                        </span>
+                        <span className="text-[9px] text-slate-500 block font-ui">vs sector peer median</span>
+                      </div>
+                      <div className="p-2 bg-white rounded border border-slate-200">
+                        <span className="text-[10px] text-slate-400 block font-ui">Disbursal / Progress Gap</span>
+                        <span className={`font-bold ${
+                          (dossier.cost_overrun_forecast?.disbursement_progress_gap_pct || 0) > 25 ? 'text-amber-600' : 'text-slate-800'
+                        }`}>
+                          {dossier.cost_overrun_forecast?.disbursement_progress_gap_pct !== undefined ? `${dossier.cost_overrun_forecast.disbursement_progress_gap_pct > 0 ? '+' : ''}${dossier.cost_overrun_forecast.disbursement_progress_gap_pct}%` : '0.0%'}
+                        </span>
+                        <span className="text-[9px] text-slate-500 block font-ui">advance disbursement gap</span>
+                      </div>
+                    </div>
+
+                    <p className="text-[11px] text-slate-600 font-secondary leading-snug">
+                      Status: <strong className="text-slate-800 font-ui">{dossier.cost_overrun_forecast?.unit_cost_status || 'Within Expected Band'}</strong>. Peer benchmark median: {dossier.cost_overrun_forecast?.peer_median_cost_inr ? formatINR(dossier.cost_overrun_forecast.peer_median_cost_inr) : 'Nominal'}.
+                    </p>
+                  </div>
+
+                  {/* Schedule Overrun Card */}
+                  <div className="p-4 rounded-lg bg-slate-50 border border-slate-200 space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5 font-ui">
+                        <Clock className="w-4 h-4 text-blue-600" />
+                        Schedule Overrun Intelligence
+                      </span>
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded font-mono ${
+                        dossier.schedule_overrun_forecast?.schedule_overrun_likelihood === 'HIGH'
+                          ? 'bg-red-100 text-red-800 border border-red-200'
+                          : dossier.schedule_overrun_forecast?.schedule_overrun_likelihood === 'MEDIUM'
+                          ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                          : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                      }`}>
+                        {dossier.schedule_overrun_forecast?.schedule_overrun_likelihood || 'LOW'} OVERRUN RISK
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-1">
+                      <div className="p-2 bg-white rounded border border-slate-200">
+                        <span className="text-[10px] text-slate-400 block font-ui">Forecast Delay</span>
+                        <span className={`font-bold ${
+                          (dossier.schedule_overrun_forecast?.forecast_delay_months || 0) > 0 ? 'text-red-600' : 'text-emerald-600'
+                        }`}>
+                          {dossier.schedule_overrun_forecast?.forecast_delay_months ? `+${dossier.schedule_overrun_forecast.forecast_delay_months} months` : '0.0 months'}
+                        </span>
+                        <span className="text-[9px] text-slate-500 block font-ui">beyond planned timeframe</span>
+                      </div>
+                      <div className="p-2 bg-white rounded border border-slate-200">
+                        <span className="text-[10px] text-slate-400 block font-ui">Monthly Progress Velocity</span>
+                        <span className="font-bold text-slate-800">
+                          {dossier.schedule_overrun_forecast?.burn_rate_velocity ? `${dossier.schedule_overrun_forecast.burn_rate_velocity}% / mo` : 'N/A'}
+                        </span>
+                        <span className="text-[9px] text-slate-500 block font-ui">milestone completion rate</span>
+                      </div>
+                    </div>
+
+                    <p className="text-[11px] text-slate-600 font-secondary leading-snug">
+                      Milestone health: <strong className="text-slate-800 font-ui">{dossier.schedule_overrun_forecast?.critical_milestone_delayed ? 'Critical Milestone Slippage Flagged' : 'Progressing on Schedule'}</strong>. Planned duration: 365 days.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
               {/* RECOMMENDED ADMINISTRATIVE ACTION */}
               {(dossier.risk_evaluation?.recommended_action || dossier.recommended_action) && (
                 <div className="bg-amber-50/90 border border-amber-300 rounded-xl p-4 shadow-2xs flex items-start gap-3">

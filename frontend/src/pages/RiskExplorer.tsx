@@ -274,7 +274,7 @@ export const RiskExplorer: React.FC<RiskExplorerProps> = ({
               ) : works.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="py-16 text-center text-slate-400">
-                    No matching MPLADS works found for the selected filters.
+                    No matching infrastructure projects found for the selected filters.
                   </td>
                 </tr>
               ) : (

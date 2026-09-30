@@ -425,6 +425,34 @@ export interface ExplainabilityDossier {
     provenance?: Record<string, string>;
   };
   investigation_intelligence?: any;
+  project_monitoring_intelligence?: {
+    monitoring_ecosystem: string;
+    sector: string;
+    approved_cost_inr: number;
+    cumulative_expenditure_inr: number;
+    physical_progress_pct: number;
+    financial_expenditure_pct: number;
+    overall_project_risk_score: number;
+    risk_classification: string;
+    schedule_risk_score: number;
+    cost_risk_score: number;
+    implementation_risk_score: number;
+  };
+  cost_overrun_forecast?: {
+    cost_variance_pct: number;
+    peer_median_cost_inr: number;
+    unit_cost_status: string;
+    disbursement_progress_gap_pct: number;
+    cost_overrun_likelihood: string;
+  };
+  schedule_overrun_forecast?: {
+    elapsed_days: number;
+    milestone_completion_benchmark_days: number;
+    forecast_delay_months: number;
+    burn_rate_velocity: number;
+    schedule_overrun_likelihood: string;
+    critical_milestone_delayed: boolean;
+  };
 }
 
 
