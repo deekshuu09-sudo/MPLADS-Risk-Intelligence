@@ -179,7 +179,9 @@ export interface WorkItem {
   approved_cost?: number;
   cumulative_expenditure?: number;
   cost_variance_pct?: number;
-  forecast_delay_months?: number;
+  forecast_delay_months?: number | null;
+  schedule_forecast_status?: "AVAILABLE" | "COMPLETED" | "EARLY_STAGE" | "STALLED_ZERO_PROGRESS" | "INSUFFICIENT_EVIDENCE";
+  monthly_progress_velocity?: number | null;
   schedule_risk_score?: number;
   cost_risk_score?: number;
 }
@@ -444,14 +446,22 @@ export interface ExplainabilityDossier {
     unit_cost_status: string;
     disbursement_progress_gap_pct: number;
     cost_overrun_likelihood: string;
+    escalation_indicator_title?: string;
   };
   schedule_overrun_forecast?: {
     elapsed_days: number;
-    milestone_completion_benchmark_days: number;
-    forecast_delay_months: number;
-    burn_rate_velocity: number;
+    planned_duration_days: number;
+    physical_progress_pct: number;
+    remaining_progress_pct?: number;
+    forecast_remaining_months?: number | null;
+    forecast_total_duration_months?: number | null;
+    forecast_delay_months: number | null;
+    monthly_progress_velocity?: number | null;
+    burn_rate_velocity?: number | null;
+    schedule_forecast_status: "AVAILABLE" | "COMPLETED" | "EARLY_STAGE" | "STALLED_ZERO_PROGRESS" | "INSUFFICIENT_EVIDENCE";
     schedule_overrun_likelihood: string;
     critical_milestone_delayed: boolean;
+    forecast_methodology?: string;
   };
 }
 
@@ -501,7 +511,9 @@ export interface InvestigationQueueItem {
   project_name?: string;
   sector?: string;
   approved_cost?: number;
-  forecast_delay_months?: number;
+  forecast_delay_months?: number | null;
+  schedule_forecast_status?: "AVAILABLE" | "COMPLETED" | "EARLY_STAGE" | "STALLED_ZERO_PROGRESS" | "INSUFFICIENT_EVIDENCE";
+  monthly_progress_velocity?: number | null;
   cost_risk_score?: number;
   schedule_risk_score?: number;
   early_warning_signal?: string;

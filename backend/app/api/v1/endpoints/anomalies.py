@@ -410,6 +410,16 @@ def get_explainability_dossier(work_id: str, db: Session = Depends(get_db)):
         audit_trail=audit_trail_list
     )
 
+    # 6. SIH26103 Predictive Infrastructure Project Monitoring & Schedule Forecasting
+    from app.services.schedule_forecast import compute_schedule_forecast
+    sched_forecast = compute_schedule_forecast(
+        sanction_date=w.sanction_date,
+        actual_end_date=w.actual_end_date,
+        work_status=w.work_status,
+        physical_progress_pct=w.physical_progress_pct,
+        eval_date=datetime.date(2026, 9, 25)
+    )
+
     return ExplainabilityDossierDTO(
         work_id=w.work_id,
         activity_name=w.activity_name,
@@ -472,16 +482,10 @@ def get_explainability_dossier(work_id: str, db: Session = Depends(get_db)):
             "peer_median_cost_inr": baseline_comp.median if baseline_comp else w.sanctioned_amount,
             "unit_cost_status": "Outlier (+MAD Breach)" if (baseline_comp and baseline_comp.z_score and baseline_comp.z_score > 3.0) else "Within Expected Band",
             "disbursement_progress_gap_pct": round(((disbursed / w.sanctioned_amount * 100.0) - w.physical_progress_pct), 1) if w.sanctioned_amount > 0 else 0.0,
-            "cost_overrun_likelihood": "HIGH" if (a.composite_risk_score >= 60.0 and b_data.get("risk_contributions", {}).get("Financial Deviation", 0) > 10) else ("MEDIUM" if a.composite_risk_score >= 40.0 else "LOW")
+            "cost_overrun_likelihood": "HIGH" if (a.composite_risk_score >= 60.0 and b_data.get("risk_contributions", {}).get("Financial Deviation", 0) > 10) else ("MEDIUM" if a.composite_risk_score >= 40.0 else "LOW"),
+            "escalation_indicator_title": "Projected Cost Escalation Risk"
         },
-        schedule_overrun_forecast={
-            "elapsed_days": days_elapsed or 0,
-            "milestone_completion_benchmark_days": 365,
-            "forecast_delay_months": round(max(0, ((days_elapsed or 0) - 365) / 30.0), 1),
-            "burn_rate_velocity": round(w.physical_progress_pct / max(1, (days_elapsed or 1) / 30.0), 2),
-            "schedule_overrun_likelihood": "HIGH" if (days_elapsed and days_elapsed > 365 and w.physical_progress_pct < 50.0) else ("MEDIUM" if (days_elapsed and days_elapsed > 200 and w.physical_progress_pct < 30.0) else "LOW"),
-            "critical_milestone_delayed": (days_elapsed is not None and days_elapsed > 365 and w.work_status != "Completed")
-        }
+        schedule_overrun_forecast=sched_forecast
     )
 
 

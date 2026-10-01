@@ -104,6 +104,16 @@ def get_works(
                 elif pri_cat:
                     primary_factor = pri_cat
 
+        # SIH26103 Schedule Forecasting
+        from app.services.schedule_forecast import compute_schedule_forecast
+        sched = compute_schedule_forecast(
+            sanction_date=w.sanction_date,
+            actual_end_date=w.actual_end_date,
+            work_status=w.work_status,
+            physical_progress_pct=w.physical_progress_pct,
+            eval_date=datetime.date(2026, 9, 25)
+        )
+
         results.append(WorkListDTO(
             work_id=w.work_id,
             activity_name=w.activity_name,
@@ -132,7 +142,9 @@ def get_works(
             approved_cost=w.sanctioned_amount,
             cumulative_expenditure=disbursed,
             cost_variance_pct=round(((w.sanctioned_amount - w.estimated_cost) / w.estimated_cost * 100.0), 1) if (w.estimated_cost and w.estimated_cost > 0) else 0.0,
-            forecast_delay_months=round(max(0, ((datetime.date(2026, 9, 25) - w.sanction_date).days - 365) / 30.0), 1) if w.sanction_date else 0.0,
+            forecast_delay_months=sched["forecast_delay_months"],
+            schedule_forecast_status=sched["schedule_forecast_status"],
+            monthly_progress_velocity=sched["monthly_progress_velocity"],
             schedule_risk_score=float(w.anomaly.baseline_metrics.get("risk_contributions", {}).get("Execution Delay", 0) * 2.85) if (w.anomaly and w.anomaly.baseline_metrics and "risk_contributions" in w.anomaly.baseline_metrics) else None,
             cost_risk_score=float(w.anomaly.baseline_metrics.get("risk_contributions", {}).get("Financial Deviation", 0) * 3.33) if (w.anomaly and w.anomaly.baseline_metrics and "risk_contributions" in w.anomaly.baseline_metrics) else None
         ))

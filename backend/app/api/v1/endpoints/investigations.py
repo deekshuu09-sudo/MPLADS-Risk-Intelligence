@@ -199,6 +199,16 @@ def get_investigation_queue(
             if primary_signal.upper() not in primary_sig.upper():
                 continue
 
+        # SIH26103 Schedule Forecasting
+        from app.services.schedule_forecast import compute_schedule_forecast
+        sched = compute_schedule_forecast(
+            sanction_date=work.sanction_date,
+            actual_end_date=work.actual_end_date,
+            work_status=work.work_status,
+            physical_progress_pct=work.physical_progress_pct,
+            eval_date=benchmark_anchor
+        )
+
         results.append(InvestigationQueueItemDTO(
             investigation_id=inv_id,
             anomaly_id=anomaly.anomaly_id,
@@ -225,7 +235,9 @@ def get_investigation_queue(
             project_name=work.activity_name,
             sector=work.work_category,
             approved_cost=work.sanctioned_amount,
-            forecast_delay_months=round(max(0, (days_elapsed - 365) / 30.0), 1),
+            forecast_delay_months=sched["forecast_delay_months"],
+            schedule_forecast_status=sched["schedule_forecast_status"],
+            monthly_progress_velocity=sched["monthly_progress_velocity"],
             schedule_risk_score=float(anomaly.baseline_metrics.get("risk_contributions", {}).get("Execution Delay", 0) * 2.85) if (anomaly.baseline_metrics and "risk_contributions" in anomaly.baseline_metrics) else None,
             cost_risk_score=float(anomaly.baseline_metrics.get("risk_contributions", {}).get("Financial Deviation", 0) * 3.33) if (anomaly.baseline_metrics and "risk_contributions" in anomaly.baseline_metrics) else None,
             early_warning_signal=primary_sig

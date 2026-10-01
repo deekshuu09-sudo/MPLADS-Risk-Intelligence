@@ -532,23 +532,53 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                       <div className="p-2 bg-white rounded border border-slate-200">
                         <span className="text-[10px] text-slate-400 block font-ui">Forecast Delay</span>
                         <span className={`font-bold ${
-                          (dossier.schedule_overrun_forecast?.forecast_delay_months || 0) > 0 ? 'text-red-600' : 'text-emerald-600'
+                          dossier.schedule_overrun_forecast?.forecast_delay_months === null
+                            ? 'text-slate-600'
+                            : (dossier.schedule_overrun_forecast?.forecast_delay_months || 0) > 0
+                            ? 'text-red-600'
+                            : 'text-emerald-600'
                         }`}>
-                          {dossier.schedule_overrun_forecast?.forecast_delay_months ? `+${dossier.schedule_overrun_forecast.forecast_delay_months} months` : '0.0 months'}
+                          {dossier.schedule_overrun_forecast?.forecast_delay_months === null || dossier.schedule_overrun_forecast?.forecast_delay_months === undefined
+                            ? (dossier.schedule_overrun_forecast?.schedule_forecast_status === 'STALLED_ZERO_PROGRESS'
+                                ? 'Indefinite (0% Progress)'
+                                : dossier.schedule_overrun_forecast?.schedule_forecast_status === 'EARLY_STAGE'
+                                ? 'Early Stage'
+                                : 'Insufficient Data')
+                            : dossier.schedule_overrun_forecast.forecast_delay_months > 0
+                            ? `+${dossier.schedule_overrun_forecast.forecast_delay_months} months`
+                            : '0.0 months'}
                         </span>
-                        <span className="text-[9px] text-slate-500 block font-ui">beyond planned timeframe</span>
+                        <span className="text-[9px] text-slate-500 block font-ui">
+                          {dossier.schedule_overrun_forecast?.forecast_delay_months !== null && (dossier.schedule_overrun_forecast?.forecast_delay_months || 0) > 0
+                            ? 'beyond planned timeframe'
+                            : 'on-schedule execution'}
+                        </span>
                       </div>
                       <div className="p-2 bg-white rounded border border-slate-200">
                         <span className="text-[10px] text-slate-400 block font-ui">Monthly Progress Velocity</span>
                         <span className="font-bold text-slate-800">
-                          {dossier.schedule_overrun_forecast?.burn_rate_velocity ? `${dossier.schedule_overrun_forecast.burn_rate_velocity}% / mo` : 'N/A'}
+                          {dossier.schedule_overrun_forecast?.monthly_progress_velocity !== undefined && dossier.schedule_overrun_forecast?.monthly_progress_velocity !== null
+                            ? `${dossier.schedule_overrun_forecast.monthly_progress_velocity}% / mo`
+                            : dossier.schedule_overrun_forecast?.burn_rate_velocity !== undefined && dossier.schedule_overrun_forecast?.burn_rate_velocity !== null
+                            ? `${dossier.schedule_overrun_forecast.burn_rate_velocity}% / mo`
+                            : 'N/A'}
                         </span>
-                        <span className="text-[9px] text-slate-500 block font-ui">milestone completion rate</span>
+                        <span className="text-[9px] text-slate-500 block font-ui">physical progress velocity</span>
                       </div>
                     </div>
 
                     <p className="text-[11px] text-slate-600 font-secondary leading-snug">
-                      Milestone health: <strong className="text-slate-800 font-ui">{dossier.schedule_overrun_forecast?.critical_milestone_delayed ? 'Critical Milestone Slippage Flagged' : 'Progressing on Schedule'}</strong>. Planned duration: 365 days.
+                      Status: <strong className="text-slate-800 font-ui">
+                        {dossier.schedule_overrun_forecast?.schedule_forecast_status === 'COMPLETED'
+                          ? 'Project Completed'
+                          : dossier.schedule_overrun_forecast?.schedule_forecast_status === 'STALLED_ZERO_PROGRESS'
+                          ? 'Stalled / Mobilization Halted'
+                          : dossier.schedule_overrun_forecast?.schedule_forecast_status === 'EARLY_STAGE'
+                          ? 'Early Mobilization Stage (<15d)'
+                          : dossier.schedule_overrun_forecast?.critical_milestone_delayed
+                          ? 'Milestone Slippage Detected'
+                          : 'Progressing on Schedule'}
+                      </strong>. {dossier.schedule_overrun_forecast?.forecast_remaining_months !== undefined && dossier.schedule_overrun_forecast?.forecast_remaining_months !== null ? `Estimated completion: ${dossier.schedule_overrun_forecast.forecast_remaining_months} months remaining.` : `Planned baseline: ${dossier.schedule_overrun_forecast?.planned_duration_days || 365} days.`}
                     </p>
                   </div>
                 </div>

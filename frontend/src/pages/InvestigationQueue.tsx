@@ -337,8 +337,22 @@ export const InvestigationQueue: React.FC<InvestigationQueueProps> = ({
                   </div>
                   <div>
                     <span className="text-slate-400 block text-[9px] uppercase tracking-wider font-semibold">Schedule Forecast</span>
-                    <span className="font-ui font-semibold text-slate-800">
-                      {item.forecast_delay_months && item.forecast_delay_months > 0 ? `+${item.forecast_delay_months}m Delay` : 'On Track'}
+                    <span className={`font-ui font-semibold ${
+                      item.forecast_delay_months && item.forecast_delay_months > 0
+                        ? 'text-red-600'
+                        : item.schedule_forecast_status === 'STALLED_ZERO_PROGRESS'
+                        ? 'text-amber-700'
+                        : 'text-slate-800'
+                    }`}>
+                      {item.forecast_delay_months && item.forecast_delay_months > 0
+                        ? `+${item.forecast_delay_months}m Delay`
+                        : item.schedule_forecast_status === 'STALLED_ZERO_PROGRESS'
+                        ? 'Zero Progress'
+                        : item.schedule_forecast_status === 'EARLY_STAGE'
+                        ? 'Early Stage'
+                        : item.schedule_forecast_status === 'INSUFFICIENT_EVIDENCE'
+                        ? 'Insufficient Data'
+                        : 'On Track'}
                     </span>
                   </div>
                   <div>

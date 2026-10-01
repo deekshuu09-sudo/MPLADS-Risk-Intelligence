@@ -47,6 +47,8 @@ class InvestigationQueueItemDTO(BaseModel):
     sector: Optional[str] = None
     approved_cost: Optional[float] = None
     forecast_delay_months: Optional[float] = None
+    schedule_forecast_status: Optional[str] = None
+    monthly_progress_velocity: Optional[float] = None
     cost_risk_score: Optional[float] = None
     schedule_risk_score: Optional[float] = None
     early_warning_signal: Optional[str] = None

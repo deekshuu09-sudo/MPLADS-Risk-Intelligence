@@ -47,6 +47,8 @@ class WorkListDTO(BaseModel):
     cumulative_expenditure: Optional[float] = None
     cost_variance_pct: Optional[float] = None
     forecast_delay_months: Optional[float] = None
+    schedule_forecast_status: Optional[str] = None
+    monthly_progress_velocity: Optional[float] = None
     schedule_risk_score: Optional[float] = None
     cost_risk_score: Optional[float] = None
 
