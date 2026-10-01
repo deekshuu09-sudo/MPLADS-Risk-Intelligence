@@ -468,12 +468,12 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Cost Overrun Card */}
+                  {/* Cost Escalation Risk Card */}
                   <div className="p-4 rounded-lg bg-slate-50 border border-slate-200 space-y-2.5">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5 font-ui">
                         <IndianRupee className="w-4 h-4 text-emerald-600" />
-                        Cost Overrun Intelligence
+                        Projected Cost Escalation Risk
                       </span>
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded font-mono ${
                         dossier.cost_overrun_forecast?.cost_overrun_likelihood === 'HIGH'
@@ -482,7 +482,7 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                           ? 'bg-amber-100 text-amber-800 border border-amber-200'
                           : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
                       }`}>
-                        {dossier.cost_overrun_forecast?.cost_overrun_likelihood || 'LOW'} OVERRUN RISK
+                        {dossier.cost_overrun_forecast?.cost_overrun_likelihood || 'LOW'} ESCALATION RISK
                       </span>
                     </div>
 
@@ -543,7 +543,7 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                                 ? 'Indefinite (0% Progress)'
                                 : dossier.schedule_overrun_forecast?.schedule_forecast_status === 'EARLY_STAGE'
                                 ? 'Early Stage'
-                                : 'Insufficient Data')
+                                : 'Insufficient Baseline Evidence')
                             : dossier.schedule_overrun_forecast.forecast_delay_months > 0
                             ? `+${dossier.schedule_overrun_forecast.forecast_delay_months} months`
                             : '0.0 months'}
@@ -551,7 +551,9 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                         <span className="text-[9px] text-slate-500 block font-ui">
                           {dossier.schedule_overrun_forecast?.forecast_delay_months !== null && (dossier.schedule_overrun_forecast?.forecast_delay_months || 0) > 0
                             ? 'beyond planned timeframe'
-                            : 'on-schedule execution'}
+                            : dossier.schedule_overrun_forecast?.forecast_delay_months === 0
+                            ? 'on-schedule execution'
+                            : 'baseline unconfirmed'}
                         </span>
                       </div>
                       <div className="p-2 bg-white rounded border border-slate-200">
@@ -568,17 +570,22 @@ export const ExplainabilityDossier: React.FC<ExplainabilityDossierProps> = ({
                     </div>
 
                     <p className="text-[11px] text-slate-600 font-secondary leading-snug">
-                      Status: <strong className="text-slate-800 font-ui">
+                      Schedule Forecast Status: <strong className="text-slate-800 font-ui">
                         {dossier.schedule_overrun_forecast?.schedule_forecast_status === 'COMPLETED'
                           ? 'Project Completed'
                           : dossier.schedule_overrun_forecast?.schedule_forecast_status === 'STALLED_ZERO_PROGRESS'
                           ? 'Stalled / Mobilization Halted'
                           : dossier.schedule_overrun_forecast?.schedule_forecast_status === 'EARLY_STAGE'
                           ? 'Early Mobilization Stage (<15d)'
+                          : dossier.schedule_overrun_forecast?.schedule_forecast_status === 'INSUFFICIENT_BASELINE_EVIDENCE' || dossier.schedule_overrun_forecast?.schedule_forecast_status === 'INSUFFICIENT_EVIDENCE'
+                          ? 'Insufficient Baseline Evidence'
                           : dossier.schedule_overrun_forecast?.critical_milestone_delayed
                           ? 'Milestone Slippage Detected'
                           : 'Progressing on Schedule'}
-                      </strong>. {dossier.schedule_overrun_forecast?.forecast_remaining_months !== undefined && dossier.schedule_overrun_forecast?.forecast_remaining_months !== null ? `Estimated completion: ${dossier.schedule_overrun_forecast.forecast_remaining_months} months remaining.` : `Planned baseline: ${dossier.schedule_overrun_forecast?.planned_duration_days || 365} days.`}
+                      </strong>. {dossier.schedule_overrun_forecast?.planned_duration_days ? (dossier.schedule_overrun_forecast?.forecast_remaining_months !== undefined && dossier.schedule_overrun_forecast?.forecast_remaining_months !== null ? `Forecast remaining: ${dossier.schedule_overrun_forecast.forecast_remaining_months} months (Planned baseline: ${dossier.schedule_overrun_forecast.planned_duration_days} days).` : `Planned baseline: ${dossier.schedule_overrun_forecast.planned_duration_days} days.`) : 'No planned baseline confirmed.'}
+                    </p>
+                    <p className="text-[10px] text-slate-500 font-secondary pt-0.5 border-t border-slate-200/60 leading-tight">
+                      Where project-specific planned completion data is unavailable in the prototype dataset, NexSolve uses a documented 365-day domain-policy benchmark as a fallback. If no planning baseline is available, NexSolve abstains from producing a forecast.
                     </p>
                   </div>
                 </div>

@@ -180,7 +180,7 @@ export interface WorkItem {
   cumulative_expenditure?: number;
   cost_variance_pct?: number;
   forecast_delay_months?: number | null;
-  schedule_forecast_status?: "AVAILABLE" | "COMPLETED" | "EARLY_STAGE" | "STALLED_ZERO_PROGRESS" | "INSUFFICIENT_EVIDENCE";
+  schedule_forecast_status?: "AVAILABLE" | "COMPLETED" | "EARLY_STAGE" | "STALLED_ZERO_PROGRESS" | "INSUFFICIENT_BASELINE_EVIDENCE" | "INSUFFICIENT_EVIDENCE";
   monthly_progress_velocity?: number | null;
   schedule_risk_score?: number;
   cost_risk_score?: number;
@@ -449,8 +449,11 @@ export interface ExplainabilityDossier {
     escalation_indicator_title?: string;
   };
   schedule_overrun_forecast?: {
-    elapsed_days: number;
-    planned_duration_days: number;
+    elapsed_duration_days?: number;
+    elapsed_days?: number;
+    planned_duration_days: number | null;
+    current_delay_days?: number | null;
+    current_delay_months?: number | null;
     physical_progress_pct: number;
     remaining_progress_pct?: number;
     forecast_remaining_months?: number | null;
@@ -458,9 +461,10 @@ export interface ExplainabilityDossier {
     forecast_delay_months: number | null;
     monthly_progress_velocity?: number | null;
     burn_rate_velocity?: number | null;
-    schedule_forecast_status: "AVAILABLE" | "COMPLETED" | "EARLY_STAGE" | "STALLED_ZERO_PROGRESS" | "INSUFFICIENT_EVIDENCE";
+    schedule_forecast_status: "AVAILABLE" | "COMPLETED" | "EARLY_STAGE" | "STALLED_ZERO_PROGRESS" | "INSUFFICIENT_BASELINE_EVIDENCE" | "INSUFFICIENT_EVIDENCE";
     schedule_overrun_likelihood: string;
     critical_milestone_delayed: boolean;
+    planned_duration_source?: string;
     forecast_methodology?: string;
   };
 }
@@ -512,7 +516,7 @@ export interface InvestigationQueueItem {
   sector?: string;
   approved_cost?: number;
   forecast_delay_months?: number | null;
-  schedule_forecast_status?: "AVAILABLE" | "COMPLETED" | "EARLY_STAGE" | "STALLED_ZERO_PROGRESS" | "INSUFFICIENT_EVIDENCE";
+  schedule_forecast_status?: "AVAILABLE" | "COMPLETED" | "EARLY_STAGE" | "STALLED_ZERO_PROGRESS" | "INSUFFICIENT_BASELINE_EVIDENCE" | "INSUFFICIENT_EVIDENCE";
   monthly_progress_velocity?: number | null;
   cost_risk_score?: number;
   schedule_risk_score?: number;

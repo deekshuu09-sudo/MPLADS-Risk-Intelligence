@@ -350,8 +350,8 @@ export const InvestigationQueue: React.FC<InvestigationQueueProps> = ({
                         ? 'Zero Progress'
                         : item.schedule_forecast_status === 'EARLY_STAGE'
                         ? 'Early Stage'
-                        : item.schedule_forecast_status === 'INSUFFICIENT_EVIDENCE'
-                        ? 'Insufficient Data'
+                        : item.schedule_forecast_status === 'INSUFFICIENT_BASELINE_EVIDENCE' || item.schedule_forecast_status === 'INSUFFICIENT_EVIDENCE'
+                        ? 'Insufficient Baseline'
                         : 'On Track'}
                     </span>
                   </div>
