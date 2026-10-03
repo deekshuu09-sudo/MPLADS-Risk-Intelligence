@@ -166,7 +166,7 @@ export const GovHeader: React.FC<GovHeaderProps> = ({
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Portal Telemetry
+              Portfolio Dataset
             </button>
             <button
               onClick={() => onSelectDatasetMode('SYNTHETIC')}
@@ -178,6 +178,18 @@ export const GovHeader: React.FC<GovHeaderProps> = ({
             >
               Benchmark Archetypes
             </button>
+          </div>
+
+          {/* Active Filter State Summary Badge */}
+          <div className="hidden lg:flex items-center gap-1 px-2.5 py-1 rounded bg-slate-50 border border-slate-200 text-slate-700 text-[11px] font-ui font-medium">
+            <span className="text-slate-400">View:</span>
+            <span className="font-semibold text-slate-800">
+              {selectedHouse === 'LOK_SABHA' ? 'Lok Sabha' : selectedHouse === 'RAJYA_SABHA' ? 'Rajya Sabha' : 'Both Houses'}
+            </span>
+            <span className="text-slate-300">•</span>
+            <span className="font-semibold text-slate-800">
+              {datasetMode === 'REAL' ? 'Portfolio Dataset' : datasetMode === 'SYNTHETIC' ? 'Benchmark Archetypes' : 'All Records'}
+            </span>
           </div>
 
           {/* Action Sync Tools */}

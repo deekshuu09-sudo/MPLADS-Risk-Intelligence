@@ -134,7 +134,7 @@ export const InvestigationQueue: React.FC<InvestigationQueueProps> = ({
             Early Warning &amp; Escalation Queue
           </h2>
           <p className="font-secondary text-xs text-slate-600 mt-1">
-            Predictive tracking of infrastructure projects exhibiting cost escalation, schedule delays, or milestone slippage (<span className="font-data font-semibold text-slate-800">{queue.length}</span> active project warnings)
+            Predictive tracking of infrastructure projects exhibiting cost escalation, schedule delays, or milestone slippage (<span className="font-data font-semibold text-slate-800">{queue.length}</span> total queue records • active early warnings with score ≥ 30 and counterexample benchmark safeguards)
           </p>
         </div>
 

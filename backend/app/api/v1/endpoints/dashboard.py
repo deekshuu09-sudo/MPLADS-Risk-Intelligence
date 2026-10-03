@@ -91,13 +91,13 @@ def get_dashboard_summary(
         ),
         open_investigations_count=(
             db.query(RiskAnomaly).join(RiskAnomaly.work).filter(
-                RiskAnomaly.composite_risk_score >= 20.0,
+                RiskAnomaly.composite_risk_score >= 30.0,
                 ~RiskAnomaly.status.in_(["RESOLVED", "DISMISSED"])
             )
             .filter(Work.is_synthetic == is_synthetic if is_synthetic is not None else True)
             .join(Work.mp).filter(MemberOfParliament.house == canonical_house) if canonical_house else
             db.query(RiskAnomaly).join(RiskAnomaly.work).filter(
-                RiskAnomaly.composite_risk_score >= 20.0,
+                RiskAnomaly.composite_risk_score >= 30.0,
                 ~RiskAnomaly.status.in_(["RESOLVED", "DISMISSED"])
             ).filter(Work.is_synthetic == is_synthetic if is_synthetic is not None else True)
         ).count(),

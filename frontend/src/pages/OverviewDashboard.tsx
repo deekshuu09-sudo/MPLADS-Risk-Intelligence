@@ -72,10 +72,12 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
       const isSyntheticParam =
         datasetMode === 'REAL' ? false : datasetMode === 'SYNTHETIC' ? true : undefined;
       const houseParam = selectedHouse !== 'ALL' ? selectedHouse : undefined;
+      // In benchmark demonstration mode, show synthetic archetypes; in portfolio view (REAL or ALL), show operational portfolio works
+      const anomalySyntheticFilter = datasetMode === 'SYNTHETIC' ? true : false;
 
       const [analyticsRes, anomRes] = await Promise.all([
         api.getExecutiveOverviewAnalytics({ house: houseParam, is_synthetic: isSyntheticParam }),
-        api.getAnomalies({ limit: 5, is_synthetic: isSyntheticParam }),
+        api.getAnomalies({ limit: 5, is_synthetic: anomalySyntheticFilter }),
       ]);
 
       setAnalytics(analyticsRes);
@@ -147,14 +149,14 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           <div className="flex flex-col sm:items-end gap-1.5 font-ui text-xs text-slate-600 border-l sm:border-l-0 sm:border-r-0 border-slate-200 pl-4 sm:pl-0">
             <div className="flex items-center gap-2">
               <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-800 border border-slate-200 uppercase tracking-wider">
-                {scope?.dataset_mode || 'SYNTHETIC'} Portfolio Baseline
+                {datasetMode === 'SYNTHETIC' ? 'BENCHMARK DEMONSTRATION MODE' : datasetMode === 'REAL' ? 'PORTFOLIO DATASET' : 'ALL RECORDS (DEMONSTRATION)'}
               </span>
             </div>
             <div className="text-[11px] text-slate-500 mt-1 font-secondary">
               Monitored: <span className="font-ui font-semibold text-slate-800">{scope?.total_records} Projects</span> | Early Warnings: <span className="font-ui font-semibold text-slate-800">{scope?.flagged_records}</span> (Risk Score ≥ {scope?.min_flagged_score})
             </div>
             <div className="text-[10px] text-slate-400 font-secondary">
-              Predictive models calibrated: {scope?.generated_at}
+              Analysis snapshot: {scope?.generated_at}
             </div>
           </div>
         </div>
@@ -225,7 +227,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           title="Active Early Warning Signals"
           value={kpis.flagged_works_count.toLocaleString('en-IN')}
           subtitle={`${kpis.flagged_percentage.toFixed(1)}% Early Warning Rate`}
-          badge={`Cost at Risk: ₹${(kpis.flagged_sanctioned_amount_inr / 10000000).toFixed(2)} Cr`}
+          badge={`Approved Cost in Early-Warning Cases: ₹${(kpis.flagged_sanctioned_amount_inr / 10000000).toFixed(2)} Cr`}
           badgeColor="text-amber-900 bg-amber-50/80 border-amber-200"
           footer="Flagged for administrative intervention (Risk Score ≥ 30)"
         />
@@ -233,7 +235,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
         <StatCard
           title="Cumulative Expenditure"
           value={formatCr(kpis.total_disbursed_amount_inr)}
-          subtitle={`At-Risk Disbursed: ₹${(kpis.flagged_disbursed_amount_inr / 10000000).toFixed(2)} Cr`}
+          subtitle={`Disbursed in Flagged Works: ₹${(kpis.flagged_disbursed_amount_inr / 10000000).toFixed(2)} Cr`}
           badge="Treasury / PFMS Tracked"
           badgeColor="text-slate-700 bg-slate-50 border-slate-200"
           footer="Cumulative financial utilization tracked across milestone vouchers"
@@ -243,7 +245,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           title="Projects Requiring Intervention"
           value={pipeline.total_unresolved.toLocaleString('en-IN')}
           subtitle={`Urgent Verification: ${pipeline.verification_required}`}
-          badge="Pending Administrative Action"
+          badge="Pending Review"
           badgeColor="text-slate-700 bg-slate-50 border-slate-200"
           footer="Active early warnings in IPMD / Monitoring Officer review queue"
         />
@@ -299,7 +301,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
 
               <div className="pt-3 border-t border-slate-100 mt-2">
                 <div className="font-secondary text-xs text-slate-700 mb-3 leading-relaxed">
-                  <span className="font-ui font-semibold text-slate-900 block mb-0.5">Recommended Action:</span>
+                  <span className="font-ui font-semibold text-slate-900 block mb-0.5">Suggested Verification Action:</span>
                   {card.recommended_action}
                 </div>
 
@@ -467,8 +469,8 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
             </div>
           </div>
 
-          <p className="text-[11px] text-slate-500 mt-4 italic">
-            *Multi-signal works demonstrate +{(signalOverlap.avg_score_multi_signal - signalOverlap.avg_score_single_signal).toFixed(1)} points higher analytical confidence.
+          <p className="text-[11px] text-slate-500 mt-4 font-secondary">
+            *Multi-signal works demonstrate <span className="font-ui font-semibold text-slate-700">Mean Risk Score Difference: +{(signalOverlap.avg_score_multi_signal - signalOverlap.avg_score_single_signal).toFixed(1)} points</span> vs single-signal cases.
           </p>
         </div>
       </div>
@@ -481,10 +483,10 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
             <div>
               <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <BarChart2 className="w-4 h-4 text-emerald-600" />
-                <span>Geographic Signal Rate & Exposure Concentration</span>
+                <span>Geographic Signal Rate &amp; Exposure Concentration</span>
               </h3>
               <p className="text-xs text-slate-500">
-                States ranked by normalized risk signal rate % (Flagged Works / Total Sanctioned)
+                States ranked by flagged work rate (%) • (Flagged Works / Total Works)
               </p>
             </div>
             <button
@@ -581,7 +583,14 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
             {analytics.category_concentration.slice(0, 5).map((cat, i) => (
               <div key={i} className="text-xs">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="font-medium text-slate-800 truncate max-w-[170px]">{cat.category}</span>
+                  <div className="flex items-center gap-1.5 truncate max-w-[170px]">
+                    <span className="font-medium text-slate-800 truncate">{cat.category}</span>
+                    {cat.total_works <= 5 && (
+                      <span className="text-[9px] px-1 py-0.2 rounded bg-slate-100 text-slate-600 border border-slate-200 shrink-0 font-ui">
+                        Small sample
+                      </span>
+                    )}
+                  </div>
                   <span className="font-mono font-bold text-slate-900">
                     {cat.flagged_works}/{cat.total_works} ({cat.signal_rate_pct}%)
                   </span>
@@ -655,8 +664,11 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
                       ₹{(anom.sanctioned_amount / 100000).toFixed(2)}L
                     </td>
                     <td className="py-3">
-                      <span className="inline-block text-[11px] text-slate-700 bg-slate-100 px-2 py-0.5 rounded truncate max-w-[160px]">
-                        {anom.primary_factor_summary}
+                      <span
+                        className="inline-block text-[11px] text-slate-700 bg-slate-100 hover:bg-slate-200 px-2 py-0.5 rounded truncate max-w-[170px] cursor-help transition-colors"
+                        title={anom.primary_factor_summary || 'Risk Signal Indicator'}
+                      >
+                        {anom.primary_factor_summary || 'Risk Signal Indicator'}
                       </span>
                     </td>
                     <td className="py-3">

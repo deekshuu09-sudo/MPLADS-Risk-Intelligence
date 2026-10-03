@@ -53,6 +53,17 @@ def test_dashboard_summary(client_with_db):
     assert data["total_works"] > 400
     assert "risk_breakdown" in data
     assert data["risk_breakdown"]["critical"] > 0
+    # Early warning queue count strictly reconciles with active warnings (composite risk >= 30.0)
+    assert data["open_investigations_count"] == 117
+
+    # House filter tests
+    lok_res = client_with_db.get("/api/v1/dashboard/summary?house=LOK_SABHA")
+    assert lok_res.status_code == 200
+    assert lok_res.json()["open_investigations_count"] == 115
+
+    rajya_res = client_with_db.get("/api/v1/dashboard/summary?house=RAJYA_SABHA")
+    assert rajya_res.status_code == 200
+    assert rajya_res.json()["open_investigations_count"] == 2
 
 
 def test_works_list(client_with_db):
