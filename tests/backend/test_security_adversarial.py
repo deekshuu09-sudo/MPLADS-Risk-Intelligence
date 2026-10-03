@@ -116,3 +116,31 @@ def test_security_response_headers():
     assert res.headers.get("Referrer-Policy") == "strict-origin-when-cross-origin"
     assert "geolocation" in res.headers.get("Permissions-Policy", "")
 
+
+def test_cors_production_origins():
+    """Verify both new and legacy Vercel production origins are permitted by CORS."""
+    origins = [
+        "https://nexsolve-predictive-infrastructure.vercel.app",
+        "https://mplads-risk-intelligence.vercel.app"
+    ]
+    for origin in origins:
+        # Preflight OPTIONS
+        preflight_res = client.options(
+            "/api/v1/anomalies/WS/DEMO/2025/101/dossier",
+            headers={
+                "Origin": origin,
+                "Access-Control-Request-Method": "GET"
+            }
+        )
+        assert preflight_res.status_code == 200
+        assert preflight_res.headers.get("access-control-allow-origin") == origin
+
+        # GET request with origin header
+        get_res = client.get(
+            "/api/v1/dashboard/summary",
+            headers={"Origin": origin}
+        )
+        assert get_res.status_code == 200
+        assert get_res.headers.get("access-control-allow-origin") == origin
+
+
