@@ -12,6 +12,7 @@ import { api } from './services/api';
 export function App() {
   const [currentTab, setCurrentTab] = useState<NavTab>('overview');
   const [selectedHouse, setSelectedHouse] = useState<string>('ALL');
+  const [previousHouse, setPreviousHouse] = useState<string>('ALL');
   const [datasetMode, setDatasetMode] = useState<'ALL' | 'REAL' | 'SYNTHETIC'>('ALL');
   const [activeDossierWorkId, setActiveDossierWorkId] = useState<string | null>(null);
   const [spatialWorkId, setSpatialWorkId] = useState<string | null>(null);
@@ -19,14 +20,36 @@ export function App() {
   const [openInvestigationsCount, setOpenInvestigationsCount] = useState<number>(0);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
+  // In Benchmark Archetypes mode, House filter is not applicable to synthetic demonstration scenarios
+  const effectiveHouse = datasetMode === 'SYNTHETIC' ? 'ALL' : selectedHouse;
+
+  const handleSelectDatasetMode = (newMode: 'ALL' | 'REAL' | 'SYNTHETIC') => {
+    if (newMode === 'SYNTHETIC') {
+      if (datasetMode !== 'SYNTHETIC') {
+        setPreviousHouse(selectedHouse);
+      }
+      setSelectedHouse('ALL');
+    } else {
+      if (datasetMode === 'SYNTHETIC' && previousHouse !== 'ALL') {
+        setSelectedHouse(previousHouse);
+      }
+    }
+    setDatasetMode(newMode);
+  };
+
+  const handleSelectHouse = (house: string) => {
+    setSelectedHouse(house);
+    setPreviousHouse(house);
+  };
+
   useEffect(() => {
     fetchGlobalStats();
-  }, [refreshTrigger, selectedHouse, datasetMode]);
+  }, [refreshTrigger, effectiveHouse, datasetMode]);
 
   const fetchGlobalStats = async () => {
     try {
       const summary = await api.getDashboardSummary({
-        house: selectedHouse !== 'ALL' ? selectedHouse : undefined,
+        house: effectiveHouse !== 'ALL' ? effectiveHouse : undefined,
         is_synthetic:
           datasetMode === 'REAL' ? false : datasetMode === 'SYNTHETIC' ? true : undefined,
       });
@@ -60,10 +83,10 @@ export function App() {
       <GovHeader
         currentTab={currentTab}
         onSelectTab={setCurrentTab}
-        selectedHouse={selectedHouse}
-        onSelectHouse={setSelectedHouse}
+        selectedHouse={effectiveHouse}
+        onSelectHouse={handleSelectHouse}
         datasetMode={datasetMode}
-        onSelectDatasetMode={setDatasetMode}
+        onSelectDatasetMode={handleSelectDatasetMode}
         openInvestigationsCount={openInvestigationsCount}
         onRefreshData={() => setRefreshTrigger((prev) => prev + 1)}
       />
@@ -72,7 +95,7 @@ export function App() {
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {currentTab === 'overview' && (
           <OverviewDashboard
-            selectedHouse={selectedHouse}
+            selectedHouse={effectiveHouse}
             datasetMode={datasetMode}
             onOpenDossier={handleOpenDossier}
             onNavigateToTab={setCurrentTab}
@@ -81,7 +104,7 @@ export function App() {
 
         {currentTab === 'explorer' && (
           <RiskExplorer
-            selectedHouse={selectedHouse}
+            selectedHouse={effectiveHouse}
             datasetMode={datasetMode}
             onOpenDossier={handleOpenDossier}
           />
@@ -97,7 +120,7 @@ export function App() {
 
         {currentTab === 'investigations' && (
           <InvestigationQueue
-            selectedHouse={selectedHouse}
+            selectedHouse={effectiveHouse}
             onOpenDossier={handleOpenDossier}
             datasetMode={datasetMode}
           />

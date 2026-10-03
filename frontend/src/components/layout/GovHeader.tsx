@@ -126,7 +126,16 @@ export const GovHeader: React.FC<GovHeaderProps> = ({
         {/* Global Controls & Mode Switcher */}
         <div className="flex flex-wrap items-center gap-3 text-xs font-ui">
           {/* House Selector */}
-          <div className="inline-flex bg-slate-100 p-0.5 rounded border border-slate-200">
+          <div
+            className={`inline-flex bg-slate-100 p-0.5 rounded border border-slate-200 transition-opacity ${
+              datasetMode === 'SYNTHETIC' ? 'opacity-60 cursor-not-allowed' : ''
+            }`}
+            title={
+              datasetMode === 'SYNTHETIC'
+                ? 'House scope not applicable to benchmark demonstration scenarios (curated across central archetypes)'
+                : 'Filter portfolio by parliamentary house'
+            }
+          >
             {[
               { id: 'ALL', label: 'Both Houses' },
               { id: 'LOK_SABHA', label: 'Lok Sabha' },
@@ -134,9 +143,18 @@ export const GovHeader: React.FC<GovHeaderProps> = ({
             ].map((h) => (
               <button
                 key={h.id}
-                onClick={() => onSelectHouse(h.id)}
+                onClick={() => {
+                  if (datasetMode !== 'SYNTHETIC') {
+                    onSelectHouse(h.id);
+                  }
+                }}
+                disabled={datasetMode === 'SYNTHETIC'}
                 className={`px-3 py-1 rounded text-xs font-semibold transition-all ${
-                  selectedHouse === h.id
+                  datasetMode === 'SYNTHETIC'
+                    ? h.id === 'ALL'
+                      ? 'bg-white text-slate-500 shadow-2xs cursor-not-allowed'
+                      : 'text-slate-400 cursor-not-allowed'
+                    : selectedHouse === h.id
                     ? 'bg-white text-slate-900 shadow-2xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
@@ -183,13 +201,21 @@ export const GovHeader: React.FC<GovHeaderProps> = ({
           {/* Active Filter State Summary Badge */}
           <div className="hidden lg:flex items-center gap-1 px-2.5 py-1 rounded bg-slate-50 border border-slate-200 text-slate-700 text-[11px] font-ui font-medium">
             <span className="text-slate-400">View:</span>
-            <span className="font-semibold text-slate-800">
-              {selectedHouse === 'LOK_SABHA' ? 'Lok Sabha' : selectedHouse === 'RAJYA_SABHA' ? 'Rajya Sabha' : 'Both Houses'}
-            </span>
-            <span className="text-slate-300">•</span>
-            <span className="font-semibold text-slate-800">
-              {datasetMode === 'REAL' ? 'Portfolio Dataset' : datasetMode === 'SYNTHETIC' ? 'Benchmark Archetypes' : 'All Records'}
-            </span>
+            {datasetMode === 'SYNTHETIC' ? (
+              <span className="font-semibold text-slate-800">
+                Benchmark Archetypes • All Scenarios (House scope N/A)
+              </span>
+            ) : (
+              <>
+                <span className="font-semibold text-slate-800">
+                  {selectedHouse === 'LOK_SABHA' ? 'Lok Sabha' : selectedHouse === 'RAJYA_SABHA' ? 'Rajya Sabha' : 'Both Houses'}
+                </span>
+                <span className="text-slate-300">•</span>
+                <span className="font-semibold text-slate-800">
+                  {datasetMode === 'REAL' ? 'Portfolio Dataset' : 'All Records'}
+                </span>
+              </>
+            )}
           </div>
 
           {/* Action Sync Tools */}
